@@ -44,12 +44,26 @@
     display: table;
     clear: both;
   }
+  button{
+    min-width: 120px;
+  }
 
-  /* Responsive columns - one column layout (vertical) on small screens */
-@media screen and (max-width: 600px) {
-    .column {
-      width: 100%;
-      display: block;
-      margin-bottom: 20px;
+  @media (max-width: 1025px) {
+    button{
+        height: 20px;
+        font-size: 10px;
+        border: 1px solid black;
+        min-width: 85px;
     }
+    input{
+        height: 20px;
+        width: 70px;
+        font-size: 10px;
+        border: 1px solid black;
+    }
+    #LevelAmount{
+      width: 120px;
+    }
+
+
   }

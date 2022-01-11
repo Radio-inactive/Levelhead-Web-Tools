@@ -64,11 +64,11 @@
     function unplayedToggle()
     {
         if(unplayedVal==false){
-            document.getElementById('unplayedButton').innerHTML='Unplayed';
+            document.getElementById('unplayedButton').innerHTML='Unplayed only';
             unplayedVal=true;
         }
         else{
-            document.getElementById('unplayedButton').innerHTML='All';
+            document.getElementById('unplayedButton').innerHTML='All Levels';
             unplayedVal=false;
         }
     }

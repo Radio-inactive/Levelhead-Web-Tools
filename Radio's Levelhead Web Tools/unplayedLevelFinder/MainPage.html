@@ -2,18 +2,19 @@
   <head>
     <title>Unplayed Level Finder</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/package.webp">
     <script src="LH_API_test.js"></script>
     <link rel="stylesheet" href="LHUnplayedLevels.css">
+
   </head>
 
   <body>
     <h1>UNPLAYED LEVEL FINDER</h1>
     <p>This site will show Levelhead levels based on what's entered in these textboxes.<br>The hard limit for amount of levels is 128.</p>
-    <br><br>
-    <p>______ Minimum EB_____________Maximum EB_________Amount of Levels____Unplayed?_</p>
-    <input type="text" id="minEB"><input type="text" id="maxEB"><input type="text" id="levelAmount"><button onclick="unplayedToggle()" id="unplayedButton" style="min-width: 80px;">All</button><br>
-    <button onclick="fetchLevels()" style="height: 50px;">__________________________________SUBMIT___________________________________</button>
+    <br>
+    <input type="text" id="minEB" placeholder="Minimum EB"><input type="text" id="maxEB" placeholder="Maximum EB"><input type="text" id="levelAmount" placeholder="Number of Levels"><button onclick="unplayedToggle()" id="unplayedButton">All Levels</button><br>
+    <button onclick="fetchLevels()">___________SUBMIT__________</button>
     <div class="row" id="levelList" style="margin-top: 20px;">
       NOTHING TO SEE HERE YET!
     </div>
