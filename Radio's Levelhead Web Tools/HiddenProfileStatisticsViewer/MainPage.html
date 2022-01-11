@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hidden Profile Statistics Viewer</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/package.webp">
+        <style>
+            *{
+                font-family: monospace;
+            }
+        </style>
+        <script src="HiddenStatistics.js"></script>
+    </head>
+    <body>
+        <h1>Hidden Profile Statistics Viewer</h1>
+        <p>This tool shows some hidden statistics that can not be seen on the profile page</p>
+        <br>
+        <p>User code:</p>
+        <input type="text" id="userCode"><button onclick="fetchProfileDetails()">Get Profile Details</button><br>
+        <b><a id="ProfileValidity">*code validity*</a></b>
+        <h2>Hidden Statistics:</h2>
+        <p>Safe Name: <a id="SafeName">-</a></p>
+        <p>Reports: <a id="Reports">-</a></p>
+        <p>Creation Date: <a id="CreationDate">-</a></p>
+        <p>Whitelisted: <a id="Whitelisted">-</a></p>
+        <p>Last Update: <a id="LastUpdate">-</a></p>
+        <p>Perk Points: <a id="PerkPoints">-</a></p>
+        <p>Tipped per Day: <a id="TippedPerDay">-</a></p>
+        <p>Tipped per Level Played: <a id="TippedPerLevelPlayed">-</a></p>
+        <p>Tips gotten per Day: <a id="TipsGottenPerDay">-</a></p>
+        <p>Tips gotten per Level: <a id="TipsGottenPerLevel">-</a></p>
+
+    </body>
+</html>
