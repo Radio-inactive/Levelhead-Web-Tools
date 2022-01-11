@@ -43,7 +43,7 @@
         output+='<img src='+ urlIcon(pictureID,100) +' id="UnplayedPicture">';
         output+='<p id="UnplayedCardText">'+ htmlLinkTo(urlLevel(levelCode),levelName) +'<br>';
         output+=htmlLinkTo(urlCreator(creatorCode),'Creator');
-        output+='<br>Plays: '+ players +'<br>EB: '+ expBucks;
+        output+='<br>Players: '+ players +'<br>EB: '+ expBucks;
         output+='</p></div></div>';
 
         return output;
