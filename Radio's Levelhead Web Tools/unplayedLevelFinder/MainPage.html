@@ -11,7 +11,11 @@
 
   <body>
     <h1>UNPLAYED LEVEL FINDER</h1>
-    <p>This site will show Levelhead levels based on what's entered in these textboxes.<br>The hard limit for amount of levels is 128.</p>
+    <p>This site will show Levelhead levels based on what's entered in these textboxes.<br>
+      The hard limit for amount of levels is 128.<br>
+      Note:<br>
+      Unplayed Levels are found most reliably at max EB thresholds lower than 7000.<br>
+    </p>
     <br>
     <input type="text" id="minEB" placeholder="Minimum EB"><input type="text" id="maxEB" placeholder="Maximum EB"><input type="text" id="levelAmount" placeholder="Number of Levels"><button onclick="unplayedToggle()" id="unplayedButton">All Levels</button><br>
     <button onclick="fetchLevels()">___________SUBMIT__________</button>

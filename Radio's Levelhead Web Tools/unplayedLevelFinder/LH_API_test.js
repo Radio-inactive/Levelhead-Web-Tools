@@ -37,13 +37,15 @@
         return 'https://img.bscotch.net/fit-in/' + size + 'x' + size + '/avatars/' + iconName + '.webp';
     }
 
+
     function htmlGridCard(pictureID, levelName, levelCode, creatorCode, players, expBucks){
         var output="";
         output+='<div class="column"><div class="card">';
         output+='<img src='+ urlIcon(pictureID,100) +' id="UnplayedPicture">';
         output+='<p id="UnplayedCardText">'+ htmlLinkTo(urlLevel(levelCode),levelName) +'<br>';
         output+=htmlLinkTo(urlCreator(creatorCode),'Creator');
-        output+='<br>Players: '+ players +'<br>EB: '+ expBucks;
+        output+='<br>Players: '+ players +'<br>EB: '+ expBucks + '<br>';
+        output+='<button onclick="navigator.clipboard.writeText(\''+ levelCode +'\')" style="height: 15px; font-size: 10px;">Copy Levelcode</button>';
         output+='</p></div></div>';
 
         return output;
