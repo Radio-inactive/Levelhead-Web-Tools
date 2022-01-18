@@ -13,6 +13,8 @@ function loadGallary(){
 function loadLevelLink(avatar){
     var size=document.getElementById(avatar+'Input').value;
     if(size=='') size=100;
+    else if(size<16) size=16;
+    else if(size>2000) size=2000;
     var filetype=document.getElementById(avatar+'Filetype').innerHTML;
     window.open('https://img.bscotch.net/fit-in/'+ size +'x'+ size +'/avatars/'+ avatar +'.'+filetype, '_blank');
 }
