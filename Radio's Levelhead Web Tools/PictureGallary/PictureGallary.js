@@ -120,7 +120,7 @@ var avatarTitles=[
     "ripcord",
     "tiptow",
     "waylay",
-    "ripcord",
+    "rebound",
     "zipper",
     "shade",
     "the-armory",
