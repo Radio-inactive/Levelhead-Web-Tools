@@ -1,7 +1,10 @@
 
 function assembleURL()
 {
-    return 'https://www.bscotch.net/api/levelhead/players?userIds='+ document.getElementById('userCode').value +'&includeAliases=true';
+    return 'https://www.bscotch.net/api/levelhead/players?userIds='+ document.getElementById('userCode').value.toLowerCase().trim() +'&includeAliases=true';
+}
+function assembleAliasesURL(){
+    return 'https://www.bscotch.net/api/levelhead/aliases?userIds='+ document.getElementById('userCode').value.toLowerCase().trim() +'&onlySafe=true'
 }
 
 function fetchProfileDetails()
@@ -34,7 +37,7 @@ function fetchProfileDetails()
                     document.getElementById('TipsGottenPerDay').innerHTML=r.data[0].stats.TipsPerDay;
                     document.getElementById('TipsGottenPerLevel').innerHTML=r.data[0].stats.TipsPerLevel;
                 }
-                return fetch('https://www.bscotch.net/api/levelhead/aliases?userIds='+ document.getElementById('userCode').value +'&onlySafe=true');
+                return fetch(assembleAliasesURL());
             })
                 .then(r=>r.json())
                 .then(r=>document.getElementById('SafeName').innerHTML=r.data[0].alias)
