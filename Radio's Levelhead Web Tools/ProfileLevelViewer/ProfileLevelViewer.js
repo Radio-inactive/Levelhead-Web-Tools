@@ -23,7 +23,7 @@ function cleanResult(){
             else{
                 levelCodeList.push(level.levelId);
                 //assembles the card
-                htmlout+=levelCardTemplate.replace('{{avatar}}', level.avatarId).replace('{{levelname}}', level.title).replace('{{levelcode}}', level.levelId);
+                htmlout+=levelCardTemplate.replace('{{avatar}}', level.avatarId).replace('{{levelname}}', level.title).replaceAll('{{levelcode}}', level.levelId);
             }
         })
     })
@@ -80,7 +80,8 @@ var levelCardTemplate=`
 <div class="column"><div class="card">
 <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
     <p id="cardText">
-    <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a>
+    <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br><br>
+    <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;">Copy Levelcode</button>
     </p>
 </div></div>
 `;
