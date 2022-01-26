@@ -29,7 +29,7 @@ function fetchProfileDetails()
                     document.getElementById('Reports').innerHTML=r.data[0].alias.reports;
                     document.getElementById('Whitelisted').innerHTML=r.data[0].alias.whitelisted;
                     document.getElementById('CreationDate').innerHTML=r.data[0].createdAt.substring(0,10);
-                    document.getElementById('LastUpdate').innerHTML=r.data[0].updatedAt.substring(0,10);
+                    document.getElementById('LastUpdate').innerHTML=new Date(r.data[0].updatedAt).toString().substring(4,31);
                     document.getElementById('PerkPoints').innerHTML=r.data[0].stats.PerkPoints;
                     document.getElementById('HiddenGem').innerHTML=r.data[0].stats.HiddenGem;
                     document.getElementById('TippedPerDay').innerHTML=r.data[0].stats.TippedPerDay;
