@@ -67,6 +67,17 @@ function recursivelyLoadFavorites(lastId){
     )
 }
 
+function timeFormat(time){
+    var millis="";
+    millis=Math.floor(time*100).toFixed();
+    if(time>=86400)
+        return Math.floor(time/86400)+'day(s)'+(new Date(time * 1000).toISOString().substr(11, 8)+','+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h').replace(':', 'm');
+    if(time>=3600)
+        return (new Date(time * 1000).toISOString().substr(11, 8)+','+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h').replace(':', 'm');
+    if(time>=60)
+        return (new Date(time * 1000).toISOString().substr(14, 5)+','+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'm');
+    return (new Date(time * 1000).toISOString().substr(17, 2)+','+millis.substr(millis.length-2, millis.length-1)+'s');
+}
 
 function loadHiddenStatistics(){
 
@@ -86,7 +97,7 @@ function loadHiddenStatistics(){
                 //loading all statistics
                 document.getElementById('LevelName').innerHTML=r.data[0].title
                 document.getElementById('CreatorName').innerHTML=r.data[0].alias.alias
-                document.getElementById('CreatorTime').innerHTML=r.data[0].creatorTime
+                document.getElementById('CreatorTime').innerHTML=timeFormat(r.data[0].creatorTime)
                 document.getElementById('CV').innerHTML=r.data[0].cv
                 document.getElementById('DailyBuild').innerHTML=r.data[0].dailyBuild
                 document.getElementById('GameVersion').innerHTML=r.data[0].gameVersion
@@ -97,19 +108,19 @@ function loadHiddenStatistics(){
                 document.getElementById('HiddenGem').innerHTML=r.data[0].stats.HiddenGem
                 document.getElementById('ReplayValue').innerHTML=r.data[0].stats.ReplayValue
                 document.getElementById('Successes').innerHTML=r.data[0].stats.Successes
-                document.getElementById('TimePerWin').innerHTML=r.data[0].stats.TimePerWin
+                document.getElementById('TimePerWin').innerHTML=timeFormat(r.data[0].stats.TimePerWin)
                 document.getElementById('UpdatedAt').innerHTML=new Date(r.data[0].updatedAt).toString().substring(4,31)
                 //record statistics
                 var recordHolders="";
 
-                for(var i=0; i<3; i++)
+                for(var i=0; i<r.data[0].records.FastestTime.length; i++)
                 recordHolders+=recordHolderTemplate
                 .replace('{{userName}}', r.data[0].records.FastestTime[i].alias.alias)
-                .replace('{{userTime}}', r.data[0].records.FastestTime[i].value)
+                .replace('{{userTime}}', timeFormat(r.data[0].records.FastestTime[i].value))
                 .replace('{{recordDate}}', new Date(r.data[0].records.FastestTime[i].createdAt).toString().substring(4,31));
                 document.getElementById('Records').innerHTML=recordHolders;
                 recordHolders="";
-                for(var i=0; i<3; i++)
+                for(var i=0; i<r.data[0].records.HighScore.length; i++)
                 recordHolders+=highScoreHolderTemplate
                 .replace('{{userName}}', r.data[0].records.HighScore[i].alias.alias)
                 .replace('{{userTime}}', r.data[0].records.HighScore[i].value)
@@ -128,7 +139,7 @@ var userTemplate=`
 `;
 
 var recordHolderTemplate=`
-<p>{{userName}}: {{userTime}}s<br>
+<p>{{userName}}: {{userTime}}<br>
     --> date: {{recordDate}}
 </p>
 `;
