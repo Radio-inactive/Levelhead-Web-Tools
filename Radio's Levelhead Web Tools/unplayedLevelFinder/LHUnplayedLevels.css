@@ -12,6 +12,10 @@
     white-space: nowrap;
 }
 
+#CodeButton{
+  height: 20px; 
+  font-size: 10px;
+}
 
 #UnplayedPicture{
     grid-column: 1;
