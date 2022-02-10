@@ -40,7 +40,7 @@ function cleanResult(){
                 .replace('{{favorites}}', level.stats.Favorites ? level.stats.Favorites : 0)
                 .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))
                 .replace('{{difficulty}}', difficulty[level.stats.Diamonds])
-                .replace('{{graduated}}', level.tower ? '<b>TOWER</b>' : '<b>MARKETING</b>')
+                .replace('{{graduated}}', level.tower ? '<b>TOWER</b>' : '<b>MD</b>')
                 .replace('{{players}}', level.stats.Players)
                 .replace('{{plays}}', level.stats.Attempts)
                 .replace('{{daily}}', level.dailyBuild ? '<b>DAILY BUILD</b>' : '')
