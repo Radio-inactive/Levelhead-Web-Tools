@@ -53,7 +53,7 @@
                     .replace('{{alias}}', level.alias.alias)
                     .replace('{{players}}', level.stats.Players)
                     .replace('{{EB}}', level.stats.ExposureBucks)
-                    .replace('{{createdAt}}', new Date(level.updatedAt).toString().substring(4,15));  
+                    .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15));  
                     }
 
                 });

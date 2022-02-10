@@ -1,10 +1,19 @@
-var levelList=[]; //all fetches are saved in here
+var levelList = []; //all fetches are saved in here
 var maxFetch=128; //maximum amount of levels a fetch call returns
 var fetches=0; //keep track of how many fetch calls have been made
 var maxFetchAmount=10; //cap for fetch calls cuz infinite loops are scary
+var difficulty = [
+    '♦♦♦♦♦',
+    '<a style="color:red">♦</a>♦♦♦♦',
+    '<a style="color:red">♦♦</a>♦♦♦',
+    '<a style="color:red">♦♦♦</a>♦♦',
+    '<a style="color:red">♦♦♦♦</a>♦',
+    '<a style="color:red">♦♦♦♦♦</a>',
+    '♦♦♦♦♦'
+];
 
 function assemblePlayerURL(){
-    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+document.getElementById('userCode').value.trim().toLowerCase()+'&maxCreatedAt='; //ToDo get user code
+    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+document.getElementById('userCode').value.trim().toLowerCase()+'&includeStats=true&maxCreatedAt=';
 }
 
 function assembleProfileURL()//used to check if the profile is valid
@@ -23,7 +32,18 @@ function cleanResult(){
             else{
                 levelCodeList.push(level.levelId);
                 //assembles the card
-                htmlout+=levelCardTemplate.replace('{{avatar}}', level.avatarId).replace('{{levelname}}', level.title).replaceAll('{{levelcode}}', level.levelId);
+                htmlout+=levelCardTemplate
+                .replace('{{avatar}}', level.avatarId)
+                .replace('{{levelname}}', level.title)
+                .replaceAll('{{levelcode}}', level.levelId)
+                .replace('{{likes}}', level.stats.Likes ? level.stats.Likes : 0)
+                .replace('{{favorites}}', level.stats.Favorites ? level.stats.Favorites : 0)
+                .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))
+                .replace('{{difficulty}}', difficulty[level.stats.Diamonds])
+                .replace('{{graduated}}', level.tower ? '<b>TOWER</b>' : '<b>MARKETING</b>')
+                .replace('{{players}}', level.stats.Players)
+                .replace('{{plays}}', level.stats.Attempts)
+                .replace('{{daily}}', level.dailyBuild ? '<b>DAILY BUILD</b>' : '')
             }
         })
     })
@@ -80,8 +100,12 @@ var levelCardTemplate=`
 <div class="column"><div class="card">
 <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
     <p id="cardText">
-    <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br><br>
-    <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;">Copy Levelcode</button>
+        <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br>
+        <a style="color:#7E3517">♥</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}} {{graduated}}<br>
+        <b>Players:</b> {{players}}, <b>Plays:</b> {{plays}}<br>
+        <b>Created:</b> {{createdAt}}<br>
+        {{daily}}<br>
+        <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>
     </p>
 </div></div>
 `;
