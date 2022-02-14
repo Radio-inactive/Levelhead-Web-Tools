@@ -2,18 +2,27 @@ var levelList = []; //all fetches are saved in here
 var maxFetch=128; //maximum amount of levels a fetch call returns
 var fetches=0; //keep track of how many fetch calls have been made
 var maxFetchAmount=10; //cap for fetch calls cuz infinite loops are scary
+
+//Buffer (to prevent redundant calls)
+var lastCode='';
+
+//CONSTANTS
 var difficulty = [
-    '♦♦♦♦♦',
-    '<a style="color:red">♦</a>♦♦♦♦',
-    '<a style="color:red">♦♦</a>♦♦♦',
-    '<a style="color:red">♦♦♦</a>♦♦',
-    '<a style="color:red">♦♦♦♦</a>♦',
+    '⋄⋄⋄⋄⋄',
+    '<a style="color:red">♦</a>⋄⋄⋄⋄',
+    '<a style="color:red">♦♦</a>⋄⋄⋄',
+    '<a style="color:red">♦♦♦</a>⋄⋄',
+    '<a style="color:red">♦♦♦♦</a>⋄',
     '<a style="color:red">♦♦♦♦♦</a>',
-    '♦♦♦♦♦'
+    '⋄⋄⋄⋄⋄'
 ];
 
+var SHOW_ALL=0;
+var SHOW_ONLY=1;
+var SHOW_EXCLUDE=2;
+
 function assemblePlayerURL(){
-    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+document.getElementById('userCode').value.trim().toLowerCase()+'&includeStats=true&maxCreatedAt=';
+    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ document.getElementById('userCode').value.trim().toLowerCase() +'&includeStats=true&maxCreatedAt=';
 }
 
 function assembleProfileURL()//used to check if the profile is valid
@@ -21,17 +30,54 @@ function assembleProfileURL()//used to check if the profile is valid
     return 'https://www.bscotch.net/api/levelhead/players?userIds='+ document.getElementById('userCode').value.toLowerCase().trim()+'&includeAliases=true';
 }
 
-function cleanResult(){
+function showFilters(){
+    if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
+        document.getElementById('filtersToggle').innerHTML = 'Filters ▼';
+        document.getElementById('filters').style.display = 'block';
+    }
+    else{
+        document.getElementById('filtersToggle').innerHTML = 'Filters ▲';
+        document.getElementById('filters').style.display = 'none';
+    }
+}
+/* 
+FILTERS:
+//  Daily build: <select id="dailyFilter">
+//  Difficulty: <select id="difficultyFilter">
+//  Graduated?: <select id="graduationFilter">
+//  Min Players: <input type="number" min="0" max="99999" value="0"><br>
+//  Max Players: <input type="number" min="0" max="99999" value="999"><br>
+//  Tower Trial: <select id="TTFilter">
+*/
+function checkFilters(level){
+    var check = false;
+
+    var filterVal = document.getElementById('dailyFilter').value;
+    if(!((filterVal !=0 ) ? (level.dailyBuild != (filterVal-1)) : true)) return false;
+
+    filterVal = document.getElementById('difficultyFilter').value; 
+    if(!((filterVal != 0) ? (level.stats.Diamonds == filterVal) : true)) return false;
+
+    filterVal = document.getElementById('graduationFilter').value; 
+    if(!((filterVal != 0) ? (level.tower != (filterVal-1)) : true)) return false;
+    
+    //min players <= players >= max players 
+    if(!(level.stats.Players >= document.getElementById('minPlayerFilter').value
+    && level.stats.Players <= document.getElementById('maxPlayerFilter').value)) return false;
+
+    filterVal = document.getElementById('TTFilter').value; 
+    if(!((filterVal != 0) ? (level.towerTrial != (filterVal-1)) : true)) return false;
+
+    return true;
+
+}
+
+function loadCards(){
     document.getElementById('profileLevels').innerHTML='Generating...';
     var htmlout="";
-    var levelCodeList=[]; //used to eliminate duplicate levels
-    
     levelList.forEach(fetchCall => {
         fetchCall.forEach(level => {
-            if(levelCodeList.includes(level.levelId)); //ToDo: probably too inefficient. I should optimize that
-            else{
-                levelCodeList.push(level.levelId);
-                //assembles the card
+            if(checkFilters(level)){ //apply filters
                 htmlout+=levelCardTemplate
                 .replace('{{avatar}}', level.avatarId)
                 .replace('{{levelname}}', level.title)
@@ -51,28 +97,35 @@ function cleanResult(){
 }
 
 
-function recursivelyLoadLevels(lastDate){
-    fetch(assemblePlayerURL()+lastDate)
+function recursivelyLoadLevels(lastDate, lastId){
+    fetch(assemblePlayerURL()+lastDate+ '&tiebreakerItemId=' +lastId)
     .then(r=>r.json())
     .then(function(r){
         fetches++;
-        //console.log(lastDate);
         levelList.push(r.data);
         if(r.data.length<maxFetch || fetches > maxFetch){ //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
             console.log(levelList);
-            cleanResult();
+            loadCards();
             return;
         }
         else
-        recursivelyLoadLevels(r.data[r.data.length-1].createdAt);
+        recursivelyLoadLevels(r.data[r.data.length-1].createdAt, r.data[r.data.length-1]._id);
     })
 }
 
 function loadProfileLevels(){
     document.getElementById('profileLevels').innerHTML='Loading...';
-    //reset Variables
     fetches=0;
+
+    //avoid unnecessary fetch calls
+    if(document.getElementById('userCode').value.trim().toLowerCase() == lastCode){
+        loadCards();
+        return;
+    }
+
     levelList=[];
+    lastCode = document.getElementById('userCode').value.trim().toLowerCase();
+
     console.log(assemblePlayerURL());
     var checkCode=true;
     //most of this is to check if the profile is valid
@@ -91,7 +144,7 @@ function loadProfileLevels(){
             document.getElementById('creatorName').innerHTML=r.data[0].alias.alias;
         })
         .then(function(){
-            if(checkCode) recursivelyLoadLevels(''); //only happens when profile is valid
+            if(checkCode) recursivelyLoadLevels('', ''); //only happens when profile is valid
         }); 
     
 }
@@ -109,9 +162,3 @@ var levelCardTemplate=`
     </p>
 </div></div>
 `;
-
-/* 
-ToDo: - optimize fetch calls by making use of tiebreakerItemId in the call.
-      - consider duplicate dates... possibly?
-      - more testing in general
-*/
