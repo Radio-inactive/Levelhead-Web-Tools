@@ -103,7 +103,7 @@ function recursivelyLoadLevels(lastDate, lastId){
     .then(function(r){
         fetches++;
         levelList.push(r.data);
-        if(r.data.length<maxFetch || fetches > maxFetch){ //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
+        if(r.data.length<maxFetch || fetches > maxFetchAmount){ //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
             console.log(levelList);
             loadCards();
             return;
