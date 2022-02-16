@@ -1,7 +1,6 @@
 var levelList = []; //all fetches are saved in here
 var maxFetch=128; //maximum amount of levels a fetch call returns
-var fetches=0; //keep track of how many fetch calls have been made
-var maxFetchAmount=10; //cap for fetch calls cuz infinite loops are scary
+var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 
 //Buffer (to prevent redundant calls)
 var lastCode='';
@@ -86,10 +85,12 @@ function loadCards(){
                 .replace('{{favorites}}', level.stats.Favorites ? level.stats.Favorites : 0)
                 .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))
                 .replace('{{difficulty}}', difficulty[level.stats.Diamonds])
-                .replace('{{graduated}}', level.tower ? '<b>TOWER</b>' : '<b>MD</b>')
+                .replace('{{graduated}}', level.tower ? 'TOWER' : 'MD')
                 .replace('{{players}}', level.stats.Players)
                 .replace('{{plays}}', level.stats.Attempts)
-                .replace('{{daily}}', level.dailyBuild ? '<b>DAILY BUILD</b>' : '')
+                .replace('{{daily}}', level.dailyBuild ? 'visible' : 'none')
+                .replace('{{tt}}', level.towerTrial ? 'visible' : 'none')
+                .replace('{{tags}}', level.tagNames)
             }
         })
     })
@@ -97,7 +98,7 @@ function loadCards(){
 }
 
 
-function recursivelyLoadLevels(lastDate, lastId){
+function recursivelyLoadLevels(lastDate, lastId, fetches){
     fetch(assemblePlayerURL()+lastDate+ '&tiebreakerItemId=' +lastId)
     .then(r=>r.json())
     .then(function(r){
@@ -109,8 +110,13 @@ function recursivelyLoadLevels(lastDate, lastId){
             return;
         }
         else
-        recursivelyLoadLevels(r.data[r.data.length-1].createdAt, r.data[r.data.length-1]._id);
+        recursivelyLoadLevels(r.data[r.data.length-1].createdAt, r.data[r.data.length-1]._id, fetches);
     })
+}
+
+function reloadLevels(){
+        document.getElementById("profileLevels").innerHTML = "Generating...";
+        loadCards();
 }
 
 function loadProfileLevels(){
@@ -144,7 +150,7 @@ function loadProfileLevels(){
             document.getElementById('creatorName').innerHTML=r.data[0].alias.alias;
         })
         .then(function(){
-            if(checkCode) recursivelyLoadLevels('', ''); //only happens when profile is valid
+            if(checkCode) recursivelyLoadLevels('', '', 0); //only happens when profile is valid
         }); 
     
 }
@@ -152,12 +158,15 @@ function loadProfileLevels(){
 var levelCardTemplate=`
 <div class="column"><div class="card">
 <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
+<img src="pictures/{{graduated}}.png" id="miniIcon" style="margin-left:2px;">
+<img src="pictures/TT.png" id="miniIcon" style="margin-left:80px;display:{{tt}};">
+<img src="pictures/DAILYBUILD.png" id="miniIcon" style="margin-top:75px;margin-left:6px;display:{{daily}};">
     <p id="cardText">
         <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br>
-        <a style="color:#7E3517">♥</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}} {{graduated}}<br>
+        <a style="color:#7E3517">♥</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}}<br>
+        {{tags}}<br>
         <b>Players:</b> {{players}}, <b>Plays:</b> {{plays}}<br>
         <b>Created:</b> {{createdAt}}<br>
-        {{daily}}<br>
         <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>
     </p>
 </div></div>

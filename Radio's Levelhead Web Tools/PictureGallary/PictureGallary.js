@@ -1,5 +1,3 @@
-
-
 function loadGallary(){
     var htmlout="";
     var cardBuf="";
@@ -27,11 +25,6 @@ function toggleFileType(avatar){
     else
         document.getElementById(avatar+'Filetype').innerHTML='png';
 }
-
-
-
-
-
 
 
 var gallaryCardTemplate=`

@@ -15,10 +15,19 @@
 
             #cardPicture{
                 grid-column: 1;
+                grid-row: 1;
+                margin-right: 2px;
+            }
+            #miniIcon{
+                height:20px;
+                width:20px;
+                grid-row:1;
+                grid-column:1;
             }
             #cardText{
                 grid-column: 2;
-                margin-left: 5;
+                grid-row: 1;
+                margin-left: 0;
                 margin-top: 0;
                 margin-bottom: 0;
                 margin-right: 0;
@@ -65,12 +74,12 @@
         <p>Name: <a id="creatorName">-</a></p>
         <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
         <p id="filters" style="display:none;">
-            Daily build: <select id="dailyFilter">
+            Daily build: <select id="dailyFilter" onchange="reloadLevels()">
                 <option value="0">show all</option>
                 <option value="1">show only daily</option>
                 <option value="2">exclude daily</option>
               </select><br>
-            Difficulty: <select id="difficultyFilter">
+            Difficulty: <select id="difficultyFilter" onchange="reloadLevels()">
                 <option value="0">show all</option>
                 <option value="1"><a style="color:red">♦</a>⋄⋄⋄⋄</option>
                 <option value="2"><a style="color:red">♦♦</a>⋄⋄⋄</option>
@@ -79,18 +88,20 @@
                 <option value="5"><a style="color:red">♦♦♦♦♦</a></option>
                 <option value="6">⋄⋄⋄⋄⋄</option>
               </select><br>
-            Graduated?: <select id="graduationFilter">
+            Graduated?: <select id="graduationFilter" onchange="reloadLevels()">
                 <option value="0">show all</option>
                 <option value="1">Tower</option>
                 <option value="2">MD</option>
               </select><br>
-            Min Players: <input id="minPlayerFilter" type="number" min="0" max="99999" value="0"><br>
-            Max Players: <input id="maxPlayerFilter" type="number" min="0" max="99999" value="999"><br>
-            Tower Trial: <select id="TTFilter">
+            Min Players: <input id="minPlayerFilter" type="number" min="0" max="99999" value="0" onchange="reloadLevels()"><br>
+            Max Players: <input id="maxPlayerFilter" type="number" min="0" max="99999" value="999" onchange="reloadLevels()"><br>
+            Tower Trial: <select id="TTFilter" onchange="reloadLevels()">
                 <option value="0">show all</option>
                 <option value="1">show only TT</option>
                 <option value="2">exclude TT</option>
               </select><br>
+              <b>Filter Tags (coming soon)</b>
+
         </p>
         <div class="rows" id="profileLevels">
             Nothing to see here yet!
