@@ -1,11 +1,13 @@
+//#region Variables for Level loading
 var levelList = []; //all fetches are saved in here
 var maxFetch=128; //maximum amount of levels a fetch call returns
 var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 
 //Buffer (to prevent redundant calls)
 var lastCode='';
+//#endregion
 
-//CONSTANTS
+//#region constants
 var difficulty = [
     '⋄⋄⋄⋄⋄',
     '<a style="color:red">♦</a>⋄⋄⋄⋄',
@@ -19,7 +21,9 @@ var difficulty = [
 var SHOW_ALL=0;
 var SHOW_ONLY=1;
 var SHOW_EXCLUDE=2;
+//#endregion
 
+//#region URL helpers
 function assemblePlayerURL(){
     return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ document.getElementById('userCode').value.trim().toLowerCase() +'&includeStats=true&maxCreatedAt=';
 }
@@ -27,6 +31,32 @@ function assemblePlayerURL(){
 function assembleProfileURL()//used to check if the profile is valid
 {
     return 'https://www.bscotch.net/api/levelhead/players?userIds='+ document.getElementById('userCode').value.toLowerCase().trim()+'&includeAliases=true';
+}
+//#endregion
+
+//#region Filters
+function loadTagSelect(){
+    var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
+    var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
+
+    fetch('https://www.bscotch.net/api/levelhead/level-tags/counts')
+    .then(r => r.json())
+    .then(
+        function(r){
+            r.data.forEach( tag => {
+                htmloutRequired += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
+                                                    .replace('{{tagName}}', tag.name)
+                                                    .replace('{{selectName}}', 'Required');
+                htmloutExcluded += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
+                                                    .replace('{{tagName}}', tag.name)
+                                                    .replace('{{selectName}}', 'Excluded');
+            })
+            for(var x =1; x<4; ++x){
+                document.getElementById('requiredTags'+ x).innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
+                document.getElementById('excludedTags'+ x).innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
+            }
+        }
+    )
 }
 
 function showFilters(){
@@ -67,10 +97,20 @@ function checkFilters(level){
     filterVal = document.getElementById('TTFilter').value; 
     if(!((filterVal != 0) ? (level.towerTrial != (filterVal-1)) : true)) return false;
 
+    //Tag Filtering
+
+    for(var x = 1; x < 4; ++x){
+        //check if Level has specified tags
+        if(document.getElementById('requiredTags'+ x).value != 0 ? !level.tags.includes(document.getElementById('requiredTags'+ x).value) : false) return false;
+        if(document.getElementById('excludedTags'+ x).value != 0 ? level.tags.includes(document.getElementById('excludedTags'+ x).value) : false) return false;
+    }
+
     return true;
 
 }
+//#endregion
 
+//#region Level Loading
 function loadCards(){
     document.getElementById('profileLevels').innerHTML='Generating...';
     var htmlout="";
@@ -154,7 +194,9 @@ function loadProfileLevels(){
         }); 
     
 }
+//#endregion
 
+//#region Templates
 var levelCardTemplate=`
 <div class="column"><div class="card">
 <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
@@ -171,3 +213,8 @@ var levelCardTemplate=`
     </p>
 </div></div>
 `;
+
+var tagSelectTemplate=`
+<option value="{{tagId}}" id="{{tagId}}{{selectName}}{{selectNumber}}">{{tagName}}</option>
+`;
+//#endregion

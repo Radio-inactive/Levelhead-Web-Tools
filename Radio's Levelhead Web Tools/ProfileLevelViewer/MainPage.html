@@ -100,11 +100,22 @@
                 <option value="1">show only TT</option>
                 <option value="2">exclude TT</option>
               </select><br>
-              <b>Filter Tags (coming soon)</b>
+              <b>Filter Tags</b><br>
+              Required Tags:<br>
+              <select id="requiredTags1" onchange="reloadLevels()"></select>
+              <select id="requiredTags2" onchange="reloadLevels()"></select>
+              <select id="requiredTags3" onchange="reloadLevels()"></select>
+              <br>
+              Excluded Tags:<br>
+              <select id="excludedTags1" onchange="reloadLevels()"></select>
+              <select id="excludedTags2" onchange="reloadLevels()"></select>
+              <select id="excludedTags3" onchange="reloadLevels()"></select>
+              <br>
 
         </p>
         <div class="rows" id="profileLevels">
             Nothing to see here yet!
         </div>
+        <script>loadTagSelect()</script>
     </body>
 </html>
