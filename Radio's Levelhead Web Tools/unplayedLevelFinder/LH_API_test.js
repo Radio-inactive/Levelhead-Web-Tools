@@ -84,6 +84,7 @@
 
         var url;
         var htmlout = '';
+        document.getElementById('getMoreButton').style.display = 'none';
         
         if(levels != []){
 
@@ -104,6 +105,7 @@
                     console.log(r.data);
                     console.log(levels)
                     document.getElementById('levelList').innerHTML += htmlout;
+                    document.getElementById('getMoreButton').style.display = 'block';
                 })
             }
             else{
@@ -122,9 +124,12 @@
                     console.log(r.data);
                     console.log(levels)
                     document.getElementById('levelList').innerHTML += htmlout;
+                    document.getElementById('getMoreButton').style.display = 'block';
                 })
             }
         }
+        else
+        document.getElementById('getMoreButton').style.display = 'block';
     }
 
     //#region Filters
