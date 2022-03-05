@@ -1,11 +1,11 @@
 function loadGallary(){
     var htmlout="";
     var cardBuf="";
-    document.getElementById('gallaryContent').innerHTML='';
 
     avatarTitles.forEach(x => {
-        document.getElementById('gallaryContent').innerHTML+=gallaryCardTemplate.replaceAll('{{avatar}}', x);
+        htmlout+=gallaryCardTemplate.replaceAll('{{avatar}}', x);
     })
+    document.getElementById('gallaryContent').innerHTML = htmlout;
 }
 
 function loadLevelLink(avatar){
