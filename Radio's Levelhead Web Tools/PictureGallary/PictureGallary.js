@@ -3,7 +3,7 @@ function loadGallary(){
     var cardBuf="";
 
     avatarTitles.forEach(x => {
-        htmlout+=gallaryCardTemplate.replaceAll('{{avatar}}', x);
+        htmlout += gallaryCardTemplate.replaceAll('{{avatar}}', x);
     })
     document.getElementById('gallaryContent').innerHTML = htmlout;
 }
