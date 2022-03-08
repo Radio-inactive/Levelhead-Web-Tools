@@ -1,22 +1,24 @@
-    var levels = [];
-    var unplayedVal = false;
-    var fetchLimit = 128;
+    var levels = []; //saves each fetch call as an array.
+    var unplayedVal = false; //ToDo: remove.
+    var fetchLimit = 128; //max level count for fetch calls
 
     function createURL()
     {
-        //input from buttons
-        //ToDo: make stuff not render if a text box is empty
+        //input from max EB input field
         var max = document.getElementById('maxEB').value;
 
-
         //assembling URL for fetch
-        return URLTemplate.replace('{{maxEB}}', max).replace('{{limit}}', fetchLimit);
+        return URLTemplate
+               .replace('{{maxEB}}', max)
+               .replace('{{limit}}', fetchLimit);
 
     }
-
+    
     function createLevelCard(level){
+        //card not created if filters don't apply
         if(!checkFilters(level)) 
             return '';
+
         var htmlout = '';
         htmlout += levelCardTemplate
         .replace('{{avatar}}', level.avatarId)
@@ -33,11 +35,14 @@
 
     function fetchLevels()
     {
-        document.getElementById('getMoreButton').style.display = 'none';
-        document.getElementById('levelList').innerHTML = 'LOADING...';
+        //Hides get more button. 
+        document.getElementById('getMoreButton').style
+                .display = 'none';
+        document.getElementById('levelList')
+                .innerHTML = 'LOADING...';
+        
         var htmlout = "";
-
-        var ref=createURL();
+        var ref = createURL();
         console.log(ref);
 
         fetch(ref)
@@ -46,79 +51,102 @@
             )
         .then(
             function(r){
-                r.data.forEach(level => {
-                        htmlout += createLevelCard(level);
+                r.data
+                 .forEach(level => {
+                    htmlout += createLevelCard(level);
                 });
+                //pushes fetch result into levels array.
                 levels.push(r.data)
                 console.log(levels);
-                document.getElementById('levelList').innerHTML = htmlout;
-                document.getElementById('getMoreButton').style.display = 'block';
+                //loads finished cards into the html
+                document.getElementById('levelList')
+                        .innerHTML = htmlout;
+                //makes 'get more button' visible again
+                document.getElementById('getMoreButton').style
+                        .display = 'block';
             })
         
     }
 
     function removeRedundantCodes(newLevels){
-        var levelCodeList = []
+        //saves level codes from API calls
+        //in Array for easy code search
+        var levelCodeList = [];
 
         if(levels != []){
-
-            levels[levels.length - 1].forEach( level => {
+            //most recent fetch call
+            levels[levels.length - 1]
+             .forEach( level => {
                 levelCodeList += level.levelId;
             })
             
             for(x = 0; x < newLevels.length -1 ; x++){
                 if(levelCodeList.includes(newLevels[x].levelId)){
+                    //removes duplicate levels
                     newLevels.splice(x, 1);
                     --x;
-                }
-                    
+                }    
             }
             return newLevels;
         }
-
-        
-        
     }
 
     function getMoreLevels(){
 
-        var url;
+        var url = '';
         var htmlout = '';
-        document.getElementById('getMoreButton').style.display = 'none';
+        //hides button after press for better feedback
+        document.getElementById('getMoreButton').style
+                .display = 'none';
         
         if(levels != []){
 
             var newMax = levels[levels.length - 1][levels[levels.length - 1].length -1].stats.ExposureBucks;
             console.log(newMax)
-            if(newMax > 0 && !(newMax == levels[levels.length - 1][0].stats.ExposureBucks)){
-                url = URLTemplate.replace('{{maxEB}}', newMax).replace('{{limit}}', fetchLimit);
+            //checks if first level of last fetch equals last level
+            //if that's the case, a different approach for getting more levels is needed
+            if(newMax > 0 && newMax != levels[levels.length - 1][0].stats.ExposureBucks){
+                //this case: EB of last level is used as max EB of next call
+                url = URLTemplate
+                      .replace('{{maxEB}}', newMax)
+                      .replace('{{limit}}', fetchLimit);
                 console.log('fetch url getmore case 1: '+ url);
                 fetch(url)
-                .then(r => r.json())
-                .then(function(r){
+                 .then(r => r.json())
+                 .then(function(r){
                     removeRedundantCodes(r.data);
-                    r.data.forEach( level => {
+                    //assemble cards
+                    r.data
+                     .forEach( level => {
                         htmlout += createLevelCard(level);
                     })
+                    //cleaned fetch call is added to levels array
                     levels.push(r.data);
                     console.log('filtering:')
                     console.log(r.data);
                     console.log(levels)
-                    document.getElementById('levelList').innerHTML += htmlout;
-                    document.getElementById('getMoreButton').style.display = 'block';
+                    document.getElementById('levelList')
+                            .innerHTML += htmlout;
+                    document.getElementById('getMoreButton').style
+                            .display = 'block';
                 })
             }
             else{
-                url = URLTemplate.replace('{{maxEB}}', newMax).replace('{{limit}}', fetchLimit)
-                      + "&minSecondsAgo="+ levels[levels.length - 1][levels[levels.length - 1].length -1].createdAgo;
+                //in this case: age of last level used as 'minSecondsAgo' in next call
+                url = URLTemplate.replace('{{maxEB}}', newMax)
+                      .replace('{{limit}}', fetchLimit)
+                      +"&minSecondsAgo="+ levels[levels.length - 1][levels[levels.length - 1].length - 1] //last level of last fetch call
+                                          .createdAgo;
                 console.log('fetch url getmore case 2: '+ url);
                 fetch(url)
                 .then(r => r.json())
                 .then(function(r) {
                     removeRedundantCodes(r.data);
+                    //assemble cards
                     r.data.forEach(level => {
                         htmlout += createLevelCard(level);
                     })
+                    //cleaned fetch call is added to levels array
                     levels.push(r.data);
                     console.log('filtering:')
                     console.log(r.data);
@@ -134,50 +162,70 @@
 
     //#region Filters
 
+    //used every time a filter is changed
     function reloadLevels(){
         var htmlout = '';
-        document.getElementById("levelList").innerHTML = "Generating...";
-        levels.forEach( x => {
-            x.forEach(level =>{
+        document.getElementById("levelList")
+                .innerHTML = "Generating...";
+        //re-generates all level cards. Filters are applied in the createLevelCard() function
+        levels
+        .forEach( x => {
+            x
+            .forEach(level =>{
                 htmlout += createLevelCard(level);
             })
         })
-        document.getElementById('levelList').innerHTML = htmlout;
-        console.log('boop')
+        document.getElementById('levelList')
+                .innerHTML = htmlout;
 }
 
     function loadTagSelect(){
+        //define empty starting option
         var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
         var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
     
+        //fetches all tags
         fetch('https://www.bscotch.net/api/levelhead/level-tags/counts')
         .then(r => r.json())
         .then(
             function(r){
-                r.data.forEach( tag => {
-                    htmloutRequired += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
-                                                        .replace('{{tagName}}', tag.name)
-                                                        .replace('{{selectName}}', 'Required');
-                    htmloutExcluded += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
-                                                        .replace('{{tagName}}', tag.name)
-                                                        .replace('{{selectName}}', 'Excluded');
+                r.data
+                .forEach( tag => {//Templates partially filled out
+                    htmloutRequired += tagSelectTemplate
+                                       .replaceAll('{{tagId}}', tag.tag)
+                                       .replace('{{tagName}}', tag.name)
+                                       .replace('{{selectName}}', 'Required');
+                    htmloutExcluded += tagSelectTemplate
+                                       .replaceAll('{{tagId}}', tag.tag)
+                                       .replace('{{tagName}}', tag.name)
+                                       .replace('{{selectName}}', 'Excluded');
                 })
+                //creates 3 Tag selections each for required and excluded tags. x used for ids
                 for(var x =1; x<4; ++x){
-                    document.getElementById('requiredTags'+ x).innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
-                    document.getElementById('excludedTags'+ x).innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
+                    document.getElementById('requiredTags'+ x)
+                            .innerHTML = htmloutRequired
+                                         .replaceAll('{{selectNumber}}', x); //each option has an id. currently unused
+                    document.getElementById('excludedTags'+ x)
+                            .innerHTML = htmloutExcluded
+                                         .replaceAll('{{selectNumber}}', x);
                 }
             }
         )
     }
     
     function showFilters(){
+        //toggles filter based on the content of the button
         if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
-            document.getElementById('filtersToggle').innerHTML = 'Filters ▼';
-            document.getElementById('filters').style.display = 'block';
+            document.getElementById('filtersToggle')
+                    .innerHTML = 'Filters ▼';
+            document.getElementById('filters').style
+                    .display = 'block';
         }
         else{
-            document.getElementById('filtersToggle').innerHTML = 'Filters ▲';
-            document.getElementById('filters').style.display = 'none';
+            document.getElementById('filtersToggle')
+                    .innerHTML = 'Filters ▲';
+            document.getElementById('filters').style
+                    .display = 'none';
         }
     }
     /* 
@@ -190,8 +238,6 @@
     //  Tower Trial: <select id="TTFilter">
     */
     function checkFilters(level){
-        var check = false;
-    
         var filterVal = document.getElementById('dailyFilter').value;
         if(!((filterVal !=0 ) ? (level.dailyBuild != (filterVal-1)) : true)) return false;
     
@@ -218,6 +264,7 @@
 
 
     //#region templates
+
 var levelCardTemplate=`
 <div class="column">
     <div class="card">
@@ -241,4 +288,5 @@ var URLTemplate =
 var tagSelectTemplate=`
 <option value="{{tagId}}" id="{{tagId}}{{selectName}}{{selectNumber}}">{{tagName}}</option>
 `;
+
 //#endregion

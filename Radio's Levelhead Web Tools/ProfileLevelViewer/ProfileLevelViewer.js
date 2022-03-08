@@ -52,8 +52,10 @@ function loadTagSelect(){
                                                     .replace('{{selectName}}', 'Excluded');
             })
             for(var x =1; x<4; ++x){
-                document.getElementById('requiredTags'+ x).innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
-                document.getElementById('excludedTags'+ x).innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
+                document.getElementById('requiredTags'+ x)
+                        .innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
+                document.getElementById('excludedTags'+ x)
+                        .innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
             }
         }
     )
@@ -61,12 +63,16 @@ function loadTagSelect(){
 
 function showFilters(){
     if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
-        document.getElementById('filtersToggle').innerHTML = 'Filters ▼';
-        document.getElementById('filters').style.display = 'block';
+        document.getElementById('filtersToggle')
+                .innerHTML = 'Filters ▼';
+        document.getElementById('filters').style
+                .display = 'block';
     }
     else{
-        document.getElementById('filtersToggle').innerHTML = 'Filters ▲';
-        document.getElementById('filters').style.display = 'none';
+        document.getElementById('filtersToggle')
+                .innerHTML = 'Filters ▲';
+        document.getElementById('filters').style
+                .display = 'none';
     }
 }
 /* 
@@ -79,8 +85,6 @@ FILTERS:
 //  Tower Trial: <select id="TTFilter">
 */
 function checkFilters(level){
-    var check = false;
-
     var filterVal = document.getElementById('dailyFilter').value;
     if(!((filterVal !=0 ) ? (level.dailyBuild != (filterVal-1)) : true)) return false;
 
@@ -106,24 +110,25 @@ function checkFilters(level){
     }
 
     return true;
-
 }
 //#endregion
 
 //#region Level Loading
+
 function loadCards(){
-    document.getElementById('profileLevels').innerHTML='Generating...';
+    document.getElementById('profileLevels')
+            .innerHTML='Generating...';
     var htmlout="";
     levelList.forEach(fetchCall => {
         fetchCall.forEach(level => {
-            if(checkFilters(level)){ //apply filters
+            if(checkFilters(level)){ //only creates card if filters apply
                 htmlout+=levelCardTemplate
                 .replace('{{avatar}}', level.avatarId)
                 .replace('{{levelname}}', level.title)
                 .replaceAll('{{levelcode}}', level.levelId)
                 .replace('{{likes}}', level.stats.Likes ? level.stats.Likes : 0)
                 .replace('{{favorites}}', level.stats.Favorites ? level.stats.Favorites : 0)
-                .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))
+                .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))//handles time format
                 .replace('{{difficulty}}', difficulty[level.stats.Diamonds])
                 .replace('{{graduated}}', level.tower ? 'TOWER' : 'MD')
                 .replace('{{players}}', level.stats.Players)
@@ -134,63 +139,74 @@ function loadCards(){
             }
         })
     })
-    document.getElementById('profileLevels').innerHTML=htmlout;
+    document.getElementById('profileLevels')
+            .innerHTML=htmlout;
 }
 
-
+//lastDate: date of most recently fetched level.
+//lastId: id of last level, so it doesn't get fetched again
+//fetches: increasing number, to prevent potential infinie loops.
 function recursivelyLoadLevels(lastDate, lastId, fetches){
     fetch(assemblePlayerURL()+lastDate+ '&tiebreakerItemId=' +lastId)
     .then(r=>r.json())
     .then(function(r){
         fetches++;
         levelList.push(r.data);
-        if(r.data.length<maxFetch || fetches > maxFetchAmount){ //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
+        //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
+        if(r.data.length<maxFetch || fetches > maxFetchAmount){ 
             console.log(levelList);
             loadCards();
             return;
         }
-        else
+        else//                creation date of last level.         id of last level
         recursivelyLoadLevels(r.data[r.data.length-1].createdAt, r.data[r.data.length-1]._id, fetches);
     })
 }
 
 function reloadLevels(){
-        document.getElementById("profileLevels").innerHTML = "Generating...";
+        document.getElementById("profileLevels")
+                .innerHTML = "Generating...";
         loadCards();
 }
 
 function loadProfileLevels(){
-    document.getElementById('profileLevels').innerHTML='Loading...';
+    document.getElementById('profileLevels')
+            .innerHTML='Loading...';
     fetches=0;
 
     //avoid unnecessary fetch calls
-    if(document.getElementById('userCode').value.trim().toLowerCase() == lastCode){
+    if(document.getElementById('userCode')
+               .value.trim().toLowerCase() == lastCode){
         loadCards();
         return;
     }
 
     levelList=[];
-    lastCode = document.getElementById('userCode').value.trim().toLowerCase();
+    lastCode = document.getElementById('userCode')
+                       .value.trim().toLowerCase();
 
     console.log(assemblePlayerURL());
-    var checkCode=true;
+    var checkCode = true;
     //most of this is to check if the profile is valid
     fetch(assembleProfileURL())
-    .then(
-            r => r.json()
-        )
+    .then(r => r.json())
     .then(
         function(r){
             console.log(r.data);
-            if(r.data.length!=1){
-                document.getElementById('profileLevels').innerHTML='INVALID ID';
-                checkCode=false;
+            //if more than 1 profile is returned, the creator code was incorrect.
+            //it will simply return a bunch of random profiles
+            if(r.data.length != 1){
+                document.getElementById('profileLevels')
+                        .innerHTML = 'INVALID ID';
+                checkCode = false;
             }
             else
-            document.getElementById('creatorName').innerHTML=r.data[0].alias.alias;
+                document.getElementById('creatorName')
+                        .innerHTML=r.data[0].alias.alias;
         })
         .then(function(){
-            if(checkCode) recursivelyLoadLevels('', '', 0); //only happens when profile is valid
+            //only happens when profile is valid
+            if(checkCode) recursivelyLoadLevels('', '', 0); 
         }); 
     
 }

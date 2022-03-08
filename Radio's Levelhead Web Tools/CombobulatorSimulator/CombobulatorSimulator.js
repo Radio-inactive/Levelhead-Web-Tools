@@ -1,26 +1,32 @@
+
 function createSelects(){
     var htmlout = '';
+    //create empty starting values
     var wordOptions = '<option value=""></option>';
     var signOptions = '<option value=""></option>';
-
+    //adds every word to the template
     words.forEach( word => {
         wordOptions += optionTemplate.replaceAll('{{content}}', word);
     });
+    //adds every sign to the template
     signs.forEach( sign => {
         signOptions += optionTemplate.replaceAll('{{content}}', sign);
     });
-
+    //Creates 4 word selects and 4 sign selects
     for(var x = 0; x<4; ++x){
+        //word selection
         htmlout += selectTemplate
                     .replace('{{type}}', 'word')
                     .replace('{{number}}', x)
                     .replace('{{options}}', wordOptions);
+        //sign selection
         htmlout += selectTemplate
                     .replace('{{type}}', 'sign')
                     .replace('{{number}}', x)
                     .replace('{{options}}', signOptions);
     }
-    document.getElementById('selects').innerHTML = htmlout;
+    document.getElementById('selects')
+            .innerHTML = htmlout;
 }
 
 function updateSentence(){
@@ -40,12 +46,15 @@ function updateSentence(){
     }
     console.log(wordList);
 
+    //checks if list is empty. if not, adds the first word/sign
     if(wordList.length != 0)
         htmlout += wordList[0]
 
     for(x = 1; x < wordList.length; ++x){
+        //buffer current and previous word. more readable.
         var curr = wordList[x];
         var prev = wordList[x - 1];
+        //buffer certain checks
         var currIsWord = !signs.includes(curr);
         var currIsDigit = curr >= '0' && curr <= '9';
         var prevIsWord = !signs.includes(prev);
@@ -56,19 +65,21 @@ function updateSentence(){
         || currIsDigit && (prevIsWord || prev == '&'))
             htmlout += ' ';
 
-
         htmlout += curr;
     }
-
-    document.getElementById('letterCount').innerHTML = htmlout.length;
-
+    //length of the sentence
+    document.getElementById('letterCount')
+            .innerHTML = htmlout.length;
+    //shown black when within the 28-letter limit, otherwise red
     if(htmlout.length <= 28)
-        document.getElementById('letterCount').style.color = 'black';
+        document.getElementById('letterCount').style
+                .color = 'black';
     else
-        document.getElementById('letterCount').style.color = 'red';
+        document.getElementById('letterCount').style
+                .color = 'red';
     
-    
-    document.getElementById('sentence').innerHTML = htmlout;
+    document.getElementById('sentence')
+            .innerHTML = htmlout;
 }
 
 var selectTemplate = `

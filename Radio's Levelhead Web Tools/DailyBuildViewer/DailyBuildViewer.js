@@ -1,33 +1,39 @@
 
 function loadDailyBuildItems(){
-    var htmlOut="";
-    document.getElementById("itemTable").innerHTML=dailyItemLabels;
-    var pictureBuf="";
+    var htmlout = "";
+    //"picture" and "name" at the top of the table
+    document.getElementById("itemTable")
+            .innerHTML = dailyItemLabels;
+    var pictureBuf = "";
     fetch("https://www.bscotch.net/api/levelhead/daily-builds/@today")
-    .then(r=>r.json())
+    .then(r => r.json())
     .then(function(r){
         console.log(r);
-        r.data.items.forEach(x => {
-            //
-            itemInfo.forEach(y => {
-                if(y.itemId==x.itemId) {
-                    pictureBuf=y.picture;
+        r.data.items
+         .forEach(x => {
+            //looks through item info until there's a match
+            itemInfo //this kinda sucks. ToDo: un-suck. Maybe use .find()?
+             .forEach(y => {
+                if(y.itemId == x.itemId) {
+                    pictureBuf = y.picture;
                 }
-            });
-            document.getElementById("itemTable").innerHTML+=dailyItemTemplate.replace('{{picture}}', pictureBuf).replace('{{itemname}}', x.name);
-            //
-        });
+             });
+         htmlout += dailyItemTemplate.replace('{{picture}}', pictureBuf)
+                                        .replace('{{itemname}}', x.name);
+         });
+        document.getElementById("itemTable")
+                .innerHTML = htmlout;
     });
 }
 
-var dailyItemLabels=`
+var dailyItemLabels =`
 <tr>
     <td>Picture</td>
     <td>Name</td>
 </tr>
 `;
 
-var dailyItemTemplate=`
+var dailyItemTemplate =`
 <tr>
     <td>
         <img src="{{picture}}">
@@ -41,7 +47,7 @@ var dailyItemTemplate=`
 </tr>
 `;
 
-var itemInfo=[
+var itemInfo = [
     {//vacrat
         "itemId":3,
         "picture":"https://img.bscotch.net/fit-in/100x100/avatars/vacrat.webp"
