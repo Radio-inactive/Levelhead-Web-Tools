@@ -1,29 +1,39 @@
 function loadGallary(){
-    var htmlout="";
-    var cardBuf="";
+    var htmlout = "";
+    var cardBuf = "";
 
-    avatarTitles.forEach(x => {
+    avatarTitles
+     .forEach(x => {
+        //avatar used for unique ids and loading pictures
         htmlout += gallaryCardTemplate.replaceAll('{{avatar}}', x);
     })
     document.getElementById('gallaryContent').innerHTML = htmlout;
 }
 
 function loadLevelLink(avatar){
-    var size=document.getElementById(avatar+'Input').value;
-    if(size=='') size=100;
-    else if(size<16) size=16;
-    else if(size>2000) size=2000;
-    var filetype=document.getElementById(avatar+'Filetype').innerHTML;
+    var size = document.getElementById(avatar +'Input').value;
+    if(size == '') size = 100;
+    //maximum/minimum size
+    else if(size < 16) size = 16;
+    else if(size > 2000) size = 2000;
+    //never happens as far as I know
+    else size = 100;
+
+    var filetype = document.getElementById(avatar +'Filetype').innerHTML;
+    //assembles link, opens in new tab
     window.open('https://img.bscotch.net/fit-in/'+ size +'x'+ size +'/avatars/'+ avatar +'.'+filetype, '_blank');
 }
 
 function toggleFileType(avatar){
-    var curType=document.getElementById(avatar+'Filetype').innerHTML;
+    var curType = document.getElementById(avatar+'Filetype').innerHTML;
 
-    if(curType=='png')
-        document.getElementById(avatar+'Filetype').innerHTML='webp';
+    //Switches a card
+    if(curType == 'png')
+        document.getElementById(avatar+'Filetype')
+                .innerHTML = 'webp';
     else
-        document.getElementById(avatar+'Filetype').innerHTML='png';
+        document.getElementById(avatar+'Filetype')
+                .innerHTML = 'png';
 }
 
 
