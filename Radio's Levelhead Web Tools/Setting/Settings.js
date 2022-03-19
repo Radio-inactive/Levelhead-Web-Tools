@@ -45,6 +45,49 @@ function delegationKeySave() {
     })
 }
 
+function loadPage(){
+
+    showDelegationKeyValidity();
+
+    loadCursorOptions();
+}
+
+function loadCursorOptions(){
+
+    htmlout = '';
+
+    cursorOptions
+    .forEach(option => {
+        if(option != 'normal')
+            htmlout += cursorOptionTemplate.replaceAll('{{color}}', option);
+        else
+            htmlout += cursorOptionTemplate.replaceAll('{{color}}', 'copy');
+
+    });
+
+    document.getElementById('cursorOptions')
+            .innerHTML = htmlout;
+}
+
+function chooseCursor(){//ToDo: radio buttons
+
+    var chosenOption = 'nothing';
+    var options = document.getElementsByName('cursorSelection')
+
+    options.forEach(option => {
+        if(option.checked)
+            chosenOption = option.value;
+    })
+
+    if(cursorOptions.includes(chosenOption)){
+        window.localStorage.setItem('CursorOption', chosenOption);
+        document.body.style.cursor = setCursorTemplate.replaceAll('{{color}}', chosenOption);
+    }
+    window.localStorage.getItem('CursorOption');
+
+    console.log(chosenOption);
+}
+
 function showDelegationKeyValidity(){
     //Check if storage object is not null
     if(!window.localStorage.getItem('DelegationKey')){
@@ -67,3 +110,7 @@ function showDelegationKeyValidity(){
         document.getElementById('delegationConfirm')
                 .innerHTML = 'Delegation key saved!';
 }
+
+var cursorOptionTemplate = `
+<input type="radio" id="cursor{{color}}" name="cursorSelection" value="{{color}}"><img src="../PicturesCommon/Cursors/{{color}}.png"><br>
+`;

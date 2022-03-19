@@ -8,6 +8,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="DailyBuildViewer.js"></script>
+        <script src="../ApplySettings.js"></script>
         <style>
             * {
                 box-sizing: border-box;
@@ -20,6 +21,7 @@
                 max-width: 100px;
             }
         </style>
+        <link rel="stylesheet" href="../CommonStyle.css">
     </head>
     <body>
         <h1>Daily Build Viewer</h1>
@@ -29,7 +31,16 @@
 
         <table id="itemTable">
         </table>
+        <br>
+        <button onclick="loadDailyBuildLevels()" id="dailyBuildLevelLoadButton">Load Daily Builds</button>
+        
+        <div class="rows" id="dailyBuilds">
+            Nothing to see here yet!
+        </div>
 
-        <script>loadDailyBuildItems()</script>
+        <script>
+        loadDailyBuildItems()
+        loadOptions();
+        </script>
     </body>
 </html>

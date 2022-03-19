@@ -26,6 +26,26 @@ function loadDailyBuildItems(){
     });
 }
 
+function loadDailyBuildLevels(){
+    var htmlout = '';
+    fetch("https://www.bscotch.net/api/levelhead/levels?dailyBuild=true&limit=128&includeAliases=true&includeStats=true")
+    .then(r => r.json())
+    .then(function(r){
+            console.log(r);
+            r.data.forEach(level => {
+                htmlout += createLevelCard(level,
+                    template.levelLink(level),
+                    template.profileLink(level),
+                    template.likeFavoriteDifficulty(level),
+                    template.tags(level),
+                    level.tower ? '' : template.exposure(level),
+                    template.copyCodeButton(level)
+                    )
+            });
+            document.getElementById("dailyBuilds").innerHTML = htmlout;
+        })
+}
+
 var dailyItemLabels =`
 <tr>
     <td>Picture</td>

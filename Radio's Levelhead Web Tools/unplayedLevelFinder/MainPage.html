@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
     <script src="LH_API_test.js"></script>
+    <script src="../ApplySettings.js"></script>
     <link rel="stylesheet" href="LHUnplayedLevels.css">
+    <link rel="stylesheet" href="../CommonStyle.css">
   </head>
 
   <body>
@@ -55,6 +57,9 @@
     </div>
     <button id="getMoreButton" style="display: none; margin-top: 50px;min-height: 100px;min-width: 200px;" onclick="getMoreLevels()">Get More Levels!</button>
 
-    <script>loadTagSelect()</script>
+    <script>
+      loadTagSelect();
+      loadOptions();
+    </script>
   </body>
 </html>

@@ -7,22 +7,6 @@ var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 var lastCode='';
 //#endregion
 
-//#region constants
-var difficulty = [
-    '⋄⋄⋄⋄⋄',
-    '<a style="color:red">♦</a>⋄⋄⋄⋄',
-    '<a style="color:red">♦♦</a>⋄⋄⋄',
-    '<a style="color:red">♦♦♦</a>⋄⋄',
-    '<a style="color:red">♦♦♦♦</a>⋄',
-    '<a style="color:red">♦♦♦♦♦</a>',
-    '⋄⋄⋄⋄⋄'
-];
-
-var SHOW_ALL=0;
-var SHOW_ONLY=1;
-var SHOW_EXCLUDE=2;
-//#endregion
-
 //#region URL helpers
 function assemblePlayerURL(){
     return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ document.getElementById('userCode').value.trim().toLowerCase() +'&includeStats=true&maxCreatedAt=';
@@ -85,29 +69,17 @@ FILTERS:
 //  Tower Trial: <select id="TTFilter">
 */
 function checkFilters(level){
-    var filterVal = document.getElementById('dailyFilter').value;
-    if(!((filterVal !=0 ) ? (level.dailyBuild != (filterVal-1)) : true)) return false;
+    if(!filterDaily(level)) return false;
 
-    filterVal = document.getElementById('difficultyFilter').value; 
-    if(!((filterVal != 0) ? (level.stats.Diamonds == filterVal) : true)) return false;
+    if(!filterDifficulty(level)) return false;
 
-    filterVal = document.getElementById('graduationFilter').value; 
-    if(!((filterVal != 0) ? (level.tower != (filterVal-1)) : true)) return false;
+    if(!filterGraduation(level)) return false;
     
-    //min players <= players >= max players 
-    if(!(level.stats.Players >= document.getElementById('minPlayerFilter').value
-    && level.stats.Players <= document.getElementById('maxPlayerFilter').value)) return false;
+    if(!filterPlayerCount(level)) return false;
 
-    filterVal = document.getElementById('TTFilter').value; 
-    if(!((filterVal != 0) ? (level.towerTrial != (filterVal-1)) : true)) return false;
+    if(!filterTowerTrial(level)) return false;
 
-    //Tag Filtering
-
-    for(var x = 1; x < 4; ++x){
-        //check if Level has specified tags
-        if(document.getElementById('requiredTags'+ x).value != 0 ? !level.tags.includes(document.getElementById('requiredTags'+ x).value) : false) return false;
-        if(document.getElementById('excludedTags'+ x).value != 0 ? level.tags.includes(document.getElementById('excludedTags'+ x).value) : false) return false;
-    }
+    if(!filterTags(level)) return false;
 
     return true;
 }
@@ -122,7 +94,7 @@ function loadCards(){
     levelList.forEach(fetchCall => {
         fetchCall.forEach(level => {
             if(checkFilters(level)){ //only creates card if filters apply
-                htmlout+=levelCardTemplate
+                /*htmlout+=levelCardTemplate
                 .replace('{{avatar}}', level.avatarId)
                 .replace('{{levelname}}', level.title)
                 .replaceAll('{{levelcode}}', level.levelId)
@@ -135,7 +107,15 @@ function loadCards(){
                 .replace('{{plays}}', level.stats.Attempts)
                 .replace('{{daily}}', level.dailyBuild ? 'visible' : 'none')
                 .replace('{{tt}}', level.towerTrial ? 'visible' : 'none')
-                .replace('{{tags}}', level.tagNames)
+                .replace('{{tags}}', level.tagNames)*/
+                htmlout += createLevelCard(level,
+                    template.levelLink(level),
+                    template.likeFavoriteDifficulty(level),
+                    template.tags(level),
+                    template.playerPlaysCount(level),
+                    template.creationDate(level),
+                    template.copyCodeButton(level)
+                    )
             }
         })
     })
@@ -213,24 +193,8 @@ function loadProfileLevels(){
 //#endregion
 
 //#region Templates
-var levelCardTemplate=`
-<div class="column"><div class="card">
-<img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
-<img src="pictures/{{graduated}}.png" id="miniIcon" style="margin-left:2px;">
-<img src="pictures/TT.png" id="miniIcon" style="margin-left:80px;display:{{tt}};">
-<img src="pictures/DAILYBUILD.png" id="miniIcon" style="margin-top:75px;margin-left:6px;display:{{daily}};">
-    <p id="cardText">
-        <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br>
-        <a style="color:#7E3517">♥</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}}<br>
-        {{tags}}<br>
-        <b>Players:</b> {{players}}, <b>Plays:</b> {{plays}}<br>
-        <b>Created:</b> {{createdAt}}<br>
-        <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>
-    </p>
-</div></div>
-`;
 
-var tagSelectTemplate=`
+var tagSelectTemplate = `
 <option value="{{tagId}}" id="{{tagId}}{{selectName}}{{selectNumber}}">{{tagName}}</option>
 `;
 //#endregion

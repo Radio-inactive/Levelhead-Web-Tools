@@ -14,23 +14,20 @@
 
     }
     
-    function createLevelCard(level){
+    function makeLevelCard(level){
         //card not created if filters don't apply
         if(!checkFilters(level)) 
             return '';
 
-        var htmlout = '';
-        htmlout += levelCardTemplate
-        .replace('{{avatar}}', level.avatarId)
-        .replaceAll('{{levelId}}', level.levelId)
-        .replace('{{levelName}}', level.title)
-        .replace('{{creatorCode}}', level.userId)
-        .replace('{{alias}}', level.alias.alias)
-        .replace('{{players}}', level.stats.Players)
-        .replace('{{EB}}', level.stats.ExposureBucks)
-        .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15)); 
-        
-        return htmlout;
+        return createLevelCard(level,
+            template.levelLink(level),
+            template.profileLink(level),
+            template.likeFavoriteDifficulty(level),
+            template.playerPlaysCount(level),
+            template.exposure(level),
+            template.copyCodeButton(level)
+            )
+
     }
 
     function fetchLevels()
@@ -53,7 +50,7 @@
             function(r){
                 r.data
                  .forEach(level => {
-                    htmlout += createLevelCard(level);
+                    htmlout += makeLevelCard(level);
                 });
                 //pushes fetch result into levels array.
                 levels.push(r.data)
@@ -118,7 +115,7 @@
                     //assemble cards
                     r.data
                      .forEach( level => {
-                        htmlout += createLevelCard(level);
+                        htmlout += makeLevelCard(level);
                     })
                     //cleaned fetch call is added to levels array
                     levels.push(r.data);
@@ -144,7 +141,7 @@
                     removeRedundantCodes(r.data);
                     //assemble cards
                     r.data.forEach(level => {
-                        htmlout += createLevelCard(level);
+                        htmlout += makeLevelCard(level);
                     })
                     //cleaned fetch call is added to levels array
                     levels.push(r.data);
@@ -172,7 +169,7 @@
         .forEach( x => {
             x
             .forEach(level =>{
-                htmlout += createLevelCard(level);
+                htmlout += makeLevelCard(level);
             })
         })
         document.getElementById('levelList')
@@ -228,18 +225,9 @@
                     .display = 'none';
         }
     }
-    /* 
-    FILTERS:
-    //  Daily build: <select id="dailyFilter">
-    //  Difficulty: <select id="difficultyFilter">
-    //  Graduated?: <select id="graduationFilter">
-    //  Min Players: <input type="number" min="0" max="99999" value="0"><br>
-    //  Max Players: <input type="number" min="0" max="99999" value="999"><br>
-    //  Tower Trial: <select id="TTFilter">
-    */
+
     function checkFilters(level){
-        var filterVal = document.getElementById('dailyFilter').value;
-        if(!((filterVal !=0 ) ? (level.dailyBuild != (filterVal-1)) : true)) return false;
+        if(!filterDaily(level)) return false;
     
         filterVal = document.getElementById('difficultyFilter').value; 
         if(!((filterVal != 0) ? (level.stats.Diamonds == filterVal) : true)) return false;
@@ -264,7 +252,7 @@
 
 
     //#region templates
-
+/*
 var levelCardTemplate=`
 <div class="column">
     <div class="card">
@@ -280,7 +268,7 @@ var levelCardTemplate=`
     </div>
 </div>
 `;
-
+*/
 //URL fragments
 var URLTemplate =
 'https://www.bscotch.net/api/levelhead/levels?marketing=true&limit={{limit}}&maxExposureBucks={{maxEB}}&includeStats=true&includeAliases=true';
