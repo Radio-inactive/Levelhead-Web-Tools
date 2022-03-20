@@ -113,27 +113,54 @@ function filterTags(level)
     return true;
 }
 
+function showFilters(){
+    if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
+        document.getElementById('filtersToggle')
+                .innerHTML = 'Filters ▼';
+        document.getElementById('filters').style
+                .display = 'block';
+    }
+    else{
+        document.getElementById('filtersToggle')
+                .innerHTML = 'Filters ▲';
+        document.getElementById('filters').style
+                .display = 'none';
+    }
+}
+
+function loadTagSelect(){
+    var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
+    var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
+
+    fetch('https://www.bscotch.net/api/levelhead/level-tags/counts')
+    .then(r => r.json())
+    .then(
+        function(r){
+            r.data.forEach( tag => {
+                htmloutRequired += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
+                                                    .replace('{{tagName}}', tag.name)
+                                                    .replace('{{selectName}}', 'Required');
+                htmloutExcluded += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
+                                                    .replace('{{tagName}}', tag.name)
+                                                    .replace('{{selectName}}', 'Excluded');
+            })
+            for(var x =1; x<4; ++x){
+                document.getElementById('requiredTags'+ x)
+                        .innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
+                document.getElementById('excludedTags'+ x)
+                        .innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
+            }
+        }
+    )
+}
+
+var tagSelectTemplate=`
+<option value="{{tagId}}" id="{{tagId}}{{selectName}}{{selectNumber}}">{{tagName}}</option>
+`;
+
 //#endregion
 
-
-
-//card templates
-var levelCardTemplate = `
-<div class="column"><div class="card">
-<img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
-<img src="../PicturesCommon/CardIcons/{{graduated}}.png" id="miniIcon" style="margin-left:2px;">
-<img src="../PicturesCommon/CardIcons/TT.png" id="miniIcon" style="margin-left:80px;display:{{tt}};">
-<img src="../PicturesCommon/CardIcons/DAILYBUILD.png" id="miniIcon" style="margin-top:75px;margin-left:6px;display:{{daily}};">
-    <p id="cardText">
-        <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br>
-        <a style="color:#7E3517">♥️</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}}<br>
-        {{tags}}<br>
-        <b>Players:</b> {{players}}, <b>Plays:</b> {{plays}}<br>
-        <b>Created:</b> {{createdAt}}<br>
-        <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>
-    </p>
-</div></div>
-`;
+//#region Level Cards
 
 //Generic Card Templates
 
@@ -263,3 +290,32 @@ var icon = {
             return '';
     }
 }
+
+//#endregion
+
+//#region Old stuff. not needed, but I'll keep it here just in case
+
+
+
+
+//old card template
+/*
+var levelCardTemplate = `
+<div class="column"><div class="card">
+<img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">
+<img src="../PicturesCommon/CardIcons/{{graduated}}.png" id="miniIcon" style="margin-left:2px;">
+<img src="../PicturesCommon/CardIcons/TT.png" id="miniIcon" style="margin-left:80px;display:{{tt}};">
+<img src="../PicturesCommon/CardIcons/DAILYBUILD.png" id="miniIcon" style="margin-top:75px;margin-left:6px;display:{{daily}};">
+    <p id="cardText">
+        <a href="https://levelhead.io/+{{levelcode}}" target="ProfileLevel">{{levelname}}</a><br>
+        <a style="color:#7E3517">♥️</a>: {{likes}}, <a style="color:#7F5217">★</a>: {{favorites}}, {{difficulty}}<br>
+        {{tags}}<br>
+        <b>Players:</b> {{players}}, <b>Plays:</b> {{plays}}<br>
+        <b>Created:</b> {{createdAt}}<br>
+        <button onclick="navigator.clipboard.writeText('{{levelcode}}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>
+    </p>
+</div></div>
+`;
+*/
+
+//#endregion

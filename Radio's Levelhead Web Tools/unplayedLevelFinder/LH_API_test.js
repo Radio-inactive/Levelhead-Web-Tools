@@ -176,55 +176,6 @@
                 .innerHTML = htmlout;
 }
 
-    function loadTagSelect(){
-        //define empty starting option
-        var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
-        var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
-    
-        //fetches all tags
-        fetch('https://www.bscotch.net/api/levelhead/level-tags/counts')
-        .then(r => r.json())
-        .then(
-            function(r){
-                r.data
-                .forEach( tag => {//Templates partially filled out
-                    htmloutRequired += tagSelectTemplate
-                                       .replaceAll('{{tagId}}', tag.tag)
-                                       .replace('{{tagName}}', tag.name)
-                                       .replace('{{selectName}}', 'Required');
-                    htmloutExcluded += tagSelectTemplate
-                                       .replaceAll('{{tagId}}', tag.tag)
-                                       .replace('{{tagName}}', tag.name)
-                                       .replace('{{selectName}}', 'Excluded');
-                })
-                //creates 3 Tag selections each for required and excluded tags. x used for ids
-                for(var x =1; x<4; ++x){
-                    document.getElementById('requiredTags'+ x)
-                            .innerHTML = htmloutRequired
-                                         .replaceAll('{{selectNumber}}', x); //each option has an id. currently unused
-                    document.getElementById('excludedTags'+ x)
-                            .innerHTML = htmloutExcluded
-                                         .replaceAll('{{selectNumber}}', x);
-                }
-            }
-        )
-    }
-    
-    function showFilters(){
-        //toggles filter based on the content of the button
-        if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
-            document.getElementById('filtersToggle')
-                    .innerHTML = 'Filters ▼';
-            document.getElementById('filters').style
-                    .display = 'block';
-        }
-        else{
-            document.getElementById('filtersToggle')
-                    .innerHTML = 'Filters ▲';
-            document.getElementById('filters').style
-                    .display = 'none';
-        }
-    }
 
     function checkFilters(level){
         if(!filterDaily(level)) return false;
@@ -272,9 +223,5 @@ var levelCardTemplate=`
 //URL fragments
 var URLTemplate =
 'https://www.bscotch.net/api/levelhead/levels?marketing=true&limit={{limit}}&maxExposureBucks={{maxEB}}&includeStats=true&includeAliases=true';
-
-var tagSelectTemplate=`
-<option value="{{tagId}}" id="{{tagId}}{{selectName}}{{selectNumber}}">{{tagName}}</option>
-`;
 
 //#endregion

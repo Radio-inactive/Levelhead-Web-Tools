@@ -1,4 +1,4 @@
-
+//#region Daily Build Items
 function loadDailyBuildItems(){
     var htmlout = "";
     //"picture" and "name" at the top of the table
@@ -26,25 +26,96 @@ function loadDailyBuildItems(){
     });
 }
 
-function loadDailyBuildLevels(){
+//#endregion
+
+//#region Daily Build Levels
+
+var levels = [];
+
+function reloadLevels(){
+    document.getElementById("dailyBuilds").innerHTML = 'generating';
     var htmlout = '';
-    fetch("https://www.bscotch.net/api/levelhead/levels?dailyBuild=true&limit=128&includeAliases=true&includeStats=true")
-    .then(r => r.json())
-    .then(function(r){
-            console.log(r);
-            r.data.forEach(level => {
+    levels.forEach( fetchCall =>{
+        fetchCall.forEach(level => {
+            if(checkFilters(level))
                 htmlout += createLevelCard(level,
                     template.levelLink(level),
                     template.profileLink(level),
                     template.likeFavoriteDifficulty(level),
                     template.tags(level),
-                    level.tower ? '' : template.exposure(level),
+                    level.tower ? '' : template.exposure(level), //does not show EB if the level has graduated
                     template.copyCodeButton(level)
                     )
-            });
-            document.getElementById("dailyBuilds").innerHTML = htmlout;
+        })
+    })
+    document.getElementById("dailyBuilds").innerHTML = htmlout;
+}
+
+function checkFilters(level){
+    if(!filterDifficulty(level)) return false;
+
+    if(!filterGraduation(level)) return false;
+    
+    if(!filterPlayerCount(level)) return false;
+
+    if(!filterTowerTrial(level)) return false;
+
+    if(!filterTags(level)) return false;
+
+    return true;
+}
+
+//creates the URL for daily build fetch calls
+function createFetchUrl(lastDate, lastLevelId){
+    var dailyBuildURL = 'https://www.bscotch.net/api/levelhead/levels?dailyBuild=true&limit=128&includeAliases=true&includeStats=true';
+    //called with no parameters: initial fetch call
+    if(lastDate === undefined)
+        return dailyBuildURL;
+    
+    return dailyBuildURL + `&maxCreatedAt=${lastDate}&tiebreakerItemId=${lastLevelId}`;
+}
+
+//loads new daily builds
+function loadDailyBuildLevels(){
+    var htmlout = '';
+    levels = [];
+    document.getElementById("dailyBuilds").innerHTML = 'LOADING';
+    fetch(createFetchUrl())
+    .then(r => r.json())
+    .then(function(r){
+            levels.push(r.data);
+            console.log(levels);
+            reloadLevels();
+            document.getElementById("getMoreButton").style
+                    .display = 'block';
         })
 }
+
+function getMoreButton(){
+    document.getElementById("getMoreButton").style
+            .display = 'none';
+
+    //get date of last level
+    var lastFetchIndex = levels.length - 1;
+    var lastLevel = levels[lastFetchIndex][levels[lastFetchIndex].length - 1];
+
+    fetch(createFetchUrl(lastLevel.createdAt, lastLevel._id))
+    .then(r => r.json())
+    .then(function(r){
+        console.log('MORE LEVELS');
+        console.log(r);
+        //adds fetch call, reloads level cards
+        levels.push(r.data);
+        reloadLevels();
+        //make get more button visible again
+        document.getElementById("getMoreButton").style
+                .display = 'block';
+    })
+}
+
+//#endregion
+
+//#region Templates
 
 var dailyItemLabels =`
 <tr>
@@ -430,3 +501,5 @@ var itemInfo = [
     }
 
 ];
+
+//#endregion

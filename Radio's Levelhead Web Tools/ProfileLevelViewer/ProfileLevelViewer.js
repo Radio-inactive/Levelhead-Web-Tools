@@ -19,46 +19,6 @@ function assembleProfileURL()//used to check if the profile is valid
 //#endregion
 
 //#region Filters
-function loadTagSelect(){
-    var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
-    var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
-
-    fetch('https://www.bscotch.net/api/levelhead/level-tags/counts')
-    .then(r => r.json())
-    .then(
-        function(r){
-            r.data.forEach( tag => {
-                htmloutRequired += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
-                                                    .replace('{{tagName}}', tag.name)
-                                                    .replace('{{selectName}}', 'Required');
-                htmloutExcluded += tagSelectTemplate.replaceAll('{{tagId}}', tag.tag)
-                                                    .replace('{{tagName}}', tag.name)
-                                                    .replace('{{selectName}}', 'Excluded');
-            })
-            for(var x =1; x<4; ++x){
-                document.getElementById('requiredTags'+ x)
-                        .innerHTML = htmloutRequired.replaceAll('{{selectNumber}}', x);
-                document.getElementById('excludedTags'+ x)
-                        .innerHTML = htmloutExcluded.replaceAll('{{selectNumber}}', x);
-            }
-        }
-    )
-}
-
-function showFilters(){
-    if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
-        document.getElementById('filtersToggle')
-                .innerHTML = 'Filters ▼';
-        document.getElementById('filters').style
-                .display = 'block';
-    }
-    else{
-        document.getElementById('filtersToggle')
-                .innerHTML = 'Filters ▲';
-        document.getElementById('filters').style
-                .display = 'none';
-    }
-}
 /* 
 FILTERS:
 //  Daily build: <select id="dailyFilter">
@@ -94,20 +54,6 @@ function loadCards(){
     levelList.forEach(fetchCall => {
         fetchCall.forEach(level => {
             if(checkFilters(level)){ //only creates card if filters apply
-                /*htmlout+=levelCardTemplate
-                .replace('{{avatar}}', level.avatarId)
-                .replace('{{levelname}}', level.title)
-                .replaceAll('{{levelcode}}', level.levelId)
-                .replace('{{likes}}', level.stats.Likes ? level.stats.Likes : 0)
-                .replace('{{favorites}}', level.stats.Favorites ? level.stats.Favorites : 0)
-                .replace('{{createdAt}}', new Date(level.createdAt).toString().substring(4,15))//handles time format
-                .replace('{{difficulty}}', difficulty[level.stats.Diamonds])
-                .replace('{{graduated}}', level.tower ? 'TOWER' : 'MD')
-                .replace('{{players}}', level.stats.Players)
-                .replace('{{plays}}', level.stats.Attempts)
-                .replace('{{daily}}', level.dailyBuild ? 'visible' : 'none')
-                .replace('{{tt}}', level.towerTrial ? 'visible' : 'none')
-                .replace('{{tags}}', level.tagNames)*/
                 htmlout += createLevelCard(level,
                     template.levelLink(level),
                     template.likeFavoriteDifficulty(level),
