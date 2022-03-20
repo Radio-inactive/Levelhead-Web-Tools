@@ -1,27 +1,26 @@
 function loadGallary(){
     var htmlout = "";
-    var cardBuf = "";
 
     avatarTitles
-     .forEach(x => {
+     .forEach(avatarId => {
         //avatar used for unique ids and loading pictures
-        htmlout += gallaryCardTemplate.replaceAll('{{avatar}}', x);
+        htmlout += gallaryCardTemplate.replaceAll('{{avatar}}', avatarId);
     })
     document.getElementById('gallaryContent').innerHTML = htmlout;
 }
 
 function loadLevelLink(avatar){
     var size = document.getElementById(avatar +'Input').value;
-    if(size == '') size = 100;
+    if(size >= 16 && size <= 2000);
+    else if(size == '') size = 100;
     //maximum/minimum size
     else if(size < 16) size = 16;
     else if(size > 2000) size = 2000;
     //never happens as far as I know
     else size = 100;
-
     var filetype = document.getElementById(avatar +'Filetype').innerHTML;
     //assembles link, opens in new tab
-    window.open('https://img.bscotch.net/fit-in/'+ size +'x'+ size +'/avatars/'+ avatar +'.'+filetype, '_blank');
+    window.open(`https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatar}.${filetype}`, '_blank');
 }
 
 function toggleFileType(avatar){
@@ -47,6 +46,7 @@ File type: <button onclick="toggleFileType('{{avatar}}')" id="{{avatar}}Filetype
 </p></div></div>
 `;
 
+//#region All Avatar IDs
 
 var avatarTitles=[
     "bureau-employee",
@@ -243,3 +243,5 @@ var avatarTitles=[
     "bscotchshi",
     "bscotchsampy"
 ]
+
+//#endregion
