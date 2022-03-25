@@ -198,12 +198,12 @@ var template = {//ToDo: implement.
 
     copyCodeButton : function (level){
         var code = level.levelId;
-        return `<button onclick="navigator.clipboard.writeText('${code}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button>`;
+        return `<button onclick="navigator.clipboard.writeText('${code}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button><button style="height: 20px; font-size: 10px;" onclick="window.open('../HiddenLevelStatistics/MainPage.html?levelCode=${code}')">Statistics</button>`;
     },
 
     playerPlaysCount : function (level){
         var players = level.stats.Players;
-        var plays = level.stats.Plays;
+        var plays = level.stats.Attempts;
         if(players === undefined) players = 0;
         if(plays === undefined) plays = 0;
         return `<b>Players:</b> ${players}, <b>Plays:</b> ${plays}`;

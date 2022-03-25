@@ -165,6 +165,17 @@ function loadHiddenStatistics(){
     )
 }
 
+function loadLevelCodeFromURL(){
+    var url_string = window.location;
+    var url = new URL(url_string);
+    var code = url.searchParams.get("levelCode");
+    console.log(`level code from url: ${code}`);
+    if(code){
+        document.getElementById('levelCode').value = code;
+        loadHiddenStatistics();
+    }
+}
+
 var userTemplate=`
 <p><img src="https://img.bscotch.net/fit-in/20x20/avatars/{{avatar}}.webp">{{userName}} <a href="https://levelhead.io/@{{userCode}}" target="userLike">@{{userCode}}</a></p>
 `;
