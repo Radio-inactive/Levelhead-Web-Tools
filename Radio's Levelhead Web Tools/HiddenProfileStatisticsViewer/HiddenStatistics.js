@@ -34,25 +34,41 @@ function fetchProfileDetails()
                     document.getElementById('ProfileValidity')
                             .innerHTML = 'VALID';
                     document.getElementById('Reports')
-                            .innerHTML = r.data[0].alias.reports;
+                            .innerHTML = r.data[0].alias.reports
+                                       ? r.data[0].alias.reports
+                                       : 0;
                     document.getElementById('Whitelisted')
-                            .innerHTML = r.data[0].alias.whitelisted;
+                            .innerHTML = r.data[0].alias.whitelisted
+                                       ? 'Yes'
+                                       : 'No';
                     document.getElementById('CreationDate')
                             .innerHTML = r.data[0].createdAt.substring(0,10);
                     document.getElementById('LastUpdate')
                             .innerHTML = new Date(r.data[0].updatedAt).toString().substring(4,31);
                     document.getElementById('PerkPoints')
-                            .innerHTML = r.data[0].stats.PerkPoints;
+                            .innerHTML = r.data[0].stats.PerkPoints
+                                       ? r.data[0].stats.PerkPoints
+                                       : 0;
                     document.getElementById('HiddenGem')
-                            .innerHTML = r.data[0].stats.HiddenGem;
+                            .innerHTML = r.data[0].stats.HiddenGem
+                                       ? r.data[0].stats.HiddenGem
+                                       : 0;
                     document.getElementById('TippedPerDay')
-                            .innerHTML = r.data[0].stats.TippedPerDay;
+                            .innerHTML = r.data[0].stats.TippedPerDay
+                                       ? r.data[0].stats.TippedPerDay
+                                       : 0;
                     document.getElementById('TippedPerLevelPlayed')
-                            .innerHTML = r.data[0].stats.TippedPerLevelPlayed;
+                            .innerHTML = r.data[0].stats.TippedPerLevelPlayed
+                                       ? r.data[0].stats.TippedPerLevelPlayed
+                                       : 0;
                     document.getElementById('TipsGottenPerDay')
-                            .innerHTML = r.data[0].stats.TipsPerDay;
+                            .innerHTML = r.data[0].stats.TipsPerDay
+                                       ? r.data[0].stats.TipsPerDay
+                                       : 0;
                     document.getElementById('TipsGottenPerLevel')
-                            .innerHTML = r.data[0].stats.TipsPerLevel;
+                            .innerHTML = r.data[0].stats.TipsPerLevel
+                                       ? r.data[0].stats.TipsPerLevel
+                                       : 0;
                 }
                 return fetch(assembleAliasesURL());
             })

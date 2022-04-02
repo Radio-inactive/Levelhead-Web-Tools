@@ -111,29 +111,51 @@ function loadHiddenStatistics(){
                 document.getElementById('CreatorName')
                         .innerHTML = r.data[0].alias.alias;
                 document.getElementById('CreatorTime')
-                        .innerHTML = timeFormat(r.data[0].creatorTime);
+                        .innerHTML = r.data[0].creatorTime
+                                   ? timeFormat(r.data[0].creatorTime)
+                                   : 'UNKNOWN';
                 document.getElementById('CV')
-                        .innerHTML = r.data[0].cv;
+                        .innerHTML = r.data[0].cv
+                                   ? r.data[0].cv
+                                   : 0;
                 document.getElementById('DailyBuild')
-                        .innerHTML = r.data[0].dailyBuild;
+                        .innerHTML = r.data[0].dailyBuild
+                                   ? 'Yes'
+                                   : 'No';
                 document.getElementById('GameVersion')
                         .innerHTML = r.data[0].gameVersion
+                                   ? r.data[0].gameVersion
+                                   : 'UNKNOWN';
                 document.getElementById('Language')
-                        .innerHTML = r.data[0].locale
+                        .innerHTML = r.data[0].locale;
                 document.getElementById('EB')
                         .innerHTML = r.data[0].stats.ExposureBucks
+                                   ? r.data[0].stats.ExposureBucks
+                                   : 0;
                 document.getElementById('ClearRate')
                         .innerHTML = r.data[0].stats.ClearRate
+                                   ? r.data[0].stats.ClearRate
+                                   : 0;
                 document.getElementById('FailureRate')
                         .innerHTML = r.data[0].stats.FailureRate
+                                   ? r.data[0].stats.FailureRate
+                                   : 0;
                 document.getElementById('HiddenGem')
                         .innerHTML = r.data[0].stats.HiddenGem
+                                   ? r.data[0].stats.HiddenGem
+                                   : 0;
                 document.getElementById('ReplayValue')
                         .innerHTML = r.data[0].stats.ReplayValue
+                                   ? r.data[0].stats.ReplayValue
+                                   : 0;
                 document.getElementById('Successes')
                         .innerHTML = r.data[0].stats.Successes
+                                   ? r.data[0].stats.Successes
+                                   : 0;
                 document.getElementById('TimePerWin')
-                        .innerHTML = timeFormat(r.data[0].stats.TimePerWin)
+                        .innerHTML = r.data[0].stats.TimePerWin
+                                   ? timeFormat(r.data[0].stats.TimePerWin)
+                                   : 'No Times';
                 document.getElementById('UpdatedAt')
                         .innerHTML = new Date(r.data[0].updatedAt).toString().substring(4,31)
                 //record statistics
@@ -157,7 +179,7 @@ function loadHiddenStatistics(){
                 document.getElementById('HighScore')
                         .innerHTML=recordHolders;
             }
-            else //ToDo: replace this if else with an if + return att the start
+            else //ToDo: replace this if else with an if + return at the start
                 document.getElementById('validity')
                         .innerHTML='INVALID CODE!';
         }

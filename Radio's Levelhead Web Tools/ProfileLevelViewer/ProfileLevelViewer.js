@@ -136,6 +136,11 @@ function loadProfileLevels(){
         }); 
     
 }
+
+function loadProfileLevelsFromDelegationKey(){
+    //ToDo: Implement
+}
+
 //#endregion
 
 //#region Templates
