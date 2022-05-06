@@ -46,6 +46,15 @@ body{
     margin-left:6px;
   }
 
+  #cardMiniIconPlayed{
+    height:35px;
+    width:35px;
+    grid-row:1;
+    grid-column:1;
+    margin-top:65px;
+    margin-left:65px;
+  }
+
   #cardAvatar {
     grid-row:1;
     grid-column:1;
@@ -62,6 +71,10 @@ body{
     margin-bottom: 0px;
   }
 
+  .cardDelegation{
+    grid-row: 2;
+    grid-column: 1 / span 2;
+  }
   
   .column {
     float: left;

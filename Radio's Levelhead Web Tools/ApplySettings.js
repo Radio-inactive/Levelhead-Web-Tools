@@ -1,9 +1,85 @@
+//Global Variables
+
+var delegationKeyValid = false;
+
 
 //#region general purpose functions
 
 function getAvatarURL(avatarId, size = 100){
     return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatarId}.webp`;
 }
+
+//creates a request body for fetch calls making use of delegation keys
+function getExtendedRequestBody(method = 'GET'){
+    var requestBody = {
+        'method': method,
+        'headers': {
+            'Rumpus-Delegation-Key' : JSON.parse(window.localStorage.getItem('DelegationKey')).Key
+        },
+        'mode': 'cors',
+        'cache': 'default'
+    }
+    return requestBody;
+}
+
+//Delegation Key stuff. very chaotic, probably nonsensical
+function checkDelegationKey(){
+    try{
+    if(window.localStorage.getItem('DelegationKey'))
+    fetch('https://www.bscotch.net/api/levelhead/aliases?userIds=@me', getExtendedRequestBody('GET'))
+    .then(function(r){ delegationKeyValid = (r.status == '200')}) //see if status is OK
+    }
+    catch(exception){
+        delegationKeyValid = false;
+    }
+}
+
+function addInteractionDetails()
+{
+    return delegationKeyValid ? "&includeMyInteractions=true" : "";
+}
+
+function getInteractions(level){
+    //checks if level was created by user
+    var ownLevel = level.userId == JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
+    var possibleInteractions = {
+        'bookmarked':false,
+        'liked':ownLevel,
+        'favorited':ownLevel,
+        'played':ownLevel,
+        'completed':ownLevel
+    }
+    //check if any interactions, then add interactions
+    if(level.interactions){
+        //double negation for conversion in bool (can otherwise be undefined)
+        possibleInteractions.bookmarked = level.interactions.bookmarked ?true:false;
+        if(!ownLevel){
+            possibleInteractions.liked = level.interactions.liked ?true:false;
+            possibleInteractions.favorited = level.interactions.favorited ?true:false;
+            possibleInteractions.played = level.interactions.played ?true:false;
+            possibleInteractions.completed = level.interactions.completed ?true:false;
+        }
+    }
+    return possibleInteractions;
+    
+}
+
+//Bookmarks
+
+function manageBookmark(levelCode, mode = 'PUT') {
+    console.log(JSON.parse(window.localStorage.getItem('DelegationKey')).Key);
+    try{
+        fetch(`https://www.bscotch.net/api/levelhead/bookmarks/${levelCode}`,
+            getExtendedRequestBody(mode));
+        return true;
+    }
+    catch(exception){
+        console.log('BOOKMARK FAILED; ACTION: '+ mode);
+        return false;
+    }
+}
+
+
 
 //#endregion
 
@@ -22,6 +98,7 @@ var setCursorTemplate = "url('../PicturesCommon/Cursors/{{color}}.png'), auto";
 
 function loadOptions(){
     loadCursor();
+    checkDelegationKey();
 }
 
 function loadCursor(){
@@ -168,6 +245,7 @@ var tagSelectTemplate=`
 function createLevelCard(level){
     var text = '';
     var pictures = '';
+    var delegationContent = '';
 
     for(x = 1; x < arguments.length; ++x){
         text += arguments[x];
@@ -180,6 +258,11 @@ function createLevelCard(level){
     pictures += icon.towerTrial(level.towerTrial);
     pictures += icon.dailyBuild(level.dailyBuild);
 
+    if(delegationKeyValid){
+        delegationContent += template.bookmarkButton(level);
+        pictures += icon.interactionPlayed(getInteractions(level));
+    }
+
     return `
     <div class="column">
         <div class="card">
@@ -189,12 +272,34 @@ function createLevelCard(level){
             <p class="cardText">
                 ${text}
             </p>
-            <div class="cardDelegation"></div>
+            <div class="cardDelegation">${delegationContent}</div>
         </div>
     </div>`
 }
 
-var template = {//ToDo: implement.
+//toggles Bookmark button of level Card
+function toggleBookmark(levelCode){
+    document.getElementById('bookmarkButton'+ levelCode).disabled = true;
+
+    if(document.getElementById('bookmarkButton'+ levelCode).innerHTML != 'Create Bookmark')
+        if(manageBookmark(levelCode, 'DELETE')){
+            document.getElementById('bookmarkButton'+ levelCode).disabled = false;
+            document.getElementById('bookmarkButton'+ levelCode).innerHTML = 'Create Bookmark';
+        }
+        else{
+            console.log("ACTION FAILED")
+        }
+    else
+        if(manageBookmark(levelCode, 'PUT')){
+            document.getElementById('bookmarkButton'+ levelCode).disabled = false;
+            document.getElementById('bookmarkButton'+ levelCode).innerHTML = 'Remove Bookmark';
+        }
+        else{
+            console.log('ACTION FAILED')
+        }
+}
+
+var template = {
 
     copyCodeButton : function (level){
         var code = level.levelId;
@@ -244,8 +349,13 @@ var template = {//ToDo: implement.
 
     tags : function(level){
         return level.tagNames;
+    },
+
+    bookmarkButton(level){
+        return `<button id="bookmarkButton${level.levelId}" class="bookmarkButton" onclick="toggleBookmark('${level.levelId}')">${getInteractions(level).bookmarked ? 'Remove Bookmark' : 'Create Bookmark'}</button>`;
     }
 }
+
 
 var icon = {
     //
@@ -256,6 +366,8 @@ var icon = {
     iconTemplate : '<img src="../PicturesCommon/CardIcons/{{icon}}.png" id="miniIcon{{icon}}">',
 
     avatarTemplate : '<img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="cardPicture">',
+
+    playedStatus : ['NONE', 'PLAYED', 'BEATEN'],
 
     difficulty : [
         '⋄⋄⋄⋄⋄',
@@ -288,6 +400,9 @@ var icon = {
             return `<img src="../PicturesCommon/CardIcons/DAILYBUILD.png" id="cardMiniIconDaily" style="margin-top:75px;margin-left:6px;">`;
         else
             return '';
+    },
+    interactionPlayed : function (interactions){
+        return `<img src="../PicturesCommon/CardIcons/INTERACTION_${this.playedStatus[interactions.played + interactions.completed]}.png" id="cardMiniIconPlayed">`
     }
 }
 

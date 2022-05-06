@@ -72,8 +72,8 @@ function loadCards(){
 //lastDate: date of most recently fetched level.
 //lastId: id of last level, so it doesn't get fetched again
 //fetches: increasing number, to prevent potential infinie loops.
-function recursivelyLoadLevels(lastDate, lastId, fetches){
-    fetch(assemblePlayerURL()+lastDate+ '&tiebreakerItemId=' +lastId)
+function recursivelyLoadLevels(lastDate, lastId, fetches){            //add interactions if delegation key is present
+    fetch(assemblePlayerURL()+ lastDate +'&tiebreakerItemId='+ lastId +addInteractionDetails(), delegationKeyValid ? getExtendedRequestBody() : undefined)
     .then(r=>r.json())
     .then(function(r){
         fetches++;
@@ -113,6 +113,7 @@ function loadProfileLevels(){
 
     console.log(assemblePlayerURL());
     var checkCode = true;
+    console.log(assembleProfileURL(), !!window.localStorage.getItem('DelegationKey'));
     //most of this is to check if the profile is valid
     fetch(assembleProfileURL())
     .then(r => r.json())

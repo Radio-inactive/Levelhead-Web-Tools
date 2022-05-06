@@ -1,11 +1,16 @@
 
 function delegationKeySave() {
     var key = document.getElementById('delegationInput').value;
-    
+    var delegationKeyData = {
+        "Key":"",
+        "Validated":"",
+        "UserName":"",
+        "UserCode":""
+    };
     if(key == '')
         return;
     
-    fetch('https://www.bscotch.net/api/levelhead/bookmarks',
+    fetch('https://www.bscotch.net/api/levelhead/aliases?userIds=@me',
         {
             'method': 'GET',
             'headers': {
@@ -27,21 +32,30 @@ function delegationKeySave() {
         }//OK
         else if(r.status == '200')
         {
-            r => r.json();
-            window.localStorage.setItem('DelegationKey', `{
-                "Key" : "`+ key +`",
-                "Validated" : true
-            }`);
-            console.log(window.localStorage.getItem('DelegationKey'))
-            document.getElementById('delegationConfirm')
-                    .innerHTML = 'Delegation key successfully stored!';
+                    return  r.json();
         }
         else
             document.getElementById('delegationConfirm')
                     .innerHTML = 'A weird error has occured. Try again later...';
 
 
+        
+        return null;
+    })
+    .then(function(r){
         console.log(r);
+        if(r){
+            window.localStorage.setItem('DelegationKey', `{
+                "Key" : "${key}",
+                "Validated" : true,
+                "UserName":"${r.data[0].alias}",
+                "UserCode":"${r.data[0].userId}"
+            }`);
+            console.log(window.localStorage.getItem('DelegationKey'))
+            document.getElementById('delegationConfirm')
+                    .innerHTML = 'Delegation key successfully stored! Welcome, ' + r.data[0].alias + '!';
+        }
+        else return null;
     })
 }
 
@@ -108,7 +122,7 @@ function showDelegationKeyValidity(){
     console.log(key);
     
         document.getElementById('delegationConfirm')
-                .innerHTML = 'Delegation key saved!';
+                .innerHTML = 'Delegation key saved! Welcome, ' + key.UserName + "!";
 }
 
 var cursorOptionTemplate = `

@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../CommonStyle.css">
         <script src="HiddenStatistics.js"></script>
+        <script src="../ApplySettings.js"></script>
     </head>
     <body>
         <h1>Hidden Profile Statistics Viewer</h1>
@@ -28,5 +29,12 @@
         <p><b>Tips received per Day: </b><a id="TipsGottenPerDay">-</a></p>
         <p><b>Tips received per Level: </b><a id="TipsGottenPerLevel">-</a></p>
 
+        <script>
+            loadOptions();
+            if(window.localStorage.getItem('DelegationKey')){
+                document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
+                fetchProfileDetails();
+            }
+        </script>
     </body>
 </html>

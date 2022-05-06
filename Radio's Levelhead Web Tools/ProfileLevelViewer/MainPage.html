@@ -64,7 +64,11 @@
         </div>
         <script>
             loadTagSelect();
-        loadOptions();
+            loadOptions();
+            if(window.localStorage.getItem('DelegationKey')){
+                document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
+                loadProfileLevels();
+            }
         </script>
     </body>
 </html>
