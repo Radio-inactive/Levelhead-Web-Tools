@@ -7,6 +7,8 @@ var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 var lastCode='';
 //#endregion
 
+var matchingLevels = 0;
+
 //#region URL helpers
 function assemblePlayerURL(){
     return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ document.getElementById('userCode').value.trim().toLowerCase() +'&includeStats=true&maxCreatedAt=';
@@ -51,9 +53,12 @@ function loadCards(){
     document.getElementById('profileLevels')
             .innerHTML='Generating...';
     var htmlout="";
+    var levelTotal = 0;
+    matchingLevels = 0;
     levelList.forEach(fetchCall => {
         fetchCall.forEach(level => {
             if(checkFilters(level)){ //only creates card if filters apply
+                matchingLevels++;
                 htmlout += createLevelCard(level,
                     template.levelLink(level),
                     template.likeFavoriteDifficulty(level),
@@ -65,6 +70,14 @@ function loadCards(){
             }
         })
     })
+    document.getElementById('levelCount').style.display = 'block';
+    //add size of each fetch to get total level count
+    levelList.forEach(fetch => {
+        levelTotal += fetch.length;
+    })
+    //show count of total levels and matching levels
+    document.getElementById('levelCountTotal').innerHTML = levelTotal;
+    document.getElementById('levelCountMatch').innerHTML = matchingLevels;
     document.getElementById('profileLevels')
             .innerHTML=htmlout;
 }
