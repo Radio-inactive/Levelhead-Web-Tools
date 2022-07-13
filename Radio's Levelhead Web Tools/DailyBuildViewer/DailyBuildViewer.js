@@ -30,7 +30,7 @@ function loadDailyBuildItems(){
 
 //#region Daily Build Levels
 
-var levels = [];
+var levelList = [];
 var matchingLevels = 0;
 
 function reloadLevels(){
@@ -39,7 +39,7 @@ function reloadLevels(){
     var levelTotal = 0;
     matchingLevels = 0;
 
-    levels.forEach( fetchCall =>{
+    levelList.forEach( fetchCall =>{
         fetchCall.forEach(level => {
             if(checkFilters(level)){
                 matchingLevels++;
@@ -56,7 +56,7 @@ function reloadLevels(){
     })
     document.getElementById('levelCount').style.display = 'block';
     //add size of each fetch to get total level count
-    levels.forEach(fetch => {
+    levelList.forEach(fetch => {
         levelTotal += fetch.length;
     })
     //show count of total levels and matching levels
@@ -92,13 +92,13 @@ function createFetchUrl(lastDate, lastLevelId){
 //loads new daily builds
 function loadDailyBuildLevels(){
     var htmlout = '';
-    levels = [];
+    levelList = [];
     document.getElementById("dailyBuilds").innerHTML = 'LOADING';
     fetch(createFetchUrl())
     .then(r => r.json())
     .then(function(r){
-            levels.push(r.data);
-            console.log(levels);
+            levelList.push(r.data);
+            console.log(levelList);
             reloadLevels();
             document.getElementById("getMoreButton").style
                     .display = 'block';
@@ -110,8 +110,8 @@ function getMoreButton(){
             .display = 'none';
 
     //get date of last level
-    var lastFetchIndex = levels.length - 1;
-    var lastLevel = levels[lastFetchIndex][levels[lastFetchIndex].length - 1];
+    var lastFetchIndex = levelList.length - 1;
+    var lastLevel = levelList[lastFetchIndex][levelList[lastFetchIndex].length - 1];
 
     fetch(createFetchUrl(lastLevel.createdAt, lastLevel._id))
     .then(r => r.json())
@@ -119,7 +119,7 @@ function getMoreButton(){
         console.log('MORE LEVELS');
         console.log(r);
         //adds fetch call, reloads level cards
-        levels.push(r.data);
+        levelList.push(r.data);
         reloadLevels();
         //make get more button visible again
         document.getElementById("getMoreButton").style

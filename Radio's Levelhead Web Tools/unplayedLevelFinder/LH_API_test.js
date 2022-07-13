@@ -1,4 +1,4 @@
-    var levels = []; //saves each fetch call as an array.
+    var levelList = []; //saves each fetch call as an array.
     var unplayedVal = false; //ToDo: remove.
     var fetchLimit = 128; //max level count for fetch calls
 
@@ -53,8 +53,8 @@
                     htmlout += makeLevelCard(level);
                 });
                 //pushes fetch result into levels array.
-                levels.push(r.data)
-                console.log(levels);
+                levelList.push(r.data)
+                console.log(levelList);
                 //loads finished cards into the html
                 document.getElementById('levelList')
                         .innerHTML = htmlout;
@@ -70,9 +70,9 @@
         //in Array for easy code search
         var levelCodeList = [];
 
-        if(levels != []){
+        if(levelList != []){
             //most recent fetch call
-            levels[levels.length - 1]
+            levelList[levelList.length - 1]
              .forEach( level => {
                 levelCodeList += level.levelId;
             })
@@ -96,13 +96,13 @@
         document.getElementById('getMoreButton').style
                 .display = 'none';
         
-        if(levels != []){
+        if(levelList != []){
 
-            var newMax = levels[levels.length - 1][levels[levels.length - 1].length -1].stats.ExposureBucks;
+            var newMax = levelList[levelList.length - 1][levelList[levelList.length - 1].length -1].stats.ExposureBucks;
             console.log(newMax)
             //checks if first level of last fetch equals last level
             //if that's the case, a different approach for getting more levels is needed
-            if(newMax > 0 && newMax != levels[levels.length - 1][0].stats.ExposureBucks){
+            if(newMax > 0 && newMax != levelList[levelList.length - 1][0].stats.ExposureBucks){
                 //this case: EB of last level is used as max EB of next call
                 url = URLTemplate
                       .replace('{{maxEB}}', newMax)
@@ -118,10 +118,10 @@
                         htmlout += makeLevelCard(level);
                     })
                     //cleaned fetch call is added to levels array
-                    levels.push(r.data);
+                    levelList.push(r.data);
                     console.log('filtering:')
                     console.log(r.data);
-                    console.log(levels)
+                    console.log(levelList)
                     document.getElementById('levelList')
                             .innerHTML += htmlout;
                     document.getElementById('getMoreButton').style
@@ -132,7 +132,7 @@
                 //in this case: age of last level used as 'minSecondsAgo' in next call
                 url = URLTemplate.replace('{{maxEB}}', newMax)
                       .replace('{{limit}}', fetchLimit)
-                      +"&minSecondsAgo="+ levels[levels.length - 1][levels[levels.length - 1].length - 1] //last level of last fetch call
+                      +"&minSecondsAgo="+ levelList[levelList.length - 1][levelList[levelList.length - 1].length - 1] //last level of last fetch call
                                           .createdAgo;
                 console.log('fetch url getmore case 2: '+ url);
                 fetch(url)
@@ -144,10 +144,10 @@
                         htmlout += makeLevelCard(level);
                     })
                     //cleaned fetch call is added to levels array
-                    levels.push(r.data);
+                    levelList.push(r.data);
                     console.log('filtering:')
                     console.log(r.data);
-                    console.log(levels)
+                    console.log(levelList)
                     document.getElementById('levelList').innerHTML += htmlout;
                     document.getElementById('getMoreButton').style.display = 'block';
                 })
@@ -165,7 +165,7 @@
         document.getElementById("levelList")
                 .innerHTML = "Generating...";
         //re-generates all level cards. Filters are applied in the createLevelCard() function
-        levels
+        levelList
         .forEach( x => {
             x
             .forEach(level =>{

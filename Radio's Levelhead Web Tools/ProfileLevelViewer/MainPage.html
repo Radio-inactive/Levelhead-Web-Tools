@@ -1,78 +1,9 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Profile Level Viewer</title>
-        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="ProfileLevelViewer.js"></script>
-        <script src="../ApplySettings.js"></script>
-        <link rel="stylesheet" href="../CommonStyle.css">
-    </head>
-
-    <body>
-        <h1>Profile Level Viewer</h1>
-        <p>
-            This tool allows you to view all levels in a profile at once!<br>
-            Quick warning: if you've made a ton of levels this tool might take a while to load all of your levels!<br>
-        </p>
-        <input id="userCode" placeholder="Creator Code"><button onclick="loadProfileLevels()">Load Levels</button><br>
-        <p>Name: <a id="creatorName">-</a></p>
-        <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
-        <p id="filters" style="display:none;">
-            Daily build: <select id="dailyFilter" onchange="reloadLevels()">
-                <option value="0">show all</option>
-                <option value="1">show only daily</option>
-                <option value="2">exclude daily</option>
-              </select><br>
-            Difficulty: <select id="difficultyFilter" onchange="reloadLevels()">
-                <option value="0">show all</option>
-                <option value="1"><a style="color:red">♦</a>⋄⋄⋄⋄</option>
-                <option value="2"><a style="color:red">♦♦</a>⋄⋄⋄</option>
-                <option value="3"><a style="color:red">♦♦♦</a>⋄⋄</option>
-                <option value="4"><a style="color:red">♦♦♦♦</a>⋄</option>
-                <option value="5"><a style="color:red">♦♦♦♦♦</a></option>
-                <option value="6">⋄⋄⋄⋄⋄</option>
-              </select><br>
-            Graduated?: <select id="graduationFilter" onchange="reloadLevels()">
-                <option value="0">show all</option>
-                <option value="1">Tower</option>
-                <option value="2">MD</option>
-              </select><br>
-            Min Players: <input id="minPlayerFilter" type="number" min="0" max="99999" value="0" onchange="reloadLevels()"><br>
-            Max Players: <input id="maxPlayerFilter" type="number" min="0" max="99999" value="999" onchange="reloadLevels()"><br>
-            Tower Trial: <select id="TTFilter" onchange="reloadLevels()">
-                <option value="0">show all</option>
-                <option value="1">show only TT</option>
-                <option value="2">exclude TT</option>
-              </select><br>
-              <b>Filter Tags</b><br>
-              Required Tags:<br>
-              <select id="requiredTags1" onchange="reloadLevels()"></select>
-              <select id="requiredTags2" onchange="reloadLevels()"></select>
-              <select id="requiredTags3" onchange="reloadLevels()"></select>
-              <br>
-              Excluded Tags:<br>
-              <select id="excludedTags1" onchange="reloadLevels()"></select>
-              <select id="excludedTags2" onchange="reloadLevels()"></select>
-              <select id="excludedTags3" onchange="reloadLevels()"></select>
-              <br>
-              <div id="levelCount" style="display: none;">
-                  <p>Total Levels: <a id="levelCountTotal">-</a></p>
-                  <p>Total Matches: <a id="levelCountMatch">-</a></p>
-              </div>
-
-        </p>
-        <div class="row" id="profileLevels">
-            Nothing to see here yet!
-        </div>
-        <script>
-            loadTagSelect();
-            loadOptions();
-            if(window.localStorage.getItem('DelegationKey')){
-                document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
-                loadProfileLevels();
-            }
-        </script>
-    </body>
+   <head>
+      <title>Profile Level Viewer</title>
+      <meta http-equiv = "refresh" content = "0; url = index.html" />
+   </head>
+   <body>
+   </body>
 </html>
