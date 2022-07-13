@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Advanced MD search</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+    <script src="LH_API_test.js"></script>
+    <script src="../ApplySettings.js"></script>
+    <link rel="stylesheet" href="LHUnplayedLevels.css">
+    <link rel="stylesheet" href="../CommonStyle.css">
+  </head>
+
+  <body>
+    <h1>Advanced MD Search</h1>
+    <p>This site will show levels from the marketing department.<br>
+      Note:<br>
+      Unplayed Levels are found most reliably at max EB thresholds lower than 7000.<br>
+    </p>
+    <br>
+    <input type="number" id="maxEB" placeholder="Maximum EB" style="min-width: 250px;"><br>
+    <button onclick="fetchLevels()" style="min-width: 250px;">___________SUBMIT__________</button>
+    <p>
+      <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
+      <p id="filters" style="display:none;">
+          Daily build: <select id="dailyFilter" onchange="reloadLevels()">
+              <option value="0">show all</option>
+              <option value="1">show only daily</option>
+              <option value="2">exclude daily</option>
+            </select><br>
+          Difficulty: <select id="difficultyFilter" onchange="reloadLevels()">
+              <option value="0">show all</option>
+              <option value="1"><a style="color:red">♦</a>⋄⋄⋄⋄</option>
+              <option value="2"><a style="color:red">♦♦</a>⋄⋄⋄</option>
+              <option value="3"><a style="color:red">♦♦♦</a>⋄⋄</option>
+              <option value="4"><a style="color:red">♦♦♦♦</a>⋄</option>
+              <option value="5"><a style="color:red">♦♦♦♦♦</a></option>
+              <option value="6">⋄⋄⋄⋄⋄</option>
+            </select><br>
+          Min Players: <input id="minPlayerFilter" type="number" min="0" max="99999" value="0" onchange="reloadLevels()"><br>
+          Max Players: <input id="maxPlayerFilter" type="number" min="0" max="99999" value="999" onchange="reloadLevels()"><br>
+            <b>Filter Tags</b><br>
+            Required Tags:<br>
+            <select id="requiredTags1" onchange="reloadLevels()"></select>
+            <select id="requiredTags2" onchange="reloadLevels()"></select>
+            <select id="requiredTags3" onchange="reloadLevels()"></select>
+            <br>
+            Excluded Tags:<br>
+            <select id="excludedTags1" onchange="reloadLevels()"></select>
+            <select id="excludedTags2" onchange="reloadLevels()"></select>
+            <select id="excludedTags3" onchange="reloadLevels()"></select>
+            <br>
+
+      </p></p>
+    <div class="row" id="levelList" style="margin-top: 20px;">
+      NOTHING TO SEE HERE YET!
+    </div>
+    <button id="getMoreButton" style="display: none; margin-top: 50px;min-height: 100px;min-width: 200px;" onclick="getMoreLevels()">Get More Levels!</button>
+
+    <script>
+      loadTagSelect();
+      loadOptions();
+    </script>
+  </body>
+</html>

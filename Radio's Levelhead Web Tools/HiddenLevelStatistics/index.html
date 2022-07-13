@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Hidden Level Statistics</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="HiddenLevelStatistics.css">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="HiddenLevelStatistics.js"></script>
+    </head>
+    <body>
+        <h1>Hidden Level Statistics</h1>
+        <p>Allows you to see several hidden statistics of a level!</p><br>
+        <input id="levelCode" placeholder="Level Code"><button onClick="loadHiddenStatistics()">Load Statistics</button><br>
+        <p id="validity">*code validity*</p>
+
+        <table>
+            <tr>
+                <td><b>Hidden Statistics</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <p><b>Level Name:</b> <a id="LevelName">-</a></p>
+                    <p><b>Creator Name:</b> <a id="CreatorName">-</a></p>
+                    <p><b>Creator Time:</b> <a id="CreatorTime">-</a></p>
+                    <p><b>CV:</b> <a id="CV">-</a></p>
+                    <p><b>Daily Build:</b> <a id="DailyBuild">-</a></p>
+                    <p><b>Game Version:</b> <a id="GameVersion">-</a></p>
+                    <p><b>Language:</b> <a id="Language">-</a></p>
+                    <p><b>Exposure Bucks:</b> <a id="EB">-</a></p>
+                    <p><b>Clear Rate:</b> <a id="ClearRate">-</a></p>
+                    <p><b>Failure Rate:</b> <a id="FailureRate">-</a></p>
+                    <p><b>Hidden Gem:</b> <a id="HiddenGem">-</a></p>
+                    <p><b>Replay Value:</b> <a id="ReplayValue">-</a></p>
+                    <p><b>Successes:</b> <a id="Successes">-</a></p>
+                    <p><b>Time per win:</b> <a id="TimePerWin">-</a></p>
+                    <p><b>Updated at:</b> <a id="UpdatedAt">-</a></p>
+                    <p><b>--Shoes:</b></p>
+                    <p id="Records">-</p>
+                    <p><b>--Ribbons:</b></p>
+                    <p id="HighScore">-</p>
+
+                </td>
+            </tr>
+            <tr>
+                <td><b>Players who have liked</b></td>
+            </tr>
+            <tr>
+                <td id="LevelLikes"></td>
+            </tr>
+            <tr>
+                <td><b>Players who have favorited</b></td>
+            </tr>
+            <tr>
+                <td id="LevelFavorites"></td>
+            </tr>
+        </table>
+        <script>loadLevelCodeFromURL()</script>
+    </body>
+</html>

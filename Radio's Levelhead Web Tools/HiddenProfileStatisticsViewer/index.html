@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hidden Profile Statistics Viewer</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="HiddenStatistics.js"></script>
+        <script src="../ApplySettings.js"></script>
+    </head>
+    <body>
+        <h1>Hidden Profile Statistics Viewer</h1>
+        <p>This tool shows some hidden statistics that can not be seen on the profile page</p>
+        <br>
+        <p>User code:</p>
+        <input type="text" id="userCode"><button onclick="fetchProfileDetails()">Get Profile Details</button><br>
+        <p><b><a id="ProfileValidity">*code validity*</a></b></p>
+        <h2>Hidden Statistics:</h2>
+        <p><b>Safe Name: </b><a id="SafeName">-</a></p>
+        <p><b>User reports: </b><a id="Reports">-</a></p>
+        <p><b>Creation Date: </b><a id="CreationDate">-</a></p>
+        <p><b>Whitelisted: </b><a id="Whitelisted">-</a></p>
+        <p><b>Last Update: </b><a id="LastUpdate">-</a></p>
+        <p><b>Hidden Gem: </b><a id="HiddenGem">-</a></p>
+        <p><b>Perk Points: </b><a id="PerkPoints">-</a></p>
+        <p><b>Tipped per Day: </b><a id="TippedPerDay">-</a></p>
+        <p><b>Tipped per Level Played: </b><a id="TippedPerLevelPlayed">-</a></p>
+        <p><b>Tips received per Day: </b><a id="TipsGottenPerDay">-</a></p>
+        <p><b>Tips received per Level: </b><a id="TipsGottenPerLevel">-</a></p>
+
+        <script>
+            loadOptions();
+            if(window.localStorage.getItem('DelegationKey')){
+                document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
+                fetchProfileDetails();
+            }
+        </script>
+    </body>
+</html>
