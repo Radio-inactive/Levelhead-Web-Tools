@@ -224,7 +224,7 @@ var template = {
 
     copyCodeButton : function (level){
         var code = level.levelId;
-        return `<button onclick="navigator.clipboard.writeText('${code}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button><button style="height: 20px; font-size: 10px;" onclick="window.open('../HiddenLevelStatistics/MainPage.html?levelCode=${code}')">Statistics</button>`;
+        return `<button onclick="navigator.clipboard.writeText('${code}')" style="height: 20px; font-size: 10px;" id="levelCodeButton">Copy Levelcode</button><button style="height: 20px; font-size: 10px;" onclick="window.open('../HiddenLevelStatistics/index.html?levelCode=${code}')">Statistics</button>`;
     },
 
     playerPlaysCount : function (level){

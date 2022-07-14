@@ -24,22 +24,6 @@
                .replace('{{limit}}', fetchLimit);
 
     }
-    
-    function makeLevelCard(level){
-        //card not created if filters don't apply
-        if(!checkFilters(level)) 
-            return '';
-
-        return createLevelCard(level,
-            template.levelLink(level),
-            template.profileLink(level),
-            template.likeFavoriteDifficulty(level),
-            template.playerPlaysCount(level),
-            template.exposure(level),
-            template.copyCodeButton(level)
-            )
-
-    }
 
     function fetchLevels()
     {
@@ -47,9 +31,8 @@
         document.getElementById('getMoreButton').style
                 .display = 'none';
         document.getElementById('levelCards')
-                .innerHTML = 'LOADING...';
+                .innerHTML = 'Loading...';
         
-        var htmlout = "";
         var ref = createURL();
         levelList = [];
         console.log(ref);
@@ -60,16 +43,11 @@
             )
         .then(
             function(r){
-                r.data
-                 .forEach(level => {
-                    htmlout += makeLevelCard(level);
-                });
                 //pushes fetch result into levels array.
-                levelList.push(r.data)
+                levelList.push(r.data);
                 console.log(levelList);
-                //loads finished cards into the html
-                document.getElementById('levelCards')
-                        .innerHTML = htmlout;
+                reloadLevels();
+
                 //makes 'get more button' visible again
                 document.getElementById('getMoreButton').style
                         .display = 'block';
@@ -124,13 +102,9 @@
                  .then(r => r.json())
                  .then(function(r){
                     removeRedundantCodes(r.data);
-                    //assemble cards
-                    r.data
-                     .forEach( level => {
-                        htmlout += makeLevelCard(level);
-                    })
                     //cleaned fetch call is added to levels array
                     levelList.push(r.data);
+                    reloadLevels();
                     console.log('filtering:')
                     console.log(r.data);
                     console.log(levelList)
@@ -151,12 +125,9 @@
                 .then(r => r.json())
                 .then(function(r) {
                     removeRedundantCodes(r.data);
-                    //assemble cards
-                    r.data.forEach(level => {
-                        htmlout += makeLevelCard(level);
-                    })
                     //cleaned fetch call is added to levels array
                     levelList.push(r.data);
+                    reloadLevels();
                     console.log('filtering:')
                     console.log(r.data);
                     console.log(levelList)
