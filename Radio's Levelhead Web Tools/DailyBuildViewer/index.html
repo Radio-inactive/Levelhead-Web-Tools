@@ -66,8 +66,10 @@
               <select id="excludedTags2" onchange="reloadLevels()"></select>
               <select id="excludedTags3" onchange="reloadLevels()"></select>
               <br>
-
         </p>
+        <br>
+        Sort by <select id="sortSelect" onchange="reloadLevels()"></select>
+        <br>
         <div id="levelCount" style="display: none;">
             <p>Total Levels: <a id="levelCountTotal">-</a></p>
             <p>Total Matches: <a id="levelCountMatch">-</a></p>
@@ -79,6 +81,7 @@
         <button onclick="getMoreButton()" id="getMoreButton" style="display:none; margin-top: 50px;min-height: 100px;min-width: 200px;">Get more levels!</button>
         <script>
             loadTagSelect();
+            loadSortingSelect();
             loadDailyBuildItems();
             loadOptions();
         </script>

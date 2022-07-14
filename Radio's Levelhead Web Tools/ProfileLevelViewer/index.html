@@ -57,18 +57,20 @@
               <select id="excludedTags1" onchange="reloadLevels()"></select>
               <select id="excludedTags2" onchange="reloadLevels()"></select>
               <select id="excludedTags3" onchange="reloadLevels()"></select>
-              <br>
-              <div id="levelCount" style="display: none;">
-                  <p>Total Levels: <a id="levelCountTotal">-</a></p>
-                  <p>Total Matches: <a id="levelCountMatch">-</a></p>
-              </div>
-
         </p>
+        <br>
+        Sort by <select id="sortSelect" onchange="reloadLevels()"></select>
+        <br>
+        <div id="levelCount" style="display: none;">
+            <p>Total Levels: <a id="levelCountTotal">-</a></p>
+            <p>Total Matches: <a id="levelCountMatch">-</a></p>
+        </div>
         <div class="row" id="levelCards">
             Nothing to see here yet!
         </div>
         <script>
             loadTagSelect();
+            loadSortingSelect();
             loadOptions();
             if(window.localStorage.getItem('DelegationKey')){
                 document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;

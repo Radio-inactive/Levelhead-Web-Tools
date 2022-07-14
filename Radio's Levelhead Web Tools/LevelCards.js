@@ -131,6 +131,136 @@ var tagSelectTemplate=`
 
 //#endregion
 
+//#region Sorting
+
+var sortOptions = [
+    "default",
+    //level.createdAgo
+    "most recent",
+    "oldest",
+    //level.stats.TimePerWin
+    "longest",
+    "shortest",
+    //level.stats.ClearRate
+    "easiest",
+    "hardest",
+    //level.stats.Players
+    "most players",
+    "least players",
+    //level.stats.Attempts
+    "most plays",
+    "least plays",
+    //level.stats.ExposureBucks
+    "most EB",
+    "least EB",
+    //level.stats.Likes
+    "most liked",
+    "least liked",
+    //level.stats.Favorites
+    "most favorited",
+    "least favorited",
+    //level.stats.ReplayValue
+    "most spicy",
+    "least spicy",
+    //level.stats.PlayTime
+    "highest play time",
+    "lowest play time"
+];
+
+var sortFunctions = {
+        //level.createdAgo
+        'most recent' : function(a, b){
+            return a.createdAgo - b.createdAgo;
+        },
+        'oldest' : function(a, b){
+            return b.createdAgo - a.createdAgo;
+        },
+        //level.stats.TimePerWin
+        'longest' : function(b, a){
+            return a.stats.TimePerWin - b.stats.TimePerWin;
+        },
+        'shortest' : function(b, a){
+            return b.stats.TimePerWin - a.stats.TimePerWin;
+        },
+        //level.stats.ClearRate
+        'easiest' : function(b, a){
+            return a.stats.ClearRate - b.stats.ClearRate;
+        },
+        'hardest' : function(b, a){
+            return b.stats.ClearRate - a.stats.ClearRate;
+        },
+        //level.stats.Players
+        'most players' : function(b, a){
+            return a.stats.Players - b.stats.Players;
+        },
+        'least players' : function(b, a){
+            return b.stats.Players - a.stats.Players;
+        },
+        //level.stats.Attempts
+        'most plays' : function(b, a){
+            return a.stats.Attempts - b.stats.Attempts;
+        },
+        'least plays' : function(b, a){
+            return b.stats.Attempts - a.stats.Attempts;
+        },
+        //level.stats.ExposureBucks
+        'most EB' : function(b, a){
+            return a.stats.ExposureBucks - b.stats.ExposureBucks;
+        },
+        'least EB' : function(b, a){
+            return b.stats.ExposureBucks - a.stats.ExposureBucks;
+        },
+        //level.stats.Likes
+        'most liked' : function(b, a){
+            return a.stats.Likes - b.stats.Likes;
+        },
+        'least liked' : function(b, a){
+            return b.stats.Likes - a.stats.Likes;
+        },
+        //level.stats.Favorites
+        'most favorited' : function(b, a){
+            return a.stats.Favorites - b.stats.Favorites;
+        },
+        'least favorited' : function(b, a){
+            return b.stats.Favorites - a.stats.Favorites;
+        },
+        //level.stats.ReplayValue
+        'most spicy' : function(b, a){
+            return a.stats.ReplayValue - b.stats.ReplayValue;
+        },
+        'least spicy' : function(b, a){
+            return b.stats.ReplayValue - a.stats.ReplayValue;
+        },
+        //level.stats.PlayTime
+        'highest play time' : function(b, a){
+            return a.stats.PlayTime - b.stats.PlayTime;
+        },
+        'lowest play time' : function(b, a){
+            return b.stats.PlayTime - a.stats.PlayTime;
+        }
+}
+
+function loadSortingSelect(){
+    var htmlout = '';
+    var sortId = 0;
+
+    sortOptions.forEach(sort => {
+        htmlout += `<option value="${sortId++}">${sort}</option>`;
+    })
+    document.getElementById("sortSelect").innerHTML = htmlout;
+}
+
+function sortLevels(levelArray){
+    var sortBy = document.getElementById("sortSelect").value;
+    sortBy = sortOptions[sortBy];
+    console.log(sortFunctions[sortBy]);
+    //choosing sort by string (to make changing the order not matter)
+    levelArray.sort(sortFunctions[sortBy]);
+}
+
+//#endregion
+
+
 //#region Level Cards
 
 //Generic Card Templates
@@ -177,15 +307,23 @@ function reloadLevels(){
     var htmlout = '';
     var levelTotal = 0;
     matchingLevels = 0;
+    var levelArray = [];
 
-    levelList.forEach( fetchCall =>{
-        fetchCall.forEach(level => {
+    levelList.forEach(call => {
+        call.forEach(level => {
+            levelArray.push(level);
+        })
+    })
+
+    sortLevels(levelArray);
+
+
+        levelArray.forEach(level => {
             if(checkFilters(level)){
                 matchingLevels++;
                 htmlout += createSpecificLevelCard(level);
             }
         })
-    })
 
     document.getElementById('levelCount').style.display = 'block';
     //add size of each fetch to get total level count

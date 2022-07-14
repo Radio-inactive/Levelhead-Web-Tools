@@ -21,6 +21,15 @@ function getExtendedRequestBody(method = 'GET'){
     }
     return requestBody;
 }
+//ToDo: Make tags always appear in English
+function getEnglishRequestBody(){
+    var requestBody = {
+        'method': method,
+        'mode': 'cors',
+        'cache': 'default'
+    }
+    return requestBody;
+}
 
 //Delegation Key stuff. very chaotic, probably nonsensical
 function checkDelegationKey(){
