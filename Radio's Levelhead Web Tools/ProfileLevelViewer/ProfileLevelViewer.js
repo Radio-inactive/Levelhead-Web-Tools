@@ -1,5 +1,4 @@
 //#region Variables for Level loading
-var levelList = []; //all fetches are saved in here
 var maxFetch=128; //maximum amount of levels a fetch call returns
 var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 
@@ -7,7 +6,7 @@ var maxFetchAmount=100; //cap for fetch calls cuz infinite loops are scary
 var lastCode='';
 //#endregion
 
-var matchingLevels = 0;
+
 
 //#region URL helpers
 function assemblePlayerURL(){
@@ -48,38 +47,15 @@ function checkFilters(level){
 //#endregion
 
 //#region Level Loading
-
-function loadCards(){
-    document.getElementById('profileLevels')
-            .innerHTML='Generating...';
-    var htmlout="";
-    var levelTotal = 0;
-    matchingLevels = 0;
-    levelList.forEach(fetchCall => {
-        fetchCall.forEach(level => {
-            if(checkFilters(level)){ //only creates card if filters apply
-                matchingLevels++;
-                htmlout += createLevelCard(level,
-                    template.levelLink(level),
-                    template.likeFavoriteDifficulty(level),
-                    template.tags(level),
-                    template.playerPlaysCount(level),
-                    template.creationDate(level),
-                    template.copyCodeButton(level)
-                    )
-            }
-        })
-    })
-    document.getElementById('levelCount').style.display = 'block';
-    //add size of each fetch to get total level count
-    levelList.forEach(fetch => {
-        levelTotal += fetch.length;
-    })
-    //show count of total levels and matching levels
-    document.getElementById('levelCountTotal').innerHTML = levelTotal;
-    document.getElementById('levelCountMatch').innerHTML = matchingLevels;
-    document.getElementById('profileLevels')
-            .innerHTML=htmlout;
+function createSpecificLevelCard(level){
+    return createLevelCard(level,
+        template.levelLink(level),
+        template.likeFavoriteDifficulty(level),
+        template.tags(level),
+        template.playerPlaysCount(level),
+        template.creationDate(level),
+        template.copyCodeButton(level)
+        );
 }
 
 //lastDate: date of most recently fetched level.
@@ -94,7 +70,7 @@ function recursivelyLoadLevels(lastDate, lastId, fetches){            //add inte
         //if r.data.length<maxFetch, that means the end of the profile has been reached, because otherwise the API wouldn't return <maxFetch Levels 
         if(r.data.length<maxFetch || fetches > maxFetchAmount){ 
             console.log(levelList);
-            loadCards();
+            reloadLevels();
             return;
         }
         else//                creation date of last level.         id of last level
@@ -102,21 +78,15 @@ function recursivelyLoadLevels(lastDate, lastId, fetches){            //add inte
     })
 }
 
-function reloadLevels(){
-        document.getElementById("profileLevels")
-                .innerHTML = "Generating...";
-        loadCards();
-}
-
 function loadProfileLevels(){
-    document.getElementById('profileLevels')
+    document.getElementById('levelCards')
             .innerHTML='Loading...';
     fetches=0;
 
     //avoid unnecessary fetch calls
     if(document.getElementById('userCode')
                .value.trim().toLowerCase() == lastCode){
-        loadCards();
+                reloadLevels();
         return;
     }
 
@@ -136,7 +106,7 @@ function loadProfileLevels(){
             //if more than 1 profile is returned, the creator code was incorrect.
             //it will simply return a bunch of random profiles
             if(r.data.length != 1){
-                document.getElementById('profileLevels')
+                document.getElementById('levelCards')
                         .innerHTML = 'INVALID ID';
                 checkCode = false;
             }
@@ -149,10 +119,6 @@ function loadProfileLevels(){
             if(checkCode) recursivelyLoadLevels('', '', 0); 
         }); 
     
-}
-
-function loadProfileLevelsFromDelegationKey(){
-    //ToDo: Implement
 }
 
 //#endregion

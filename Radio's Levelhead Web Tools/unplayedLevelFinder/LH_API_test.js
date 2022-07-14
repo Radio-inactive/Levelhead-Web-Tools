@@ -1,6 +1,17 @@
-    var levelList = []; //saves each fetch call as an array.
+
     var unplayedVal = false; //ToDo: remove.
     var fetchLimit = 128; //max level count for fetch calls
+
+    function createSpecificLevelCard(level){
+        return createLevelCard(level,
+            template.levelLink(level),
+            template.profileLink(level),
+            template.likeFavoriteDifficulty(level),
+            template.playerPlaysCount(level),
+            template.exposure(level),
+            template.copyCodeButton(level)
+            )
+    }
 
     function createURL()
     {
@@ -35,11 +46,12 @@
         //Hides get more button. 
         document.getElementById('getMoreButton').style
                 .display = 'none';
-        document.getElementById('levelList')
+        document.getElementById('levelCards')
                 .innerHTML = 'LOADING...';
         
         var htmlout = "";
         var ref = createURL();
+        levelList = [];
         console.log(ref);
 
         fetch(ref)
@@ -56,7 +68,7 @@
                 levelList.push(r.data)
                 console.log(levelList);
                 //loads finished cards into the html
-                document.getElementById('levelList')
+                document.getElementById('levelCards')
                         .innerHTML = htmlout;
                 //makes 'get more button' visible again
                 document.getElementById('getMoreButton').style
@@ -122,7 +134,7 @@
                     console.log('filtering:')
                     console.log(r.data);
                     console.log(levelList)
-                    document.getElementById('levelList')
+                    document.getElementById('levelCards')
                             .innerHTML += htmlout;
                     document.getElementById('getMoreButton').style
                             .display = 'block';
@@ -148,7 +160,7 @@
                     console.log('filtering:')
                     console.log(r.data);
                     console.log(levelList)
-                    document.getElementById('levelList').innerHTML += htmlout;
+                    document.getElementById('levelCards').innerHTML += htmlout;
                     document.getElementById('getMoreButton').style.display = 'block';
                 })
             }
@@ -159,42 +171,15 @@
 
     //#region Filters
 
-    //used every time a filter is changed
-    function reloadLevels(){
-        var htmlout = '';
-        document.getElementById("levelList")
-                .innerHTML = "Generating...";
-        //re-generates all level cards. Filters are applied in the createLevelCard() function
-        levelList
-        .forEach( x => {
-            x
-            .forEach(level =>{
-                htmlout += makeLevelCard(level);
-            })
-        })
-        document.getElementById('levelList')
-                .innerHTML = htmlout;
-}
-
-
     function checkFilters(level){
         if(!filterDaily(level)) return false;
     
-        filterVal = document.getElementById('difficultyFilter').value; 
-        if(!((filterVal != 0) ? (level.stats.Diamonds == filterVal) : true)) return false;
+        if(!filterDifficulty(level)) return false;
     
-        //min players <= players >= max players 
-        if(!(level.stats.Players >= document.getElementById('minPlayerFilter').value
-        && level.stats.Players <= document.getElementById('maxPlayerFilter').value)) return false;
+        if(!filterPlayerCount(level)) return false;
+    
+        if(!filterTags(level)) return false;
 
-        //Tag Filtering
-    
-        for(var x = 1; x < 4; ++x){
-            //check if Level has specified tags
-            if(document.getElementById('requiredTags'+ x).value != 0 ? !level.tags.includes(document.getElementById('requiredTags'+ x).value) : false) return false;
-            if(document.getElementById('excludedTags'+ x).value != 0 ? level.tags.includes(document.getElementById('excludedTags'+ x).value) : false) return false;
-        }
-    
         return true;
     
     }
@@ -202,24 +187,8 @@
     //#endregion
 
 
-    //#region templates
-/*
-var levelCardTemplate=`
-<div class="column">
-    <div class="card">
-        <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="UnplayedPicture">
-        <p id="UnplayedCardText">
-            <a href="https://levelhead.io/+{{levelId}}" target="_blank">{{levelName}}</a><br>
-            <a href="https://levelhead.io/@{{creatorCode}}" target="_blank" style="text-decoration: none;">by {{alias}}</a><br>
-            Players: {{players}}<br>
-            EB: {{EB}}<br>
-            Created: {{createdAt}}<br>
-            <button id="CodeButton" onclick="navigator.clipboard.writeText('{{levelId}}')">Copy Levelcode</button>
-        </p>
-    </div>
-</div>
-`;
-*/
+//#region templates
+
 //URL fragments
 var URLTemplate =
 'https://www.bscotch.net/api/levelhead/levels?marketing=true&limit={{limit}}&maxExposureBucks={{maxEB}}&includeStats=true&includeAliases=true';

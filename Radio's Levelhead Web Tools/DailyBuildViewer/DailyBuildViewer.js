@@ -30,39 +30,15 @@ function loadDailyBuildItems(){
 
 //#region Daily Build Levels
 
-var levelList = [];
-var matchingLevels = 0;
-
-function reloadLevels(){
-    document.getElementById("dailyBuilds").innerHTML = 'generating';
-    var htmlout = '';
-    var levelTotal = 0;
-    matchingLevels = 0;
-
-    levelList.forEach( fetchCall =>{
-        fetchCall.forEach(level => {
-            if(checkFilters(level)){
-                matchingLevels++;
-                htmlout += createLevelCard(level,
-                    template.levelLink(level),
-                    template.profileLink(level),
-                    template.likeFavoriteDifficulty(level),
-                    template.tags(level),
-                    level.tower ? '' : template.exposure(level), //does not show EB if the level has graduated
-                    template.copyCodeButton(level)
-                    )
-                }
-        })
-    })
-    document.getElementById('levelCount').style.display = 'block';
-    //add size of each fetch to get total level count
-    levelList.forEach(fetch => {
-        levelTotal += fetch.length;
-    })
-    //show count of total levels and matching levels
-    document.getElementById('levelCountTotal').innerHTML = levelTotal;
-    document.getElementById('levelCountMatch').innerHTML = matchingLevels;
-    document.getElementById("dailyBuilds").innerHTML = htmlout;
+function createSpecificLevelCard(level){
+    return createLevelCard(level,
+        template.levelLink(level),
+        template.profileLink(level),
+        template.likeFavoriteDifficulty(level),
+        template.tags(level),
+        level.tower ? '' : template.exposure(level), //does not show EB if the level has graduated
+        template.copyCodeButton(level)
+        );
 }
 
 function checkFilters(level){
@@ -93,7 +69,7 @@ function createFetchUrl(lastDate, lastLevelId){
 function loadDailyBuildLevels(){
     var htmlout = '';
     levelList = [];
-    document.getElementById("dailyBuilds").innerHTML = 'LOADING';
+    document.getElementById("levelCards").innerHTML = 'LOADING';
     fetch(createFetchUrl())
     .then(r => r.json())
     .then(function(r){
