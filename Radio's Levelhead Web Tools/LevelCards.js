@@ -170,72 +170,113 @@ var sortOptions = [
 var sortFunctions = {
         //level.createdAgo
         'most recent' : function(a, b){
+            //some properties are undefined when not set. Undefined values can break the sorting functions
+            if(a.createdAgo === undefined) a.createdAgo = 0;
+            if(b.createdAgo === undefined) b.createdAgo = 0;
             return a.createdAgo - b.createdAgo;
         },
         'oldest' : function(a, b){
+            if(a.createdAgo === undefined) a.createdAgo = 0;
+            if(b.createdAgo === undefined) b.createdAgo = 0;
             return b.createdAgo - a.createdAgo;
         },
         //level.stats.TimePerWin
         'longest' : function(b, a){
+            if(a.stats.TimePerWin === undefined) a.stats.TimePerWin = 0;
+            if(b.stats.TimePerWin === undefined) b.stats.TimePerWin = 0;
             return a.stats.TimePerWin - b.stats.TimePerWin;
         },
         'shortest' : function(b, a){
+            if(a.stats.TimePerWin === undefined) a.stats.TimePerWin = 0;
+            if(b.stats.TimePerWin === undefined) b.stats.TimePerWin = 0;
             return b.stats.TimePerWin - a.stats.TimePerWin;
         },
         //level.stats.ClearRate
         'easiest' : function(b, a){
+            if(a.stats.ClearRate === undefined) a.stats.ClearRate = 0;
+            if(b.stats.ClearRate === undefined) b.stats.ClearRate = 0;
             return a.stats.ClearRate - b.stats.ClearRate;
         },
         'hardest' : function(b, a){
+            if(a.stats.ClearRate === undefined) a.stats.ClearRate = 0;
+            if(b.stats.ClearRate === undefined) b.stats.ClearRate = 0;
             return b.stats.ClearRate - a.stats.ClearRate;
         },
         //level.stats.Players
         'most players' : function(b, a){
+            if(a.stats.Players === undefined) a.stats.Players = 0;
+            if(b.stats.Players === undefined) b.stats.Players = 0;
             return a.stats.Players - b.stats.Players;
         },
         'least players' : function(b, a){
+            if(a.stats.Players === undefined) a.stats.Players = 0;
+            if(b.stats.Players === undefined) b.stats.Players = 0;
             return b.stats.Players - a.stats.Players;
         },
         //level.stats.Attempts
         'most plays' : function(b, a){
+            if(a.stats.Attempts === undefined) a.stats.Attempts = 0;
+            if(b.stats.Attempts === undefined) b.stats.Attempts = 0;
             return a.stats.Attempts - b.stats.Attempts;
         },
         'least plays' : function(b, a){
+            if(a.stats.Attempts === undefined) a.stats.Attempts = 0;
+            if(b.stats.Attempts === undefined) b.stats.Attempts = 0;
             return b.stats.Attempts - a.stats.Attempts;
         },
         //level.stats.ExposureBucks
         'most EB' : function(b, a){
+            if(a.stats.ExposureBucks === undefined) a.stats.ExposureBucks = 0;
+            if(b.stats.ExposureBucks === undefined) b.stats.ExposureBucks = 0;
             return a.stats.ExposureBucks - b.stats.ExposureBucks;
         },
         'least EB' : function(b, a){
+            if(a.stats.ExposureBucks === undefined) a.stats.ExposureBucks = 0;
+            if(b.stats.ExposureBucks === undefined) b.stats.ExposureBucks = 0;
             return b.stats.ExposureBucks - a.stats.ExposureBucks;
         },
         //level.stats.Likes
         'most liked' : function(b, a){
+            if(a.stats.Likes === undefined) a.stats.Likes = 0;
+            if(b.stats.Likes === undefined) b.stats.Likes = 0;
             return a.stats.Likes - b.stats.Likes;
         },
         'least liked' : function(b, a){
+            if(a.stats.Likes === undefined) a.stats.Likes = 0;
+            if(b.stats.Likes === undefined) b.stats.Likes = 0;
             return b.stats.Likes - a.stats.Likes;
         },
         //level.stats.Favorites
         'most favorited' : function(b, a){
+            if(a.stats.Favorites === undefined) a.stats.Favorites = 0;
+            if(b.stats.Favorites === undefined) b.stats.Favorites = 0;
             return a.stats.Favorites - b.stats.Favorites;
         },
         'least favorited' : function(b, a){
+            if(a.stats.Favorites === undefined) a.stats.Favorites = 0;
+            if(b.stats.Favorites === undefined) b.stats.Favorites = 0;
             return b.stats.Favorites - a.stats.Favorites;
         },
         //level.stats.ReplayValue
         'most spicy' : function(b, a){
+            if(a.stats.ReplayValue === undefined) a.stats.ReplayValue = 0;
+            if(b.stats.ReplayValue === undefined) b.stats.ReplayValue = 0;
             return a.stats.ReplayValue - b.stats.ReplayValue;
         },
         'least spicy' : function(b, a){
+            if(a.stats.ReplayValue === undefined) a.stats.ReplayValue = 0;
+            if(b.stats.ReplayValue === undefined) b.stats.ReplayValue = 0;
             return b.stats.ReplayValue - a.stats.ReplayValue;
         },
         //level.stats.PlayTime
         'highest play time' : function(b, a){
+            if(a.stats.PlayTime === undefined) a.stats.PlayTime = 0;
+            if(b.stats.PlayTime === undefined) b.stats.PlayTime = 0;
             return a.stats.PlayTime - b.stats.PlayTime;
         },
         'lowest play time' : function(b, a){
+            if(a.stats.PlayTime === undefined) a.stats.PlayTime = 0;
+            if(b.stats.PlayTime === undefined) b.stats.PlayTime = 0;
             return b.stats.PlayTime - a.stats.PlayTime;
         }
 }
@@ -252,8 +293,9 @@ function loadSortingSelect(){
 
 function sortLevels(levelArray){
     var sortBy = document.getElementById("sortSelect").value;
+    if(sortBy == 0) return;
     sortBy = sortOptions[sortBy];
-    console.log(sortFunctions[sortBy]);
+
     //choosing sort by string (to make changing the order not matter)
     levelArray.sort(sortFunctions[sortBy]);
 }
