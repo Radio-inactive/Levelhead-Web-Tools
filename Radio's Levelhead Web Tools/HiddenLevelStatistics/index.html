@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="HiddenLevelStatistics.css">
         <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="../ApplySettings.js"></script>
         <script src="HiddenLevelStatistics.js"></script>
     </head>
     <body>
@@ -57,6 +58,9 @@
                 <td id="LevelFavorites"></td>
             </tr>
         </table>
-        <script>loadLevelCodeFromURL()</script>
+        <script>
+            generateToolFooter();
+            loadLevelCodeFromURL()
+        </script>
     </body>
 </html>

@@ -30,6 +30,7 @@
         <p><b>Tips received per Level: </b><a id="TipsGottenPerLevel">-</a></p>
 
         <script>
+            generateToolFooter();
             loadOptions();
             if(window.localStorage.getItem('DelegationKey')){
                 document.getElementById('userCode').value = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;

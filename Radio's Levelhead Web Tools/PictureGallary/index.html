@@ -6,6 +6,7 @@
         <title>Levelhead picture Gallery</title>
         <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../ApplySettings.js"></script>
         <script src="PictureGallary.js"></script>
         <link rel="stylesheet" href="../CommonStyle.css">
         <link rel="stylesheet" href="PictureGallary.css">
@@ -20,9 +21,12 @@
         - Clicking on a picture's title will copy the title to the clipboard.<br>
         </p>
         <br>
-        <div class="rows" id="gallaryContent">
+        <div class="row" id="gallaryContent">
             LOADING...
         </div>
-        <script async defer>loadGallary()</script>
+        <script async defer>
+            generateToolFooter();
+            loadGallary();
+        </script>
     </body>
 </html>

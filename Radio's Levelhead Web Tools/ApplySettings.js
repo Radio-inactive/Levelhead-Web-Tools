@@ -2,6 +2,43 @@
 
 var delegationKeyValid = false;
 
+//#region html generation
+
+//position 0: folder name, position 1: display name
+var toolNames = [
+    ["Setting", "Site Settings"],
+    ["ProfileLevelViewer", "Profile Level Viewer"],
+    ["AdvancedMDSearch", "Advanced Marketing Department Search"],
+    ["DailyBuildViewer", "Daily Build Viewer"],
+    ["HiddenLevelStatistics", "Hidden Level Statistics viewer"],
+    ["HiddenProfileStatisticsViewer", "Hidden Profile Statistics Viewer"],
+    ["CombobulatorSimulator", "Combobulator Simulator"],
+    ["PictureGallary", "Avatar Gallery"]
+]
+var currentToolName = "";
+
+function getCurrentToolName(){
+    var name = window.location.href;
+
+    name = name.substring(0, name.lastIndexOf('/'));
+    name = name.substring(name.lastIndexOf('/')+1, name.length);
+    currentToolName = name;
+    return name;
+}
+
+function generateToolFooter(){
+    getCurrentToolName();
+
+    var htmlout = "";
+
+    toolNames.forEach(name => {
+        if(name[0] != currentToolName)
+            htmlout += `<p><a href="../${name[0]}/index.html">${name[1]}</a></p>`
+    })
+    document.body.innerHTML += `<footer id="navigationFooter"><p><b>Other Tools:</b></p><p><b><a href="../index.html">Main Page</a></b></p>${htmlout}</footer>`;
+}
+
+//#endregion
 
 //#region general purpose functions
 

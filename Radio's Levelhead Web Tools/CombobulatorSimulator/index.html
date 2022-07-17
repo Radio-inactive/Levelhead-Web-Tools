@@ -5,6 +5,7 @@
         <title>Combobulator Simulator</title>
         <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../ApplySettings.js"></script>
         <script src="CombobulatorSimulator.js"></script>
         <link rel="stylesheet" href="../CommonStyle.css">
     </head>
@@ -18,6 +19,7 @@
         <p>Letters: <a id="letterCount"></a></p>
         <div id="selects"></div>
         <script>
+            generateToolFooter();
             createSelects();
             updateSentence();
         </script>
