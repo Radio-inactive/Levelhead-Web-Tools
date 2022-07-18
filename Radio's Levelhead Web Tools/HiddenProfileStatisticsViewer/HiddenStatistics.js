@@ -2,13 +2,11 @@
 function assembleURL()
 {
     return 'https://www.bscotch.net/api/levelhead/players?userIds='
-           + document.getElementById('userCode')
-                     .value.toLowerCase().trim() +'&includeAliases=true';
+           + getProfileCode(document.getElementById('userCode').value) +'&includeAliases=true'; 
 }
 function assembleAliasesURL(){
     return 'https://www.bscotch.net/api/levelhead/aliases?userIds='
-           + document.getElementById('userCode')
-                      .value.toLowerCase().trim() +'&onlySafe=true'
+           + getProfileCode(document.getElementById('userCode').value) +'&onlySafe=true'
 }
 
 function fetchProfileDetails()

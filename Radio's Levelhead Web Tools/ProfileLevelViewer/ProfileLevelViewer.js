@@ -10,12 +10,12 @@ var lastCode='';
 
 //#region URL helpers
 function assemblePlayerURL(){
-    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ document.getElementById('userCode').value.trim().toLowerCase() +'&includeStats=true&maxCreatedAt=';
+    return 'https://www.bscotch.net/api/levelhead/levels?limit='+ maxFetch +'&userIds='+ getProfileCode(document.getElementById('userCode').value) +'&includeStats=true&maxCreatedAt=';
 }
 
 function assembleProfileURL()//used to check if the profile is valid
 {
-    return 'https://www.bscotch.net/api/levelhead/players?userIds='+ document.getElementById('userCode').value.toLowerCase().trim()+'&includeAliases=true';
+    return 'https://www.bscotch.net/api/levelhead/players?userIds='+ getProfileCode(document.getElementById('userCode').value) +'&includeAliases=true';
 }
 //#endregion
 

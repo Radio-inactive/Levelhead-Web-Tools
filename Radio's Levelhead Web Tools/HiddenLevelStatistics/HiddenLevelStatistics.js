@@ -2,13 +2,11 @@
 var likes=[];
 var favorites=[];
 
-function getLevelCode(){
-    return levelCode.value.trim().toLowerCase();
-}
+
 //loads users who liked. the favorite equivalent is nearly identical
 function recursivelyLoadLikes(lastId){
 
-    fetch('https://www.bscotch.net/api/levelhead/levels/'+ getLevelCode() +'/likes?limit=32&includeAliases=true&beforeId='+ lastId)
+    fetch('https://www.bscotch.net/api/levelhead/levels/'+ getLevelCode(levelCode.value) +'/likes?limit=32&includeAliases=true&beforeId='+ lastId)
     .then(r => r.json())
     .then(
         function(r){
@@ -44,7 +42,7 @@ function recursivelyLoadLikes(lastId){
 }
 
 function recursivelyLoadFavorites(lastId){
-    fetch('https://www.bscotch.net/api/levelhead/levels/'+ getLevelCode() +'/favorites?limit=32&includeAliases=true&beforeId='+ lastId)
+    fetch('https://www.bscotch.net/api/levelhead/levels/'+ getLevelCode(levelCode.value) +'/favorites?limit=32&includeAliases=true&beforeId='+ lastId)
     .then(r => r.json())
     .then(
         function(r){
@@ -95,7 +93,7 @@ function loadHiddenStatistics(){
     likes = [];
     favorites = [];
 
-    fetch('https://www.bscotch.net/api/levelhead/levels?levelIds='+ getLevelCode() +'&includeAliases=true&includeStats=true&includeRecords=true')
+    fetch('https://www.bscotch.net/api/levelhead/levels?levelIds='+ getLevelCode(levelCode.value) +'&includeAliases=true&includeStats=true&includeRecords=true')
     .then(r => r.json())
     .then(
         function(r){

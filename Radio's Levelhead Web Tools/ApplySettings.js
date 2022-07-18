@@ -42,6 +42,51 @@ function generateToolFooter(){
 
 //#region general purpose functions
 
+function getProfileCode(input = ""){
+    var clean = input.trim().toLowerCase();
+    if(input.length == 6)
+        return clean;
+    var result = /levelhead\.io\/@(.{6})/.exec(clean);
+
+    if(result == null)
+        result = /www\.bscotch\.net\/games\/levelhead\/players\/(.{6})/.exec(clean);
+    
+    if(result == null)
+        return null;
+    
+    return result[1];
+}
+
+//ToDo: finish
+function getLevelCode(input = ""){
+    var clean = input.trim().toLowerCase();
+    if(input.length == 7)
+        return clean;
+
+    var result = /levelhead\.io\/\+(.{7})/.exec(clean);
+
+    if(result == null)
+        result = /bscotch\.net\/games\/levelhead\/levels\/(.{7})/.exec(clean);
+
+    if(result == null)
+        return null;
+        
+    return result[1];
+}
+
+function getAnyCode(input = ""){
+    var result = getProfileCode(input);
+    
+    if(result != null)
+        return ['Profile', result];
+    result = getLevelCode(input);
+
+    if(result != null)
+        return ['Level', result];
+    
+    return null;
+}
+
 function getAvatarURL(avatarId, size = 100){
     return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatarId}.webp`;
 }
