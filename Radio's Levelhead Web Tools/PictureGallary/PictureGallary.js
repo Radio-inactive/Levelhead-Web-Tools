@@ -110,6 +110,7 @@ var avatarTitles=[
     "bumpers",
     "puncher-gold",
     "puncher-green",
+    "puncher-blue",
     "puncher-fuchsia",
     "puncher-punching",
     "puncher-diagonal",

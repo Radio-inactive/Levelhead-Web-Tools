@@ -49,7 +49,7 @@ function getProfileCode(input = ""){
     var result = /levelhead\.io\/@(.{6})/.exec(clean);
 
     if(result == null)
-        result = /www\.bscotch\.net\/games\/levelhead\/players\/(.{6})/.exec(clean);
+        result = /bscotch\.net\/games\/levelhead\/players\/(.{6})/.exec(clean);
     
     if(result == null)
         return null;
@@ -57,7 +57,6 @@ function getProfileCode(input = ""){
     return result[1];
 }
 
-//ToDo: finish
 function getLevelCode(input = ""){
     var clean = input.trim().toLowerCase();
     if(input.length == 7)
