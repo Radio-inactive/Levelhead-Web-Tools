@@ -103,3 +103,8 @@ body{
       background:rgb(209, 209, 209);
    
   }
+
+  tr,td{
+    border: 1px solid black;
+    font-size: 20px;
+  }

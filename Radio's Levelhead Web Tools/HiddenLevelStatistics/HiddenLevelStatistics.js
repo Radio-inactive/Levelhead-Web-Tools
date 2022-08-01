@@ -76,18 +76,6 @@ function recursivelyLoadFavorites(lastId){
     )
 }
 
-function timeFormat(time){ //ToDo: document this monstrosity
-    var millis = "";
-    millis = Math.floor(time*100).toFixed();
-    if(time >= 86400)
-        return Math.floor(time/86400) +'day(s) '+ (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
-    if(time >= 3600)
-        return (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
-    if(time >= 60)
-        return (new Date(time * 1000).toISOString().substr(14, 5)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'm ');
-    return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1)+'s');
-}
-
 function loadHiddenStatistics(){
 
     likes = [];

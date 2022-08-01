@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Record Viewr</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="../LevelCards.js"></script>
+        <script src="../ApplySettings.js"></script>
+        <script src="EventViewer.js"></script>
+    </head>
+    <body>
+        <h1>Record Viewer</h1>
+        <p>Enter Players and Levels to track:</p>
+        Player code(s): <input placeholder="Player code(s)" id="playerCodes">
+        <br>
+        Track <select id="levelCodesOptions">
+            <option value="lvl">Level(s)</option>
+            <option value="pl">Playlist</option>
+        </select>
+        <input id="levelCodes">
+        <br>
+        Sort results by: <select id="sortBy" onchange="assembleRecordsTable()">
+            <option value="default">Default</option>
+            <option value="player">Player</option>
+            <option value="level">Level</option>
+        </select>
+        <br>
+        <button onclick="checkTimes()">Check</button><br>
+        <table id="recordTable"></table>
+    </body>
+</html>

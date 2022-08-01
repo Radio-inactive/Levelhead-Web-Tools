@@ -86,6 +86,22 @@ function getAnyCode(input = ""){
     return null;
 }
 
+function getPlaylistCode(input = ""){
+    var clean = input.trim().toLowerCase();
+    if(input.length == 7)
+        return clean;
+
+    var result = /levelhead\.io\/\-(.{7})/.exec(clean);
+
+    if(result == null)
+        result = /bscotch\.net\/games\/levelhead\/playlists\/(.{7})/.exec(clean);
+
+    if(result == null)
+        return null;
+        
+    return result[1];
+}
+
 function getAvatarURL(avatarId, size = 100){
     return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatarId}.webp`;
 }
@@ -197,6 +213,26 @@ function loadCursor(){
         document.body.style.cursor = setCursorTemplate.replaceAll('{{color}}', cursor);
         //ToDo: set other cursors
     }
+}
+
+//#endregion
+
+//#region other
+
+function timeFormat(time){ //ToDo: document this monstrosity
+    var millis = "";
+    millis = Math.floor(time*100).toFixed();
+    if(time >= 86400)
+        return Math.floor(time/86400) +'day(s) '+ (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
+    if(time >= 3600)
+        return (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
+    if(time >= 60)
+        return (new Date(time * 1000).toISOString().substr(14, 5)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'm ');
+    return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1)+'s');
+}
+
+function dateFormat(date){
+    return new Date(date).toString().substring(4,31)
 }
 
 //#endregion
