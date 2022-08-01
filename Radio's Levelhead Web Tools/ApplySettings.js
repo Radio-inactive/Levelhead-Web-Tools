@@ -12,6 +12,7 @@ var toolNames = [
     ["DailyBuildViewer", "Daily Build Viewer"],
     ["HiddenLevelStatistics", "Hidden Level Statistics viewer"],
     ["HiddenProfileStatisticsViewer", "Hidden Profile Statistics Viewer"],
+    ["RecordViewer", "Record Viewer"],
     ["CombobulatorSimulator", "Combobulator Simulator"],
     ["PictureGallary", "Avatar Gallery"]
 ]
