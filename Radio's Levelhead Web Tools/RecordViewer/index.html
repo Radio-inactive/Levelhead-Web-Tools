@@ -13,14 +13,19 @@
     </head>
     <body>
         <h1>Record Viewer</h1>
+        <p>
+            Used to retrieve recently set personal bests on levels.<br>
+            Note: You can use several level/profile codes/URLs by seperating them with commas.<br>
+        </p>
+        <br>
         <p>Enter Players and Levels to track:</p>
-        Player code(s): <input placeholder="Player code(s)" id="playerCodes">
+        Track Player(s): <input placeholder="Player Code(s)" id="playerCodes">
         <br>
         Track <select id="levelCodesOptions">
             <option value="lvl">Level(s)</option>
             <option value="pl">Playlist</option>
         </select>
-        <input id="levelCodes">
+        <input placeholder="Level/Playlist Code(s)" id="levelCodes">
         <br>
         Sort results by: <select id="sortBy" onchange="assembleRecordsTable()">
             <option value="default">Default</option>

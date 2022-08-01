@@ -1,10 +1,16 @@
 //Global Variables
-
+/**
+ * specifies if there's a valid delegation key. set by checkDelegationKey()
+ */
 var delegationKeyValid = false;
 
 //#region html generation
 
-//position 0: folder name, position 1: display name
+/**
+ * Contains names and folders for the generation of the footer
+ * 
+ * position 0: folder name, position 1: display name
+ */
 var toolNames = [
     ["Setting", "Site Settings"],
     ["ProfileLevelViewer", "Profile Level Viewer"],
@@ -16,8 +22,15 @@ var toolNames = [
     ["CombobulatorSimulator", "Combobulator Simulator"],
     ["PictureGallary", "Avatar Gallery"]
 ]
+/**
+ * Folder of the current tool. loaded by currentToolName()
+ */
 var currentToolName = "";
 
+/**
+ * Retrieves the name of the current folder and saves it in currentToolName
+ * @returns Name of the current folder
+ */
 function getCurrentToolName(){
     var name = window.location.href;
 
@@ -27,6 +40,10 @@ function getCurrentToolName(){
     return name;
 }
 
+/**
+ * Generates a footer linking to other tools
+ * @note The site has to be in a folder inside the main folder, otherwise this won't work
+ */
 function generateToolFooter(){
     getCurrentToolName();
 
@@ -43,6 +60,12 @@ function generateToolFooter(){
 
 //#region general purpose functions
 
+/**
+ * Input sanitization for Creator codes
+ * @param {string} input creator code or profile link. the levelhead.io and bschotch.net links both work
+ * @returns null if code could not be extracted
+ * @returns the cleaned code
+ */
 function getProfileCode(input = ""){
     var clean = input.trim().toLowerCase();
     if(input.length == 6)
@@ -58,6 +81,12 @@ function getProfileCode(input = ""){
     return result[1];
 }
 
+/**
+ * Input sanitization for Level codes
+ * @param {string} input level code or level link. the levelhead.io and bschotch.net links both work
+ * @returns null if code could not be extracted
+ * @returns the cleaned code
+ */
 function getLevelCode(input = ""){
     var clean = input.trim().toLowerCase();
     if(input.length == 7)
@@ -74,6 +103,12 @@ function getLevelCode(input = ""){
     return result[1];
 }
 
+/**
+ * Input sanitization for Creator codes and profile codes. Can distinguish the 2, but cannot handle playlists
+ * @param {string} input creator/level code or profile/level link. the levelhead.io and bschotch.net links both work
+ * @returns null if code could not be extracted
+ * @returns the cleaned code. result[0] is either 'Profile' or 'Level' depemding on what the code is for. result[1] is the code
+ */
 function getAnyCode(input = ""){
     var result = getProfileCode(input);
     
@@ -86,7 +121,12 @@ function getAnyCode(input = ""){
     
     return null;
 }
-
+/**
+ * Input sanitization for Playlist codes
+ * @param {string} input playlist code or playlist link. the levelhead.io and bschotch.net links both work
+ * @returns null if code could not be extracted
+ * @returns the cleaned code
+ */
 function getPlaylistCode(input = ""){
     var clean = input.trim().toLowerCase();
     if(input.length == 7)
@@ -103,11 +143,21 @@ function getPlaylistCode(input = ""){
     return result[1];
 }
 
+/**
+ * Creates a URL to load an avatar with
+ * @param {string} avatarId id of the avatar. see https://beta.bscotch.net/api/docs/community-edition/#avatars
+ * @param {int} size specifies size of the returned avatar. it will be size x size big
+ * @returns URL to load an avatar with
+ */
 function getAvatarURL(avatarId, size = 100){
     return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatarId}.webp`;
 }
 
-//creates a request body for fetch calls making use of delegation keys
+/**
+ * creates a request body for fetch calls making use of delegation keys
+ * @param {string} method either 'GET', 'POST', 'PUT' or 'DELETE'
+ * @returns A request body to be used with the fetch function. fetch(URL, RequestBody)
+ */
 function getExtendedRequestBody(method = 'GET'){
     var requestBody = {
         'method': method,
@@ -119,33 +169,36 @@ function getExtendedRequestBody(method = 'GET'){
     }
     return requestBody;
 }
-//ToDo: Make tags always appear in English
-function getEnglishRequestBody(){
-    var requestBody = {
-        'method': method,
-        'mode': 'cors',
-        'cache': 'default'
-    }
-    return requestBody;
-}
 
-//Delegation Key stuff. very chaotic, probably nonsensical
+/**
+ * Checks if the Delegation Key is valid. sets delegationKeyValid to true if valid, false if invalid
+ */
 function checkDelegationKey(){
     try{
     if(window.localStorage.getItem('DelegationKey'))
     fetch('https://www.bscotch.net/api/levelhead/aliases?userIds=@me', getExtendedRequestBody('GET'))
     .then(function(r){ delegationKeyValid = (r.status == '200')}) //see if status is OK
     }
-    catch(exception){
+    catch(exception){//fetch failed means no internet connection of key is invalid
         delegationKeyValid = false;
     }
 }
 
+/**
+ * used for API calls that support includeMyInteractions
+ * @returns "" if there's no valid delegation key, else "&includeMyInteractions=true"
+ */
 function addInteractionDetails()
 {
     return delegationKeyValid ? "&includeMyInteractions=true" : "";
 }
 
+/**
+ * Get the interactions (played, completed, etc.) from a level
+ * @param {LEVEL} level level object, returned by level-related api calls
+ * @returns interactions object. contains 'bookmarked', 'liked', 'favorited', 'played' and 'completed'.
+ *  all but 'bookmarked' are set to true if the level was made by the player whose delegation key is used
+ */
 function getInteractions(level){
     //checks if level was created by user
     var ownLevel = level.userId == JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode;
@@ -173,6 +226,12 @@ function getInteractions(level){
 
 //Bookmarks
 
+/**
+ * Can add/remove Bookmarks
+ * @param {string} levelCode a level's level code. must be sanitized
+ * @param {string} mode 'PUT' to create bookmark (default), 'DELETE' to remove Bookmark
+ * @returns true if successful, false if unsuccessful. posts error messages using console.log
+ */
 function manageBookmark(levelCode, mode = 'PUT') {
     console.log(JSON.parse(window.localStorage.getItem('DelegationKey')).Key);
     try{
@@ -186,13 +245,13 @@ function manageBookmark(levelCode, mode = 'PUT') {
     }
 }
 
-
-
 //#endregion
 
 //#region Customization
 
-//cursor constants
+/**
+ * contains cursor colors. file name must be <color>.png
+ */
 var cursorOptions = [
     "normal",
     "blue",
@@ -200,14 +259,22 @@ var cursorOptions = [
     "fuchsia",
     "orange"
 ];
-//cursor picture path
+/**
+ * path to cursors. used in the CSS
+ */
 var setCursorTemplate = "url('../PicturesCommon/Cursors/{{color}}.png'), auto";
 
+/**
+ * loads cursor options and loads delegation key.
+ */
 function loadOptions(){
     loadCursor();
     checkDelegationKey();
 }
 
+/**
+ * loads custom cursors
+ */
 function loadCursor(){
     var cursor = window.localStorage.getItem('CursorOption');
     if(cursor && cursor != cursorOptions[0] && cursorOptions.includes(cursor)){
@@ -220,6 +287,11 @@ function loadCursor(){
 
 //#region other
 
+/**
+ * transforms a time in seconds into a formatted string
+ * @param {float} time time in seconds
+ * @returns formatted time string
+ */
 function timeFormat(time){ //ToDo: document this monstrosity
     var millis = "";
     millis = Math.floor(time*100).toFixed();
@@ -232,6 +304,11 @@ function timeFormat(time){ //ToDo: document this monstrosity
     return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1)+'s');
 }
 
+/**
+ * Formats a date object
+ * @param {Date} date Date object to format
+ * @returns Formatted Date as a string
+ */
 function dateFormat(date){
     return new Date(date).toString().substring(4,31)
 }

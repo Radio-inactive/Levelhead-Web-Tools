@@ -1,6 +1,14 @@
 
 //#region Global Variables
-var levelList = []; //saves each fetch call as an array.
+/**
+ * used to save levels received from API calls.
+ * saves each fetch call as a seperate array.
+ * used by several functions
+ */
+var levelList = [];
+/**
+ * tracks how many levels match the current filter criteria
+ */
 var matchingLevels = 0;
 
 //#endregion
@@ -8,8 +16,17 @@ var matchingLevels = 0;
 //#region Filters
 
 //filter constants
+/**
+ * used if filter is not active
+ */
 const SHOW_ALL = 0;
+/**
+ * show only levels that match the criteria
+ */
 const SHOW_ONLY = 1;
+/**
+ * exclude levels that match the criteria
+ */
 const SHOW_EXCLUDE = 2;
 
 function filterDaily(level, selectId = 'dailyFilter')
@@ -84,6 +101,9 @@ function filterTags(level)
     return true;
 }
 
+/**
+ * toggles visibility of the filters section
+ */
 function showFilters(){
     if(document.getElementById('filtersToggle').innerHTML == 'Filters ▲'){
         document.getElementById('filtersToggle')
@@ -99,6 +119,9 @@ function showFilters(){
     }
 }
 
+/**
+ * loads the selects used to filter for tags
+ */
 function loadTagSelect(){
     var htmloutRequired = '<option value="0" id="noneRequired">-</option>';
     var htmloutExcluded = '<option value="0" id="noneExcluded">-</option>';
@@ -133,6 +156,9 @@ var tagSelectTemplate=`
 
 //#region Sorting
 
+/**
+ * contains the values that levels can be sorted by
+ */
 var sortOptions = [
     "default",
     //level.createdAgo
@@ -167,6 +193,9 @@ var sortOptions = [
     "lowest play time"
 ];
 
+/**
+ * contains the compare funtions used to sort levels
+ */
 var sortFunctions = {
         //level.createdAgo
         'most recent' : function(a, b){
@@ -281,6 +310,9 @@ var sortFunctions = {
         }
 }
 
+/**
+ * loads select field used for sorting. <select id="sortSelect">
+ */
 function loadSortingSelect(){
     var htmlout = '';
     var sortId = 0;
@@ -291,6 +323,10 @@ function loadSortingSelect(){
     document.getElementById("sortSelect").innerHTML = htmlout;
 }
 
+/**
+ * Sorts a level array by the selected criteria
+ * @param {LEVEL[]} levelArray Array containing levels to be sorted
+ */
 function sortLevels(levelArray){
     var sortBy = document.getElementById("sortSelect").value;
     if(sortBy == 0) return;
@@ -302,12 +338,17 @@ function sortLevels(levelArray){
 
 //#endregion
 
-
 //#region Level Cards
 
 //Generic Card Templates
 
-//First argument: Level from fetch call. Following arguments: content of Level card text (will be put between <p class="cardTextLine"> automatically)
+/**
+ * Creates an html card from a level object
+ * @param {LEVEL} level level to create card from
+ * 
+ * Following arguments: content of Level card text (will be put between <p class="cardTextLine"> automatically)
+ * @returns Level card
+ */
 function createLevelCard(level){
     var text = '';
     var pictures = '';
@@ -343,6 +384,9 @@ function createLevelCard(level){
     </div>`
 }
 
+/**
+ * reloads the level cards. applies filters and sorting in the process, also updates levelTotal and matchingLevels
+ */
 function reloadLevels(){
     document.getElementById("levelCards")
             .innerHTML = 'generating';
@@ -378,7 +422,10 @@ function reloadLevels(){
     document.getElementById("levelCards").innerHTML = htmlout;
 }
 
-//toggles Bookmark button of level Card
+/**
+ * removes/adds bookmark and toggles Bookmark button of level Card.
+ * @param {string} levelCode a level's code. must be sanitized
+ */
 function toggleBookmark(levelCode){
     document.getElementById('bookmarkButton'+ levelCode).disabled = true;
 
@@ -400,6 +447,9 @@ function toggleBookmark(levelCode){
         }
 }
 
+/**
+ * templates used inside level cards
+ */
 var template = {
 
     copyCodeButton : function (level){
@@ -457,7 +507,9 @@ var template = {
     }
 }
 
-
+/**
+ * collection of templates used to display icons
+ */
 var icon = {
     //
     showIcon : ["none", ""],
