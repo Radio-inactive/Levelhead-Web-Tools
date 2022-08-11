@@ -407,6 +407,7 @@ function reloadLevels(){
         levelArray.forEach(level => {
             if(checkFilters(level)){
                 matchingLevels++;
+                //createSpecificLevelCard must be defined in the tool's .js file
                 htmlout += createSpecificLevelCard(level);
             }
         })

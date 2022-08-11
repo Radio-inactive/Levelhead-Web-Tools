@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Advanced Tower Search</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="AdvancedTowerSearch.js"></script>
+        <script src="../ApplySettings.js"></script>
+        <script src="../LevelCards.js"></script>
+    </head>
+    <body>
+        <h1>Advanced Tower Search</h1>
+        <p>Find specific kinds of tower levels more easily!</p>
+        <h3>Search Parameters</h3>
+        Search by <select id="APISortSelect"></select>
+        <br>
+        Look for Tag: <select id="tagsAPI"></select>
+        <br>
+        Must have been in the Tower Trial:<input type="checkbox" id="towerTrial" style="margin: 0">
+        <br>
+        Playtime(sec): min: <input id="playtimeMin" type="number" min="0"> max: <input id="playtimeMax" type="number" min="0">
+        <br>
+        Spice: min: <input id="spiceMin" type="number" min="0"> max: <input id="spiceMax" type="number" min="0">
+        <br>
+        Feature Score: min: <input id="featuredMin" type="number" min="0"> max: <input id="featuredMax" type="number" min="0">
+        <br>
+        Difficulty: min: <select id="diamondsMin"></select> max: <select id="diamondsMax"></select>
+        <br>
+        <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
+        <p id="filters" style="display:none;">
+
+
+            <b>Filter Tags</b><br>
+            Required Tags:<br>
+            <select id="requiredTags1" onchange="reloadLevels()"></select>
+            <select id="requiredTags2" onchange="reloadLevels()"></select>
+            <select id="requiredTags3" onchange="reloadLevels()"></select>
+            <br>
+            Excluded Tags:<br>
+            <select id="excludedTags1" onchange="reloadLevels()"></select>
+            <select id="excludedTags2" onchange="reloadLevels()"></select>
+            <select id="excludedTags3" onchange="reloadLevels()"></select>
+        </p>
+        <br>
+        Sort by <select id="sortSelect" onchange="reloadLevels()"></select>
+        <br>
+        
+        <button onclick="searchTowerLevels()">Search Tower Levels</button>
+        <br>
+        <div id="levelCount" style="display: none;">
+            <p>Total Levels: <a id="levelCountTotal">-</a></p>
+            <p>Total Matches: <a id="levelCountMatch">-</a></p>
+        </div>
+        <br>
+        <div class="row" id="levelCards">
+            Nothing to see here yet!
+        </div>
+
+        <script>
+            loadDiamondsSelect()
+
+            loadTagSelectAdvancedTowerSearch();
+            loadAPISort();
+            loadSortingSelect();
+            generateToolFooter();
+        </script>
+    </body>
+</html>

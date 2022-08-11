@@ -20,7 +20,8 @@ var toolNames = [
     ["HiddenProfileStatisticsViewer", "Hidden Profile Statistics Viewer"],
     ["RecordViewer", "Record Viewer"],
     ["CombobulatorSimulator", "Combobulator Simulator"],
-    ["PictureGallary", "Avatar Gallery"]
+    ["PictureGallary", "Avatar Gallery"],
+    ["AdvancedTowerSearch", "Advanced Tower Search"]
 ]
 /**
  * Folder of the current tool. loaded by currentToolName()
