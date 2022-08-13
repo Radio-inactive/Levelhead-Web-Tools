@@ -149,6 +149,8 @@
     
         if(!filterPlayerCount(level)) return false;
     
+        if(!filterMultiplayer(level)) return false;
+
         if(!filterTags(level)) return false;
 
         if(!filterInteractions(level)) return false;

@@ -229,6 +229,8 @@ function createSpecificLevelCard(level){
 }
 
 function checkFilters(level){
+    if(!filterMultiplayer(level)) return false
+
     if(!filterTags(level)) return false
 
     if(!filterInteractions(level)) return false

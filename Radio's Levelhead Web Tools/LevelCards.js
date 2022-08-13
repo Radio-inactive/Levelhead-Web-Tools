@@ -86,6 +86,27 @@ function filterTowerTrial(level, selectId = 'TTFilter')
     return false;
 }
 
+function filterMultiplayer(level){
+    var select = +document.getElementById("mulitiplayerFilter").value
+    var playerCount = level.requiredPlayers
+
+    switch(select){
+        case SHOW_ALL:
+            return true
+        case 1:
+            return playerCount == 1
+        case 2:
+            return playerCount == 2
+        case 3:
+            return playerCount == 3
+        case 4:
+            return playerCount == 4
+    }
+
+    console.log("unhandled case in filterMultiplayer(level): " + select)
+    return false;
+}
+
 function filterTags(level)
 {
     
@@ -107,7 +128,7 @@ function filterPlayed(level){
 
     var interactions = getInteractions(level)
     var select = document.getElementById("playedFilter").value
-    console.log("thing: " + select)
+
     switch(+select){
         case 0: //show all
             return true;
@@ -461,6 +482,7 @@ function createLevelCard(level){
     pictures += icon.graduated(level.tower);
     pictures += icon.towerTrial(level.towerTrial);
     pictures += icon.dailyBuild(level.dailyBuild);
+    pictures += icon.multiplayer(level.requiredPlayers);
 
     if(delegationKeyValid){
         delegationContent += template.bookmarkButton(level);
@@ -651,6 +673,17 @@ var icon = {
             return `<img src="../PicturesCommon/CardIcons/DAILYBUILD.png" id="cardMiniIconDaily" style="margin-top:75px;margin-left:6px;">`;
         else
             return '';
+    },
+    multiplayer : function(playerCount){
+        if(playerCount && playerCount != 1){
+            return `
+            <div id="cardMiniIconMultiplayer" style="display: grid">
+                <img style="max-width:40px;grid-row:1;grid-column:1;" src="../PicturesCommon/CardIcons/MULTIPLAYER.png">
+                <div style="color:white;margin-top:7px;margin-left:8px;font-family:monospace;grid-row:1;grid-column:1;">${playerCount}</div>
+            </div>`
+        }
+        else
+            return ""
     },
     interactionPlayed : function (interactions){
         return `<img src="../PicturesCommon/CardIcons/INTERACTION_${this.playedStatus[interactions.played + interactions.completed]}.png" id="cardMiniIconPlayed">`

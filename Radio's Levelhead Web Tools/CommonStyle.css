@@ -55,6 +55,14 @@ body{
     margin-left:65px;
   }
 
+  #cardMiniIconMultiplayer{
+    max-width:40px;
+    grid-row:1;
+    grid-column:1;
+    margin-top:70px;
+    margin-left:27px;
+  }
+
   #cardAvatar {
     grid-row:1;
     grid-column:1;
