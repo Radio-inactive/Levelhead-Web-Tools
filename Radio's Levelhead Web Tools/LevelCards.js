@@ -101,6 +101,103 @@ function filterTags(level)
     return true;
 }
 
+function filterPlayed(level){
+    if(!delegationKeyValid)
+    return true
+
+    var interactions = getInteractions(level)
+    var select = document.getElementById("playedFilter").value
+    console.log("thing: " + select)
+    switch(+select){
+        case 0: //show all
+            return true;
+        case 1: //only not played
+            return !interactions.played
+        case 2: //only played
+            return interactions.played && !interactions.completed
+        case 3: //only beaten levels
+            return interactions.completed
+        case 4: //played or beaten levels
+            return interactions.played
+    }
+    console.log("ERROR in filterPlayed(): undefined case", select, interactions)
+    return false
+}
+
+function fliterLiked(level){
+    if(!delegationKeyValid)
+    return true
+
+    var interactions = getInteractions(level)
+    var select = document.getElementById("likedFilter").value
+
+    switch(+select){
+        case SHOW_ALL:
+            return true
+        case SHOW_ONLY:
+            return interactions.liked
+        case SHOW_EXCLUDE:
+            return !interactions.liked
+    }
+    console.log("ERROR in fliterLiked(): undefined case", select, interactions)
+    return false
+}
+
+function filterFavorited(level){
+    if(!delegationKeyValid)
+    return true
+
+    var interactions = getInteractions(level)
+    var select = document.getElementById("favoritedFilter").value
+
+    switch(+select){
+        case SHOW_ALL:
+            return true
+        case SHOW_ONLY:
+            return interactions.favorited
+        case SHOW_EXCLUDE:
+            return !interactions.favorited
+    }
+    console.log("ERROR in filterFavorited(): undefined case", select, interactions)
+    return false
+}
+
+function filterBookmarked(level){
+    if(!delegationKeyValid)
+    return true
+
+    var interactions = getInteractions(level)
+    var select = document.getElementById("bookmarkedFilter").value
+
+    switch(+select){
+        case SHOW_ALL:
+            return true
+        case SHOW_ONLY:
+            return interactions.bookmarked
+        case SHOW_EXCLUDE:
+            return !interactions.bookmarked 
+    }
+    console.log("ERROR in filterBookmarked(): undefined case", select, interactions)
+    return false
+}
+/**
+ * Collection of all filter functions that make use of the delegation key. if delegationKeyValid is false, it will always return true
+ * @param {LEVEL} level level to be filtered
+ * @returns true if filters apply, false if not
+ */
+function filterInteractions(level){
+    if(!filterPlayed(level))
+        return false
+    if(!fliterLiked(level))
+        return false
+    if(!filterFavorited(level))
+        return false
+    if(!filterBookmarked(level))
+        return false
+
+    return true
+}
+
 /**
  * toggles visibility of the filters section
  */

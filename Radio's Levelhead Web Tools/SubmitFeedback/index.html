@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <style>
+            form {
+                background-color: gainsboro;
+                border: 1px solid black;
+            }
+        </style>
+        <script src="../ApplySettings.js"></script>
+    </head>
+    <body>
+        <h1>Submit Feedback!</h1>
+        <p>This is the place to submit suggestions and error reports.
+            just fill out the form below and I will get the feedback!
+        </p>
+        <form action="?submit=true" name="feedback" method="POST" data-netlify="true">
+            <p>
+                <label>Feedback Type: <select name="feedbackTypes">
+                  <option value="suggestion">Suggestion</option>
+                  <option value="bugReport">Bug Report</option>
+                </select></label>
+            </p>
+            <p>
+                <label>Tool Name: <select id="toolSelect" name="toolName">
+                  <option value="none">-</option>
+                </select></label>
+            </p>
+            <p>
+                <label>Your Name(optional): <input type="text" name="name" /></label>
+            </p>
+            <p>
+                <label>Write your suggestion here: <textarea name="message"></textarea></label>
+            </p>
+            <p>
+                <button type="submit">Send Feedback</button>
+            </p>
+        </form>
+          <h2 style="color: red;" id="confirmation"></h2>
+          <br><br>
+          <script>
+            const params = new URLSearchParams(document.location.search);
+            if(params.get("submit"))
+                document.getElementById("confirmation").innerHTML = "Feeback Submitted!"
+            var sites = `<option value="MainPage">Main Page</option>`
+            toolNames.forEach(name => {
+                sites += `<option value="${name[0]}">${name[1]}</option>`
+            });
+            document.getElementById("toolSelect").innerHTML += sites
+            generateToolFooter();
+          </script>
+    </body>
+</html>

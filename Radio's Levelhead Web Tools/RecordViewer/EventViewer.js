@@ -112,6 +112,7 @@ function splitArray(array, chunkSize = 16){
 }
 
 function checkTimes() {
+    document.getElementById("recordTable").innerHTML = "LOADING"
     bestTimes = []
     bestScores = []
     var playerIds = document.getElementById("playerCodes").value;

@@ -42,6 +42,8 @@ function checkFilters(level){
 
     if(!filterTags(level)) return false;
 
+    if(!filterInteractions(level)) return false;
+
     return true;
 }
 //#endregion

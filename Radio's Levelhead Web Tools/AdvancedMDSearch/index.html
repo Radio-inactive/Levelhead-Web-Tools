@@ -50,6 +50,35 @@
             <select id="excludedTags1" onchange="reloadLevels()"></select>
             <select id="excludedTags2" onchange="reloadLevels()"></select>
             <select id="excludedTags3" onchange="reloadLevels()"></select>
+            <br>
+            <b>Interactions (can only be used with a delegation key):</b>
+              <br>
+              Played: <select id="playedFilter" onchange="reloadLevels()">
+                <option value="0">show all</option>
+                <option value="1">Not Played</option>
+                <option value="2">Played</option>
+                <option value="3">Beaten</option>
+                <option value="4">Played or Beaten</option>
+              </select>
+              <br>
+              Liked: <select id="likedFilter" onchange="reloadLevels()">
+                <option value="0">show all</option>
+                <option value="1">show only Liked</option>
+                <option value="2">exclude Liked</option>
+              </select>
+              <br>
+              Favorited: <select id="favoritedFilter" onchange="reloadLevels()">
+                <option value="0">show all</option>
+                <option value="1">show only Favorited</option>
+                <option value="2">exclude Favorited</option>
+              </select>
+              <br>
+              Bookmarked: <select id="bookmarkedFilter" onchange="reloadLevels()">
+                <option value="0">show all</option>
+                <option value="1">show only Bookmarked</option>
+                <option value="2">exclude Bookmarked</option>
+              </select>
+              <br>
       </p>
     </p>
     <br>

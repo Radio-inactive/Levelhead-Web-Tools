@@ -51,6 +51,8 @@ function checkFilters(level){
     if(!filterTowerTrial(level)) return false;
 
     if(!filterTags(level)) return false;
+    
+    if(!filterInteractions(level)) return false;
 
     return true;
 }
