@@ -22,6 +22,7 @@ var toolNames = [
     ["CombobulatorSimulator", "Combobulator Simulator"],
     ["PictureGallery", "Avatar Gallery"],
     ["AdvancedTowerSearch", "Advanced Tower Search"],
+    ["TowerTrialViewer", "Tower Trial Viewer"],
     ["SubmitFeedback", "Feedback Submission"]
 ]
 /**

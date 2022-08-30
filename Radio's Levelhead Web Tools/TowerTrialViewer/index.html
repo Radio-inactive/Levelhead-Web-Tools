@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tower Trial Viewer</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="../ApplySettings.js"></script>
+        <script src="../LevelCards.js"></script>
+        <script src="TTViewer.js"></script>
+    </head>
+    <body>
+        <h1>Tower Trial Viewer</h1>
+        <p>See past tower trials and their records!</p>
+        <p>Will typically return 10 trials.</p>
+        <br>
+        Trials made before: <input type="date" id="TTDateMin"><br>
+        Get by: <select id="TTCreatedAt">
+            <option value="createdAt">Newest</option>
+            <option value="-createdAt">Oldest</option>
+        </select><br>
+        <button onclick="loadTT()">Get Tower Trials</button>
+
+        <div id="TowerTrials"></div>
+
+        <script>
+            loadOptions();
+            generateToolFooter();
+        </script>
+    </body>
+</html>
