@@ -3,7 +3,7 @@ function createTTTable(TT){
 
     //date as first entry
     htmlout += `<tr><th>Date: ${dateFormat(TT.createdAt)}</th></tr>`
-    htmlout += `<tr><th>Time Tropy: ${timeFormat(TT.timeTrophyGoal)}</th><tr>`
+    htmlout += `<tr><th>Time Trophy: ${timeFormat(TT.timeTrophyGoal)}</th><tr>`
     htmlout += `<tr><th>Levels</th></tr>`
     TT.levelIds.forEach(level => {
         if(delegationKeyValid)
