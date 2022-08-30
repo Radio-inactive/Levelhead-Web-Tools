@@ -6,7 +6,8 @@ function createTTTable(TT){
     htmlout += `<tr><th>Time Tropy: ${timeFormat(TT.timeTrophyGoal)}</th><tr>`
     htmlout += `<tr><th>Levels</th></tr>`
     TT.levelIds.forEach(level => {
-        var interactions = getInteractions(level)
+        if(delegationKeyValid)
+            var interactions = getInteractions(level)
         htmlout += `<tr>
                         <td>
                             <img src="${getAvatarURL(level.avatarId, 20)}">
@@ -45,7 +46,7 @@ function makeTTTables(data){
     var levelInfo = []
 
     data.forEach(trial => {
-        levelInfo.push(fetch(`https://www.bscotch.net/api/levelhead/levels?levelIds=${trial.levelIds}&includeAliases=true&includeStats=true&includeRecords=true&includeMyInteractions=true`, getExtendedRequestBody())
+        levelInfo.push(fetch(`https://www.bscotch.net/api/levelhead/levels?levelIds=${trial.levelIds}&includeAliases=true&includeStats=true&includeRecords=true&includeMyInteractions=true`, delegationKeyValid ? getExtendedRequestBody() : undefined)
                         .then(r => r.json()))
     });
 
@@ -69,6 +70,7 @@ function makeTTTables(data){
 function loadTT(){
     var URLAppend = ""
     var startDate = document.getElementById("TTDateMin").value
+    document.getElementById("TowerTrials").innerHTML = "LOADING..."
     if(startDate){
         startDate = new Date(Date.parse(startDate))
         console.log("date log", startDate)
@@ -83,7 +85,7 @@ function loadTT(){
     if(document.getElementById("TTCreatedAt").value == "-createdAt")
         URLAppend += "&sort=-createdAt"
     
-    fetch('https://www.bscotch.net/api/levelhead/tower-trials?limit=10&includeRecords=true&includeAliases=true' + URLAppend, getExtendedRequestBody())
+    fetch('https://www.bscotch.net/api/levelhead/tower-trials?limit=10&includeRecords=true&includeAliases=true' + URLAppend, delegationKeyValid ? getExtendedRequestBody() : undefined)
     .then(r => r.json())
     .then(function(r){
         makeTTTables(r.data)
