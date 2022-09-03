@@ -9,15 +9,16 @@ var tableHeaders = `
 
 var bestTimes = []
 var bestScores = []
+var recordsAll = []
 
-function assembleRecordsTableRow(time, score){ //only time contains the alias
+function assembleRecordsTableRow(scoreEntry){ //only time contains the alias
     return `
         <tr>
-            <td><a href="https://levelhead.io/@${time.userId}">${time.alias.alias}</a><br>${time.userId}</td>
-            <td><a href="https://levelhead.io/+${time.levelId.levelId}">${time.levelId.title}</a><br>${time.levelId.levelId}</td>
-            <td>Achieved:<br>${dateFormat(time.updatedAt)}<br>Expires:<br>${dateFormat(time.expiresAt)}</td>
-            <td>${timeFormat(time.value)}</td>
-            <td>${score.value}</td>
+            <td><a href="https://levelhead.io/@${scoreEntry.userId}" target="_blank">${scoreEntry.alias.alias}</a><br>${scoreEntry.userId}</td>
+            <td><a href="https://levelhead.io/+${scoreEntry.levelId.levelId}" target="_blank">${scoreEntry.levelId.title}</a><br>${scoreEntry.levelId.levelId}</td>
+            <td>Achieved:<br>${dateFormat(scoreEntry.updatedAt)}<br>Expires:<br>${dateFormat(scoreEntry.expiresAt)}</td>
+            <td>${timeFormat(scoreEntry.value)}</td>
+            <td>${scoreEntry.score}</td>
         </tr>`
 }
 /**
@@ -52,7 +53,7 @@ function sort_player(a, b){
 }
 
 function sort_level(a, b){
-    return a.levelId.localeCompare(b.levelId)
+    return a.levelId.levelId.localeCompare(b.levelId.levelId)
 }
 
 function assembleRecordsTable(){
@@ -60,16 +61,14 @@ function assembleRecordsTable(){
     var sort = document.getElementById('sortBy').value
 
     if(sort == 'player'){
-        bestTimes.sort(sort_player)
-        bestScores.sort(sort_player)
+        recordsAll.sort(sort_player)
     }
     else if(sort == 'level'){
-        bestTimes.sort(sort_level)
-        bestScores.sort(sort_level)
+        recordsAll.sort(sort_level)
     }
 
-    for(var x=0; x < bestTimes.length; x++){
-        htmlout += assembleRecordsTableRow(bestTimes[x], bestScores[x])
+    for(var x=0; x < recordsAll.length; x++){
+        htmlout += assembleRecordsTableRow(recordsAll[x])
     }
     document.getElementById('recordTable').innerHTML = htmlout
 }
@@ -78,31 +77,64 @@ function getRecords(players, levels){
     //remove duplicates
     players = [...new Set(players)]
     levels = [...new Set(levels)]
-
+    console.log(levels, players)
     var playersSplit = splitArray(players)
     var levelsSplit = splitArray(levels)
     var recordsPromises = []
+    var timePromises = []
+    var scorePromises = []
 
     //fetch times and scores of every batch
     playersSplit.forEach(playerBatch => {
         levelsSplit.forEach(levelBatch => {
-            recordsPromises.push(fetch(getFastestTimeURL(playerBatch, levelBatch)).then(r => r.json()))
-            recordsPromises.push(fetch(getHighScoreURL(playerBatch, levelBatch)).then(r => r.json()))
+            timePromises.push(fetch(getFastestTimeURL(playerBatch, levelBatch)).then(r => r.json()))
+            scorePromises.push(fetch(getHighScoreURL(playerBatch, levelBatch)).then(r => r.json()))
         })
     })
+    recordsPromises.push(Promise.all(timePromises))
+    recordsPromises.push(Promise.all(scorePromises))
+    console.log(recordsPromises)
 
     Promise.all(recordsPromises)
-    .then(function(r){ //r contains all data fields from the fetch calls
-        console.log(r)
-        for(var x = 0; x < r.length; x += 2){ //r[x] is a time fetch, r[x+1] is a score fetch (as they're done alternatingly)
-            for(var y = 0; y < r[x].data.length; y++){
-                bestTimes.push(r[x].data[y])
-                bestScores.push(r[x + 1].data[y])
-            }
+    .then(function(timeAndScore){ //r contains all data fields from the fetch calls
+        console.log(timeAndScore)
+
+        if(timeAndScore.length == 0 || timeAndScore[0].length ==0){
+            document.getElementById("recordTable").innerHTML = "NO LEVELS FOUND"
+            return;
         }
+
+        timeAndScore[0].forEach(timeFetch => {
+            timeFetch.data.forEach(time => {
+                var recordFull = undefined
+                var score = undefined;
+                timeAndScore[1].forEach(scoreFetch => {
+                    if(score == undefined){
+                        score = scoreFetch.data.find(entry => entry.levelId == time.levelId && entry.userId == time.userId)
+                    }
+                })
+                
+                recordFull = time;
+                if(score)
+                    recordFull.score = score.value
+                else
+                    recordFull.score = 0
+                recordsAll.push(recordFull)
+            })
+        })
+        console.log(recordsAll)
+        
         var levelDetails = []
+        //get all returned levels
+        var recordLevels = []
+        recordsAll.forEach(entry => {
+            recordLevels.push(entry.levelId)
+        })
+        recordLevels =  [...new Set(recordLevels)]
+        recordLevels = splitArray(recordLevels)
+
         //get Level details via fetch calls
-        levelsSplit.forEach( 
+        recordLevels.forEach( 
             levelBatch => {
                 levelDetails.push(
                     fetch(levelFetchUrl(0,0,0) +'&levelIds='+ levelBatch).then(r => r.json()))
@@ -110,18 +142,17 @@ function getRecords(players, levels){
             )
 
         Promise.all(levelDetails)
-        .then(function(levelBatch){
-            levelBatch.forEach(levels => {
-                levels.data.forEach(level => {
+        .then(function(fetches){
+            fetches.forEach(levelBatch => {
+                levelBatch.data.forEach(level => {
                     //replaces level codes in bestTimes with full level data
-                    bestTimes.forEach(function(entry, index){
+                    recordsAll.forEach(function(entry, index){
                         if(entry.levelId == level.levelId)
-                            bestTimes[index].levelId = level
+                            recordsAll[index].levelId = level
                     })
                 })
             })
             assembleRecordsTable()
-            console.log(bestTimes)
         })
         
     })
@@ -136,8 +167,7 @@ function splitArray(array, chunkSize = 16){
 
 function checkTimes() {
     document.getElementById("recordTable").innerHTML = "LOADING"
-    bestTimes = []
-    bestScores = []
+    recordsAll = []
     var playerIds = document.getElementById("playerCodes").value;
     playerIds = transformStringListToArray(playerIds);
     var levelIds = document.getElementById("levelCodes").value;
@@ -160,7 +190,10 @@ function checkTimes() {
         var playlistName = ""
         var codes = []
         levelIds = `https://www.bscotch.net/api/levelhead/playlists/` + getPlaylistCode(levelIds)
-        console.log(levelIds)
+        if(getPlaylistCode(levelIds) == null){
+            document.getElementById("recordTable").innerHTML = "INVALID PLAYLIST CODE"
+            return;
+        }
         fetch(levelIds)
         .then(r => r.json())
         .then(function(r){
