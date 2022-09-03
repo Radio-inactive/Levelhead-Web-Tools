@@ -64,6 +64,29 @@ function generateToolFooter(){
 //#region general purpose functions
 
 /**
+ * Returns a URL to be used for Level fetch calls
+ * @param {bool} stats if true, includes stats (Plays, playtime, etc.)
+ * @param {bool} aliases if true, includes alias (player name, etc.)
+ * @param {bool} records if true, includes leaderboards (shoe, ribbon)
+ * @param {bool} interactions if true includes interactions (boommarked, played, etc.). WARNING: Must be used with a delegation key.
+ * @param {int} limit Maximun number of levels to be returned.
+ * @returns URL for a level fetch call
+ */
+function levelFetchUrl(stats = true, aliases = true, records = true, interactions = false, limit = 128){
+    var basicURL = 'https://www.bscotch.net/api/levelhead/levels?limit=' + limit
+    if(stats)
+        basicURL += '&includeStats=true'
+    if(aliases)
+        basicURL += '&includeAliases=true'
+    if(records)
+        basicURL += '&includeRecords=true'
+    if(interactions)
+        basicURL += '&includeMyInteractions=true'
+
+    return basicURL
+}
+
+/**
  * Input sanitization for Creator codes
  * @param {string} input creator code or profile link. the levelhead.io and bschotch.net links both work
  * @returns null if code could not be extracted

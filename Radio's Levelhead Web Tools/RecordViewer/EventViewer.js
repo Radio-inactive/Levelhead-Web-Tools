@@ -13,8 +13,8 @@ var bestScores = []
 function assembleRecordsTableRow(time, score){ //only time contains the alias
     return `
         <tr>
-            <td>${time.alias.alias}<br>${time.userId}</td>
-            <td>${time.levelId}</td>
+            <td><a href="https://levelhead.io/@${time.userId}">${time.alias.alias}</a><br>${time.userId}</td>
+            <td><a href="https://levelhead.io/+${time.levelId.levelId}">${time.levelId.title}</a><br>${time.levelId.levelId}</td>
             <td>Achieved:<br>${dateFormat(time.updatedAt)}<br>Expires:<br>${dateFormat(time.expiresAt)}</td>
             <td>${timeFormat(time.value)}</td>
             <td>${score.value}</td>
@@ -100,7 +100,30 @@ function getRecords(players, levels){
                 bestScores.push(r[x + 1].data[y])
             }
         }
-        assembleRecordsTable()
+        var levelDetails = []
+        //get Level details via fetch calls
+        levelsSplit.forEach( 
+            levelBatch => {
+                levelDetails.push(
+                    fetch(levelFetchUrl(0,0,0) +'&levelIds='+ levelBatch).then(r => r.json()))
+            }
+            )
+
+        Promise.all(levelDetails)
+        .then(function(levelBatch){
+            levelBatch.forEach(levels => {
+                levels.data.forEach(level => {
+                    //replaces level codes in bestTimes with full level data
+                    bestTimes.forEach(function(entry, index){
+                        if(entry.levelId == level.levelId)
+                            bestTimes[index].levelId = level
+                    })
+                })
+            })
+            assembleRecordsTable()
+            console.log(bestTimes)
+        })
+        
     })
 }
 
