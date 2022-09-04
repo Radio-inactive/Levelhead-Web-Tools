@@ -6,8 +6,10 @@ function loadCanvas(){}
  */
 function loadWorldMap(){
     var canvas = document.getElementById("campaignCanvas");
+    /**@type {CanvasRenderingContext2D}*/
     var ctx = canvas.getContext("2d");
-    var spaceshipImg = MapImages.getImage("ship")
-    console.log(spaceshipImg.height, spaceshipImg.width)
-    ctx.drawImage(spaceshipImg,0,0,spaceshipImg.width*0.5,spaceshipImg.height*0.5)
+    //var spaceshipImg = MapImages.getImage("ship")
+    //console.log(spaceshipImg.height, spaceshipImg.width)
+    MapImages.drawImage(ctx,"ship",50,50,Math.PI)
+    //ctx.drawImage(spaceshipImg,0,0,spaceshipImg.width*0.5,spaceshipImg.height*0.5)
 }

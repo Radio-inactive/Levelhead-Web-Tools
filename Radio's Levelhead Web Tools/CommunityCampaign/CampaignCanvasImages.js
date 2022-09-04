@@ -27,6 +27,22 @@ var MapImages = {
             return container.image
         else
             return undefined
+    },
+    /**
+     * Draws and image on a canvas
+     * @param {CanvasRenderingContext2D} ctx Context of the canvas
+     * @param {String} imageName Name of the image
+     * @param {Number} xPos x-position of the image
+     * @param {Number} yPos y-position of the image
+     * @param {Number} rotation rotation of the  (in radiant)
+     */
+    drawImage:function(ctx, imageName, xPos=0, yPos=0, rotation=0){
+        
+        var imageContainer = this.getImageContainer(imageName)
+        ctx.translate(xPos+imageContainer.width/2,yPos+imageContainer.getHeight())
+        ctx.rotate(rotation)
+        ctx.drawImage(imageContainer.image, -imageContainer.width/2, -imageContainer.getHeight()/2, imageContainer.width, imageContainer.getHeight())
+        //ToDo: Finish
     }
 }
 
@@ -49,7 +65,14 @@ class ImageContainer {
         this.extension = extension
         /**@type {HTMLImageElement} Contains the image. must be loaded first, see loadImages() */
         this.image = null
-
+    }
+    
+    /**
+     * Returns the image's height based on the desired width
+     * @returns {Number} Scaled Height
+     */
+    getHeight() {
+        return this.image.height * (this.width/this.image.width)
     }
     
 }
