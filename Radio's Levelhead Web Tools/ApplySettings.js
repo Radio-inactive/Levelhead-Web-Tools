@@ -65,11 +65,11 @@ function generateToolFooter(){
 
 /**
  * Returns a URL to be used for Level fetch calls
- * @param {bool} stats if true, includes stats (Plays, playtime, etc.)
- * @param {bool} aliases if true, includes alias (player name, etc.)
- * @param {bool} records if true, includes leaderboards (shoe, ribbon)
- * @param {bool} interactions if true includes interactions (boommarked, played, etc.). WARNING: Must be used with a delegation key.
- * @param {int} limit Maximun number of levels to be returned.
+ * @param {Boolean} stats if true, includes stats (Plays, playtime, etc.)
+ * @param {Boolean} aliases if true, includes alias (player name, etc.)
+ * @param {Boolean} records if true, includes leaderboards (shoe, ribbon)
+ * @param {Boolean} interactions if true includes interactions (boommarked, played, etc.). WARNING: Must be used with a delegation key.
+ * @param {Number} limit Maximun number of levels to be returned.
  * @returns URL for a level fetch call
  */
 function levelFetchUrl(stats = true, aliases = true, records = true, interactions = false, limit = 128){
@@ -88,7 +88,7 @@ function levelFetchUrl(stats = true, aliases = true, records = true, interaction
 
 /**
  * Input sanitization for Creator codes
- * @param {string} input creator code or profile link. the levelhead.io and bschotch.net links both work
+ * @param {String} input creator code or profile link. the levelhead.io and bschotch.net links both work
  * @returns null if code could not be extracted
  * @returns the cleaned code
  */
@@ -109,7 +109,7 @@ function getProfileCode(input = ""){
 
 /**
  * Input sanitization for Level codes
- * @param {string} input level code or level link. the levelhead.io and bschotch.net links both work
+ * @param {String} input level code or level link. the levelhead.io and bschotch.net links both work
  * @returns null if code could not be extracted
  * @returns the cleaned code
  */
@@ -131,7 +131,7 @@ function getLevelCode(input = ""){
 
 /**
  * Input sanitization for Creator codes and profile codes. Can distinguish the 2, but cannot handle playlists
- * @param {string} input creator/level code or profile/level link. the levelhead.io and bschotch.net links both work
+ * @param {String} input creator/level code or profile/level link. the levelhead.io and bschotch.net links both work
  * @returns null if code could not be extracted
  * @returns the cleaned code. result[0] is either 'Profile' or 'Level' depemding on what the code is for. result[1] is the code
  */
@@ -149,7 +149,7 @@ function getAnyCode(input = ""){
 }
 /**
  * Input sanitization for Playlist codes
- * @param {string} input playlist code or playlist link. the levelhead.io and bschotch.net links both work
+ * @param {String} input playlist code or playlist link. the levelhead.io and bschotch.net links both work
  * @returns null if code could not be extracted
  * @returns the cleaned code
  */
@@ -171,8 +171,8 @@ function getPlaylistCode(input = ""){
 
 /**
  * Creates a URL to load an avatar with
- * @param {string} avatarId id of the avatar. see https://beta.bscotch.net/api/docs/community-edition/#avatars
- * @param {int} size specifies size of the returned avatar. it will be size x size big
+ * @param {String} avatarId id of the avatar. see https://beta.bscotch.net/api/docs/community-edition/#avatars
+ * @param {Number} size specifies size of the returned avatar. it will be size x size big
  * @returns URL to load an avatar with
  */
 function getAvatarURL(avatarId, size = 100){
@@ -181,7 +181,7 @@ function getAvatarURL(avatarId, size = 100){
 
 /**
  * creates a request body for fetch calls making use of delegation keys
- * @param {string} method either 'GET', 'POST', 'PUT' or 'DELETE'
+ * @param {String} method either 'GET', 'POST', 'PUT' or 'DELETE'
  * @returns A request body to be used with the fetch function. fetch(URL, RequestBody)
  */
 function getExtendedRequestBody(method = 'GET'){
@@ -196,6 +196,7 @@ function getExtendedRequestBody(method = 'GET'){
     return requestBody;
 }
 
+var delegationKeyChecked = false
 /**
  * Checks if the Delegation Key is valid. sets delegationKeyValid to true if valid, false if invalid
  */
@@ -203,10 +204,14 @@ function checkDelegationKey(){
     try{
     if(window.localStorage.getItem('DelegationKey'))
     fetch('https://www.bscotch.net/api/levelhead/aliases?userIds=@me', getExtendedRequestBody('GET'))
-    .then(function(r){ delegationKeyValid = (r.status == '200')}) //see if status is OK
+    .then(function(r){ 
+        delegationKeyValid = (r.status == '200')
+        delegationKeyChecked = true
+    }) //see if status is OK
     }
-    catch(exception){//fetch failed means no internet connection of key is invalid
-        delegationKeyValid = false;
+    catch(exception){//fetch failed means no internet connection or key is invalid
+        delegationKeyValid = false
+        delegationKeyChecked = true
     }
 }
 
@@ -254,8 +259,8 @@ function getInteractions(level){
 
 /**
  * Can add/remove Bookmarks
- * @param {string} levelCode a level's level code. must be sanitized
- * @param {string} mode 'PUT' to create bookmark (default), 'DELETE' to remove Bookmark
+ * @param {String} levelCode a level's level code. must be sanitized
+ * @param {String} mode 'PUT' to create bookmark (default), 'DELETE' to remove Bookmark
  * @returns true if successful, false if unsuccessful. posts error messages using console.log
  */
 function manageBookmark(levelCode, mode = 'PUT') {
@@ -315,7 +320,7 @@ function loadCursor(){
 
 /**
  * transforms a time in seconds into a formatted string
- * @param {float} time time in seconds
+ * @param {Number} time time in seconds
  * @returns formatted time string
  */
 function timeFormat(time){ //ToDo: document this monstrosity

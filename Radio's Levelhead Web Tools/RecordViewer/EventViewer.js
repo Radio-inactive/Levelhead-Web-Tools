@@ -23,16 +23,16 @@ function assembleRecordsTableRow(scoreEntry){ //only time contains the alias
 }
 /**
  * transforms a comma-seperated string into a string array
- * @param {string} list comma-seperated list
- * @returns {string[]} Parsed list
+ * @param {String} list comma-seperated list
+ * @returns {Array<String>} Parsed list
  */
 function transformStringListToArray(list){
     return JSON.parse(`["${list.replaceAll(',', '","')}"]`)
 }
 /**
  * Creates URL for getting personal Records (Fastest time)
- * @param {string} players Sanitized array of player codes
- * @param {string} levels Sanitized array of level codes
+ * @param {String} players Sanitized array of player codes
+ * @param {String} levels Sanitized array of level codes
  * @returns URL that can be used for fetching fastest times
  */
 function getFastestTimeURL(players, levels){
@@ -40,8 +40,8 @@ function getFastestTimeURL(players, levels){
 }
 /**
  * Creates URL for getting personal Records (High Score)
- * @param {string} players Sanitized array of player codes
- * @param {string} levels Sanitized array of level codes
+ * @param {String} players Sanitized array of player codes
+ * @param {String} levels Sanitized array of level codes
  * @returns URL that can be used for fetching High Scores
  */
 function getHighScoreURL(players, levels){

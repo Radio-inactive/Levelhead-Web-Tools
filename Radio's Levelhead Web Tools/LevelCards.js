@@ -443,7 +443,7 @@ function loadSortingSelect(){
 
 /**
  * Sorts a level array by the selected criteria
- * @param {LEVEL[]} levelArray Array containing levels to be sorted
+ * @param {Array<LEVEL>} levelArray Array containing levels to be sorted
  */
 function sortLevels(levelArray){
     var sortBy = document.getElementById("sortSelect").value;
@@ -544,7 +544,7 @@ function reloadLevels(){
 
 /**
  * removes/adds bookmark and toggles Bookmark button of level Card.
- * @param {string} levelCode a level's code. must be sanitized
+ * @param {String} levelCode a level's code. must be sanitized
  */
 function toggleBookmark(levelCode){
     document.getElementById('bookmarkButton'+ levelCode).disabled = true;

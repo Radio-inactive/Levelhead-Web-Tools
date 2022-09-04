@@ -11,14 +11,20 @@
         <link rel="stylesheet" href="../CommonStyle.css">
         <script src="../ApplySettings.js"></script>
         <script src="../LevelCards.js"></script>
+        <script src="CampaignCanvas.js"></script>
+        <script src="CampaignAPI.js"></script>
+        <script src="CampaignCanvasImages.js"></script>
     </head>
     <body>
-        <canvas style="height:200px ;width:200px;background-color: black;" id="campaignCanvas"></canvas>
+        <canvas style="background-color: black;" width="200" height="200" id="campaignCanvas"></canvas>
+
+        <div id="test"></div>
 
         <script>
-            loadCanvas();
+            loadImages();
             generateToolFooter();
             loadOptions();
+            loadCanvas();
         </script>
     </body>
 </html>
