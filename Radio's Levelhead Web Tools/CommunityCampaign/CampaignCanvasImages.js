@@ -39,10 +39,13 @@ var MapImages = {
     drawImage:function(ctx, imageName, xPos=0, yPos=0, rotation=0){
         
         var imageContainer = this.getImageContainer(imageName)
-        ctx.translate(xPos+imageContainer.width/2,yPos+imageContainer.getHeight())
+        //ctx.translate(-imageContainer.width/2,-imageContainer.getHeight()/2)
+        ctx.translate(xPos + imageContainer.width/2, yPos + imageContainer.getHeight()/2)
         ctx.rotate(rotation)
-        ctx.drawImage(imageContainer.image, -imageContainer.width/2, -imageContainer.getHeight()/2, imageContainer.width, imageContainer.getHeight())
-        //ToDo: Finish
+        ctx.translate(-xPos + -imageContainer.width/2, -yPos + -imageContainer.getHeight()/2)
+        //ctx.translate(imageContainer.width/2, imageContainer.getHeight()/2)
+        ctx.drawImage(imageContainer.image, xPos, yPos, imageContainer.width, imageContainer.getHeight())
+        ctx.restore()
     }
 }
 
