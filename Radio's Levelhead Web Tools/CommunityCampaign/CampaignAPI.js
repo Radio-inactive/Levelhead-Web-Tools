@@ -15,11 +15,107 @@ function splitArray(array, chunkSize = 16){
 
 //#endregion
 
+//#region Level API call
+/**
+ * contains the most important data from a level returned by an API call
+ */
+class Level {
+    constructor(level){
+        /**@type {String} Level code of the level*/
+        this.levelId = level.levelId
+        /**@type {String} Creator code of the builder*/
+        this.userId = level.userId
+        /**@type {String} The level's name*/
+        this.title = level.title
+
+        /**@type {Number} The benchmark time of the level in seconds*/
+        this.creatorTime = level.creatorTime
+        /**@type {Number} */
+        this.requiredPlayers = level.requiredPlayers
+
+        //Objects inside the level object
+        /**@type {Object | undefined} Alias object of a level. Contains the user name of the builder (alias), their avatar (avatarId), etc.*/
+        this.alias = level.alias
+        /**@type {Object | undefined} Content of the Level (Enemies, Puzzle, World, Hazards, Movement)*/
+        this.content = level.content
+        /**@type {Object | undefined} The 3 best times and scores on a level.*/
+        this.records = level.records
+        /**@type {Object | undefined} Stats of a level. contains clear rate (ClearRate), diamonds (Diamonds), likes (Likes) etc.*/
+        this.stats = level.stats
+        /**@type {Array<String>} Tag names of the level's tag. Adjusts to the browser language.*/
+        this.tagNames = level.tagNames
+        /**@type {Array<String>} Tag IDs. Are the same regardless of browser language.*/
+        this.tags = level.tags
+        if(level.interactions)
+            this.interactions = Interactions(level.interactions)
+
+        //Potentially to be connected
+        /**@type {PersonalRecord} The current user's record on a level. To be used to store a user's time and score on a level, not part of the level returned by the api.*/
+        this.personalRecord = null
+    }
+}
+
+/**
+ * Makes API calls to retrieve level info
+ * @param {Array<String>} levelIds Array with level codes
+ * @param {Boolean} includeAlias If true, retrieves the Alias object (containing the builder's name and avatar)
+ * @param {Boolean} includeStats If true, retrieves the Stats object (containing the level's clear rate, likes, etc.)
+ * @param {Boolean} includeRecords If true, retrieves the Records object (containing the 3 best times and scores of the level)
+ * @param {Boolean} includePersonalRecord If true, retrieves the currently logged in user's personal best time and score of the level
+ * @param {Boolean} includeInteractions If true, retrieves the Interactions object (containing the logged in user's Interactions (see Interactions class))
+ * @returns Promise for Array with Level objects.
+ */
+async function APIgetLevels(levelIds, includeAlias = false, includeStats = true, includeRecords = false, includePersonalRecord = false, includeInteractions = false){
+    var levelIdsSplit = splitArray(levelIds)
+    var fetchBody = undefined;
+    var fetchURL = 'https://www.bscotch.net/api/levelhead/levels?limit=128'
+    if(includeAlias) fetchURL += '&includeAliases=true'
+    if(includeStats) fetchURL += '&includeStats=true'
+    if(includeRecords) fetchURL += '&includeRecords=true'
+    if(includeInteractions && delegationKeyValid){
+        fetchURL += '&includeMyInteractions=true'
+        fetchBody = getExtendedRequestBody()
+    }
+
+    fetchURL += '&levelIds='
+
+    /**@type {Array<Promise>} */
+    var levelPromises = []
+
+    levelIdsSplit.forEach(batch => {
+        levelPromises.push(
+            fetch(fetchURL + batch, fetchBody).then(r => r.json())
+        )
+    })
+    /**@type {Array<Level>} */
+    var levels = []
+    var levelInfo = await Promise.all(levelPromises)
+    
+    levelInfo.forEach(batch => {
+        batch.data.forEach(level => {
+            levels.push(new Level(level))
+        })
+    })
+
+    if(includePersonalRecord){
+        var personalrecords = await APIgetLevelRecords(levelIds)
+        personalrecords.forEach(record => {
+            var recordLevel = levels.find(level => level.levelId == record.levelId)
+            if(recordLevel)
+                recordLevel.personalRecord = record
+        })
+    }
+
+    return levels
+}
+
+//#endregion
+
 //#region Records API call
 /**
  * Contains a user's personal best time and score on a level
  */
-class Record{
+class PersonalRecord{
     /**
      * @param {String} userId Creator code of the record holder
      * @param {String} levelId Level code of the level the record was set on
@@ -42,7 +138,7 @@ class Record{
  * Retrieves a user's records on any amount of levels
  * @param {Array<String>} levelIds array of level ids
  * @param {String} [userId] creator code of user. will default to the creator code of the currently saved delegation key
- * @returns {Promise<Array<Record>>} promise for an array that contains a user's records
+ * @returns {Promise<Array<PersonalRecord>>} promise for an array that contains a user's records
  */
 async function APIgetLevelRecords(levelIds, userId){
     if(userId == undefined)
@@ -53,7 +149,7 @@ async function APIgetLevelRecords(levelIds, userId){
     var timeRecordPromises = []
     /**@type {Array<Promise>} */
     var scoreRecordPromises = []
-    /**@type {Array<Record>} Combines a user's score and time*/
+    /**@type {Array<PersonalRecord>} Combines a user's score and time*/
     var records = []
 
     levelIdsSplit.forEach(batch => {
@@ -79,7 +175,7 @@ async function APIgetLevelRecords(levelIds, userId){
                 if(scoreBuf)
                     score = scoreBuf.value
             })
-            records.push(new Record(userId, recordTime.levelId,recordTime.value, score))
+            records.push(new PersonalRecord(userId, recordTime.levelId,recordTime.value, score))
         })
     })
     return records;
@@ -91,7 +187,7 @@ async function APIgetLevelRecords(levelIds, userId){
 
 class Interactions{
     /**
-     * @param {LEVEL} level A level to extract interactions from
+     * @param {Level} level A level to extract interactions from
      */
     constructor(level){
         var interactions = getInteractions(level)
