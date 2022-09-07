@@ -15,6 +15,35 @@ function splitArray(array, chunkSize = 16){
 
 //#endregion
 
+//#region Delegation Key stuff
+
+async function APIgetDelegationKey(){
+    var key = JSON.parse(window.localStorage.getItem('DelegationKey')).Key
+
+    if(!key || key == "")
+        return {error: "No Delegtion Key has been saved!"}
+
+    var delegationKeyAPI = await fetch("https://www.bscotch.net/api/delegation/keys/@this", getExtendedRequestBody())
+    //check for errors
+    switch(Number(delegationKeyAPI)){
+        case 200:
+            break;
+        case 401:
+            return {error: "Delegation Key invalid!"}
+        case 404:
+            return {error: "Connection error!"}
+        default:
+            return {error: "An unknown error has occured: " + delegationKeyAPI}
+    }
+
+    delegationKeyAPI = await delegationKeyAPI.json()
+
+    return delegationKeyAPI
+
+}
+
+//#endregion
+
 //#region Level API call
 /**
  * contains the most important data from a level returned by an API call
@@ -30,7 +59,7 @@ class Level {
 
         /**@type {Number} The benchmark time of the level in seconds*/
         this.creatorTime = level.creatorTime
-        /**@type {Number} */
+        /**@type {Number} Amount of players required to play this level (Multiplayer)*/
         this.requiredPlayers = level.requiredPlayers
 
         //Objects inside the level object
@@ -47,7 +76,8 @@ class Level {
         /**@type {Array<String>} Tag IDs. Are the same regardless of browser language.*/
         this.tags = level.tags
         if(level.interactions)
-            this.interactions = Interactions(level.interactions)
+            /**@type {Interactions} contains user's interactions with the level.*/
+            this.interactions = new Interactions(level.interactions)
 
         //Potentially to be connected
         /**@type {PersonalRecord} The current user's record on a level. To be used to store a user's time and score on a level, not part of the level returned by the api.*/
@@ -196,15 +226,15 @@ class Interactions{
         this.levelId = level.levelId
 
         /**@type {Boolean} true if level is bookmarked*/
-        this.bookmarked = interactions.bookmarked
+        this.bookmarked = !!interactions.bookmarked
         /**@type {Boolean} true if level is liked*/
-        this.liked = interactions.liked
+        this.liked = !!interactions.liked
         /**@type {Boolean} true if level is favorited*/
-        this.favorited = interactions.favorited
+        this.favorited = !!interactions.favorited
         /**@type {Boolean} true if level has been played*/
-        this.played = interactions.played
+        this.played = !!interactions.played
         /**@type {Boolean} true if level has been completed*/
-        this.completed = interactions.completed
+        this.completed = !!interactions.completed
     }
     /**
      * 
