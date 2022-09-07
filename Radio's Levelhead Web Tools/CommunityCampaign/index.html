@@ -18,28 +18,26 @@
     <body>
         <canvas style="background-color: white;" width="200" height="200" id="campaignCanvas"></canvas>
 
-        <script>
-            loadImages();
-            generateToolFooter();
-            loadOptions();
-            loadCanvas();
-            APIgetLevelRecords(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"], "fck11l")
-            .then(function(r){
-                console.log("APIgetLevelRecords",r)
-                console.log(APIgetLevelInteractions(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"]))
-            })
-            APIgetLevels(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"],true,true,true,true)
-            .then(
-                function(r){
-                    console.log("APIgetLevels",r)
-                }
-            )
-            APIgetDelegationKey()
-            .then(
-                function(r){
-                    console.log(r)
-                }
-            )
+        <script async>
+            setup();
+
+            async function setup(){
+                //Tool footer has to be generated at the start, otherwise funky stuff happens
+                generateToolFooter();
+                //loadCanvas is to be used for a loading screen atm
+                loadCanvas();
+                await loadImages()
+                loadWorldMap();
+                var delegationKeyStatus = await APIgetDelegationKey()
+
+                //APIgetLevelRecords(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"], "fck11l")
+                //APIgetLevelInteractions(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"])
+                var levelsTest = await APIgetLevels(["lk2mpp4", "nc4wgd6", "v2f60m6", "hq0q0jn", "13r3fzn", "00zspnb", "7rbr169", "33sxdsf", "3f877l3", "0hhkm4r", "1dbp3rm", "70wqj00", "g0qzt1p", "x1cdkgh", "xrsppzr", "f6vgg15", "6fk7kkq", "9cs208n"],true,true,true,true)
+
+
+                
+            }
+
         </script>
     </body>
 </html>

@@ -16,16 +16,25 @@ function splitArray(array, chunkSize = 16){
 //#endregion
 
 //#region Delegation Key stuff
-
+/**
+ * Checks the current Delegation key. sets delegationKeyValid to true if successful
+ * @returns Status of the current delegation key
+ */
 async function APIgetDelegationKey(){
-    var key = JSON.parse(window.localStorage.getItem('DelegationKey')).Key
 
-    if(!key || key == "")
+    var key = JSON.parse(window.localStorage.getItem('DelegationKey'))
+
+    if(!key || !key.Key)
         return {error: "No Delegtion Key has been saved!"}
+    try{
+    var delegationKeyAPI = await fetch("https://www.bscotch.net/api/levelhead/aliases?userIds=@me", getExtendedRequestBody())
 
-    var delegationKeyAPI = await fetch("https://www.bscotch.net/api/delegation/keys/@this", getExtendedRequestBody())
+    }
+    catch(error){
+        return {error: "Delegation key invalid or a connection error has occured (Exception): " + error}
+    }
     //check for errors
-    switch(Number(delegationKeyAPI)){
+    switch(Number(delegationKeyAPI.status)){
         case 200:
             break;
         case 401:
@@ -36,9 +45,9 @@ async function APIgetDelegationKey(){
             return {error: "An unknown error has occured: " + delegationKeyAPI}
     }
 
-    delegationKeyAPI = await delegationKeyAPI.json()
+    delegationKeyValid = true;
 
-    return delegationKeyAPI
+    return {valid: true}
 
 }
 

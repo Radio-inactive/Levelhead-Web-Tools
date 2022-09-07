@@ -99,7 +99,7 @@ var mapImageInfo = [
 /**
  * Loads images based on the content of the mapImageInfo array
  */
-function loadImages(){
+async function loadImages(){
     /**@type {Array<Promise>} stores the promises that will contain the image data*/
     var imagePromises = []
 
@@ -119,12 +119,12 @@ function loadImages(){
             })
         )
     })
-    Promise.all(imagePromises).then(function(loadedImages){
+    //Wait for images to be loaded
+    var loadedImages = await Promise.all(imagePromises)
+        
         loadedImages.forEach(entry => {
             entry.dest.image = entry.img
             MapImages.images.push(entry.dest)
         })
         console.log(MapImages, MapImages.getImage("ship"))
-        loadWorldMap();
-    })
 }
