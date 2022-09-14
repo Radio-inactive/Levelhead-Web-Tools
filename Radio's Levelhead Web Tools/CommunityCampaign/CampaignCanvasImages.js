@@ -126,5 +126,4 @@ async function loadImages(){
             entry.dest.image = entry.img
             MapImages.images.push(entry.dest)
         })
-        console.log(MapImages, MapImages.getImage("ship"))
 }
