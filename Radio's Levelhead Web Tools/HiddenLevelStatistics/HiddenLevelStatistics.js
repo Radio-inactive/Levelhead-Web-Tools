@@ -160,7 +160,7 @@ function loadHiddenStatistics(){
                 for(var i=0; i < r.data[0].records.HighScore.length; i++)
                     recordHolders += highScoreHolderTemplate
                     .replace('{{userName}}', r.data[0].records.HighScore[i].alias.alias)
-                    .replace('{{userTime}}', r.data[0].records.HighScore[i].value)
+                    .replace('{{userTime}}', scoreFormat(r.data[0].records.HighScore[i].value))
                     .replace('{{recordDate}}', new Date(r.data[0].records.HighScore[i].createdAt).toString().substring(4,31));
                 document.getElementById('HighScore')
                         .innerHTML=recordHolders;

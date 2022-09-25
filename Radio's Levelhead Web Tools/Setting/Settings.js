@@ -64,6 +64,41 @@ function loadPage(){
     showDelegationKeyValidity();
 
     loadCursorOptions();
+    loadDateOptions();
+    loadTimeOptions();
+    loadScoreOptions();
+}
+
+function loadDateOptions(){
+    var htmlout = ""
+    var radioFormat = function(date, formatName){return `<input type="radio" name="dateFormat" value="${formatName}">${date}<br>`} 
+    var currentDate = new Date(Date.now())
+
+    htmlout += radioFormat(dateFormatOptions.standard(currentDate), "standard")
+    htmlout += radioFormat(dateFormatOptions.locale(currentDate), "locale")
+    document.getElementById("dateFormatSelection").innerHTML = htmlout
+}
+
+function loadTimeOptions(){
+    var htmlout = ""
+    var radioFormat = function(time, formatName){return `<input type="radio" name="timeFormat" value="${formatName}">${time}<br>`}
+    var testTime = 64323.33 
+    
+    htmlout += radioFormat(timeFormatOptions.standard(testTime), "standard")
+    htmlout += radioFormat(timeFormatOptions.compact(testTime), "compact")
+
+    document.getElementById("timeFormatSelection").innerHTML = htmlout
+}
+
+function loadScoreOptions(){
+    var htmlout = ""
+    var radioFormat = function(score, formatName){return `<input type="radio" name="scoreFormat" value="${formatName}">${score}<br>`}
+    var testScore = 6432300
+    
+    htmlout += radioFormat(scoreFormatOptions.standard(testScore), "standard")
+    htmlout += radioFormat(scoreFormatOptions.compact(testScore), "compact")
+
+    document.getElementById("scoreFormatSelection").innerHTML = htmlout
 }
 
 function loadCursorOptions(){
@@ -83,7 +118,24 @@ function loadCursorOptions(){
             .innerHTML = htmlout;
 }
 
-function chooseCursor(){//ToDo: radio buttons
+function saveFormatingOptions(options){
+    options.forEach(option => {
+        chooseFormatOption(option)
+    })
+}
+
+function chooseFormatOption(optionName = ""){
+    var selection = document.getElementsByName(optionName + "Format")
+
+    selection.forEach(option => {
+        if(option.checked == true){
+            window.localStorage.setItem(optionName + "Format", option.value)
+        }
+    })
+
+}
+
+function chooseCursor(){//ToDo: implement
 
     var chosenOption = 'nothing';
     var options = document.getElementsByName('cursorSelection')

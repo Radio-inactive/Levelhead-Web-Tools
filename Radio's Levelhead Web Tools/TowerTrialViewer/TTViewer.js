@@ -33,7 +33,7 @@ function createTTTable(TT){
             htmlout += `
             <tr>
                 <td>
-                ${ribbon.value} by <a href="https://levelhead.io/@${ribbon.userId}" target="_blank">${ribbon.alias.alias}</a>
+                ${scoreFormat(ribbon.value)} by <a href="https://levelhead.io/@${ribbon.userId}" target="_blank">${ribbon.alias.alias}</a>
                 </td>
             </tr>`
         })

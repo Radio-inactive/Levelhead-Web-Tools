@@ -324,15 +324,39 @@ function loadCursor(){
  * @returns formatted time string
  */
 function timeFormat(time){ //ToDo: document this monstrosity
-    var millis = "";
-    millis = Math.floor(time*100).toFixed();
-    if(time >= 86400)
-        return Math.floor(time/86400) +'day(s) '+ (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
-    if(time >= 3600)
-        return (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
-    if(time >= 60)
-        return (new Date(time * 1000).toISOString().substr(14, 5)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'm ');
-    return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1)+'s');
+    var format = window.localStorage.getItem("timeFormat")
+    if(!format)
+        return timeFormatOptions["standard"](time)
+    else
+        return timeFormatOptions[format](time)
+}
+
+/**
+ * Contains all formating kinds for times
+ */
+var timeFormatOptions = {
+    standard : function(time){
+        var millis = "";
+        millis = Math.floor(time*100).toFixed();
+        if(time >= 86400)
+            return Math.floor(time/86400) +'day(s) '+ (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
+        if(time >= 3600)
+            return (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'h ').replace(':', 'm ');
+        if(time >= 60)
+            return (new Date(time * 1000).toISOString().substr(14, 5)+'.'+millis.substr(millis.length-2, millis.length-1)+'s').replace(':', 'm ');
+        return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1)+'s');
+    },
+    compact : function(time){
+        var millis = "";
+        millis = Math.floor(time*100).toFixed();
+        if(time >= 86400)
+            return Math.floor(time/86400) +'day(s) '+ (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1));
+        if(time >= 3600)
+            return (new Date(time * 1000).toISOString().substr(11, 8)+'.'+millis.substr(millis.length-2, millis.length-1));
+        if(time >= 60)
+            return (new Date(time * 1000).toISOString().substr(14, 5)+'.'+millis.substr(millis.length-2, millis.length-1));
+        return (new Date(time * 1000).toISOString().substr(17, 2)+'.'+millis.substr(millis.length-2, millis.length-1));
+    }
 }
 
 /**
@@ -341,7 +365,41 @@ function timeFormat(time){ //ToDo: document this monstrosity
  * @returns Formatted Date as a string
  */
 function dateFormat(date){
-    return new Date(date).toString().substring(4,31)
+    var format = window.localStorage.getItem("dateFormat")
+    if(!format)
+        return dateFormatOptions["standard"](date)
+    else
+        return dateFormatOptions[format](date)
+}
+
+/**
+ * Contains all formating kinds for dates
+ */
+var dateFormatOptions = {
+    standard : function(date){
+        return new Date(date).toString().substring(4,31)
+    },
+    locale : function(date){
+        return new Date(date).toLocaleString()
+    }
+    
+}
+
+function scoreFormat(score){
+    var format = window.localStorage.getItem("scoreFormat")
+    if(!format)
+        return scoreFormatOptions["standard"](score)
+    else
+        return scoreFormatOptions[format](score)
+}
+
+var scoreFormatOptions = {
+    standard : function(score = 0){
+        return score.toLocaleString()
+    },
+    compact : function(score = 0){
+        return score
+    }
 }
 
 //#endregion
