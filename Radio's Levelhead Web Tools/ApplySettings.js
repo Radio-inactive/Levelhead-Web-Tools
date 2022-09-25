@@ -381,6 +381,9 @@ var dateFormatOptions = {
     },
     locale : function(date){
         return new Date(date).toLocaleString()
+    },
+    notz : function(date){
+        return new Date(date).toString().substring(4,24)
     }
     
 }

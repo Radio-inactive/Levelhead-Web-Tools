@@ -75,6 +75,7 @@ function loadDateOptions(){
     var currentDate = new Date(Date.now())
 
     htmlout += radioFormat(dateFormatOptions.standard(currentDate), "standard")
+    htmlout += radioFormat(dateFormatOptions.notz(currentDate), "notz")
     htmlout += radioFormat(dateFormatOptions.locale(currentDate), "locale")
     document.getElementById("dateFormatSelection").innerHTML = htmlout
 }

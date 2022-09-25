@@ -143,7 +143,7 @@ function loadHiddenStatistics(){
                                    ? timeFormat(r.data[0].stats.TimePerWin)
                                    : 'No Times';
                 document.getElementById('UpdatedAt')
-                        .innerHTML = new Date(r.data[0].updatedAt).toString().substring(4,31)
+                        .innerHTML = dateFormat(r.data[0].updatedAt)
                 //record statistics
                 var recordHolders="";
                 //Shoe Times
@@ -151,7 +151,7 @@ function loadHiddenStatistics(){
                     recordHolders += recordHolderTemplate
                     .replace('{{userName}}', r.data[0].records.FastestTime[i].alias.alias)
                     .replace('{{userTime}}', timeFormat(r.data[0].records.FastestTime[i].value))
-                    .replace('{{recordDate}}', new Date(r.data[0].records.FastestTime[i].createdAt).toString().substring(4,31));
+                    .replace('{{recordDate}}', dateFormat(r.data[0].records.FastestTime[i].createdAt));
                 document.getElementById('Records')
                         .innerHTML = recordHolders;
 
@@ -161,7 +161,7 @@ function loadHiddenStatistics(){
                     recordHolders += highScoreHolderTemplate
                     .replace('{{userName}}', r.data[0].records.HighScore[i].alias.alias)
                     .replace('{{userTime}}', scoreFormat(r.data[0].records.HighScore[i].value))
-                    .replace('{{recordDate}}', new Date(r.data[0].records.HighScore[i].createdAt).toString().substring(4,31));
+                    .replace('{{recordDate}}', dateFormat(r.data[0].records.HighScore[i].createdAt));
                 document.getElementById('HighScore')
                         .innerHTML=recordHolders;
             }

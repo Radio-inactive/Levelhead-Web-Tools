@@ -42,7 +42,7 @@ function fetchProfileDetails()
                     document.getElementById('CreationDate')
                             .innerHTML = r.data[0].createdAt.substring(0,10);
                     document.getElementById('LastUpdate')
-                            .innerHTML = new Date(r.data[0].updatedAt).toString().substring(4,31);
+                            .innerHTML = dateFormat(r.data[0].updatedAt);
                     document.getElementById('PerkPoints')
                             .innerHTML = r.data[0].stats.PerkPoints
                                        ? r.data[0].stats.PerkPoints
