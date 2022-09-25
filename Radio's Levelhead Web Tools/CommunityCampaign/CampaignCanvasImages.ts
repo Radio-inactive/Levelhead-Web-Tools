@@ -2,18 +2,34 @@ var imagesLoaded = false;
 
 var WIDTH_DEFAULT = 50
 
+interface IImageContainer {
+    name: String
+    width: number
+    extension: String
+    image: HTMLImageElement | undefined
+    getHeight: () => number
+}
+
+interface ImageMap {
+    images: Array<IImageContainer>
+    getImageContainer: (x: String) => IImageContainer | undefined
+    getImage: (x: String) => HTMLElement | undefined
+    drawImage: (ctx: CanvasRenderingContext2D, imageName: String, xPos: number, yPos: number, rotation: number) => void
+}
+
+
 /**
  * Manages the images used for the canvas.
  */
-var MapImages = {
-    /**@type {Array<ImageContainer>} array with ImageContainers.*/
-    images:[],
+var MapImages: ImageMap = {
+    /**@type {Array<IImageContainer>} array with ImageContainers.*/
+    images: [],
     /**
      * Returns an image container based on its name
      * @param {String} name Name of the image (filename without extension)
-     * @returns {ImageContainer | undefined} The desired ImageContainer. if name could not be found, returns undefined
+     * @returns {IImageContainer | undefined} The desired ImageContainer. if name could not be found, returns undefined
      */
-    getImageContainer:function(name){
+    getImageContainer:function(name: String){
         return this.images.find(entry => entry.name == name)
     },
     /**
@@ -32,50 +48,59 @@ var MapImages = {
      * Draws and image on a canvas
      * @param {CanvasRenderingContext2D} ctx Context of the canvas
      * @param {String} imageName Name of the image
-     * @param {Number} xPos x-position of the image
-     * @param {Number} yPos y-position of the image
-     * @param {Number} rotation rotation of the  (in radiant)
+     * @param {number} xPos x-position of the image
+     * @param {number} yPos y-position of the image
+     * @param {number} rotation rotation of the  (in radiant)
      */
     drawImage:function(ctx, imageName, xPos=0, yPos=0, rotation=0){
         
         var imageContainer = this.getImageContainer(imageName)
-        //ctx.translate(-imageContainer.width/2,-imageContainer.getHeight()/2)
-        ctx.translate(xPos + imageContainer.width/2, yPos + imageContainer.getHeight()/2)
-        ctx.rotate(rotation)
-        ctx.translate(-xPos + -imageContainer.width/2, -yPos + -imageContainer.getHeight()/2)
-        //ctx.translate(imageContainer.width/2, imageContainer.getHeight()/2)
-        ctx.drawImage(imageContainer.image, xPos, yPos, imageContainer.width, imageContainer.getHeight())
-        ctx.restore()
+        if(imageContainer) {
+            //ctx.translate(-imageContainer.width/2,-imageContainer.getHeight()/2)
+            ctx.translate(xPos + imageContainer.width/2, yPos + imageContainer.getHeight()/2)
+            ctx.rotate(rotation)
+            ctx.translate(-xPos + -imageContainer.width/2, -yPos + -imageContainer.getHeight()/2)
+            //ctx.translate(imageContainer.width/2, imageContainer.getHeight()/2)
+            ctx.drawImage(imageContainer.image as CanvasImageSource, xPos, yPos, imageContainer.width, imageContainer.getHeight())
+            ctx.restore()
+        }
     }
 }
 
 /**
  * contains an image and other necessary data
  */
-class ImageContainer {
+class ImageContainer implements IImageContainer {
+    name: string = '';
+    width: number = 0;
+    extension: string = 'png';
+    image: HTMLImageElement | undefined = undefined;
     /**
      * constructor for ImgeInfo
      * @param {String} name name of the image. will automatically get the image "Pictures/<name>.<extension>"
-     * @param {Number} width preferred width of the image. height will be scaled automatically. default is WIDTH_DEFAULT
+     * @param {number} width preferred width of the image. height will be scaled automatically. default is WIDTH_DEFAULT
      * @param {String} extension specifies file extension. png by default
      */
-    constructor(name, width = 50, extension = "png"){
+    constructor(name: string, width = 50, extension = "png"){
         /**@type {String} file name without extension */
         this.name = name;
-        /**@type {Number} desired width */
+        /**@type {number} desired width */
         this.width = width;
         /**@type {String} the picture's file extension */
         this.extension = extension
         /**@type {HTMLImageElement} Contains the image. must be loaded first, see loadImages() */
-        this.image = null
+        this.image = undefined
     }
     
     /**
      * Returns the image's height based on the desired width
-     * @returns {Number} Scaled Height
+     * @returns {number} Scaled Height
      */
     getHeight() {
-        return this.image.height * (this.width/this.image.width)
+        if(this.image) {
+            return this.image.height * (this.width/this.image.width)
+        }
+        return 0;
     }
     
 }
@@ -83,15 +108,15 @@ class ImageContainer {
 /**
  * Wrapper for imageInfo constructor
  * @param {String} name name of image
- * @param {Number} width width of image, height will be scaled automatically
- * @param {String} extension file extension
+ * @param {number} width width of image, height will be scaled automatically
+ * @param {String | undefined} extension file extension
  * @returns A new Image Container.
  */
-function mkimg(name, width, extension){
+function mkimg(name: string, width: number, extension: string | undefined = undefined): IImageContainer {
     return new ImageContainer(name,width, extension)
 }
 
-var mapImageInfo = [
+var mapImageInfo: Array<IImageContainer> = [
     mkimg("ship", 50),
     mkimg("GR-18_Package_BG", 100)
 ]
@@ -101,7 +126,7 @@ var mapImageInfo = [
  */
 async function loadImages(){
     /**@type {Array<Promise>} stores the promises that will contain the image data*/
-    var imagePromises = []
+    var imagePromises: Array<Promise<any>> = []
 
     mapImageInfo.forEach(imageContainer => {
         imagePromises.push(

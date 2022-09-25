@@ -104,7 +104,7 @@ class Level {
  * @param {Boolean} includeInteractions If true, retrieves the Interactions object (containing the logged in user's Interactions (see Interactions class))
  * @returns Promise for Array with Level objects.
  */
-async function APIgetLevels(levelIds, includeAlias = false, includeStats = true, includeRecords = false, includePersonalRecord = false, includeInteractions = false){
+async function APIgetLevels(levelIds: Array<string>, includeAlias = false, includeStats = true, includeRecords = false, includePersonalRecord = false, includeInteractions = false){
     var levelIdsSplit = splitArray(levelIds)
     var fetchBody = undefined;
     var fetchURL = 'https://www.bscotch.net/api/levelhead/levels?limit=128'
@@ -179,17 +179,20 @@ class PersonalRecord{
  * @param {String} [userId] creator code of user. will default to the creator code of the currently saved delegation key
  * @returns {Promise<Array<PersonalRecord>>} promise for an array that contains a user's records
  */
-async function APIgetLevelRecords(levelIds, userId){
-    if(userId == undefined)
-        userId = JSON.parse(window.localStorage.getItem('DelegationKey')).UserCode
+async function APIgetLevelRecords(levelIds: Array<string>, userId: string): Promise<Array<PersonalRecord>>{
+    if(userId == undefined) {
+        var delegationKey = window.localStorage.getItem('DelegationKey');
+        if(delegationKey)
+            userId = JSON.parse(delegationKey).UserCode
+    }
     /**@type {Array<Array<String>>} */
     var levelIdsSplit = splitArray(levelIds)
     /**@type {Array<Promise>} */
-    var timeRecordPromises = []
+    var timeRecordPromises: Array<Promise<any>> = []
     /**@type {Array<Promise>} */
-    var scoreRecordPromises = []
+    var scoreRecordPromises:  Array<Promise<any>> = []
     /**@type {Array<PersonalRecord>} Combines a user's score and time*/
-    var records = []
+    var records: Array<PersonalRecord>  = []
 
     levelIdsSplit.forEach(batch => {
         timeRecordPromises.push(

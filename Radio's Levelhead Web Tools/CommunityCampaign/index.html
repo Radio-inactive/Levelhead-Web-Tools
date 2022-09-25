@@ -16,8 +16,12 @@
         <script src="CampaignCanvasImages.js"></script>
     </head>
     <body>
-        <canvas style="background-color: white;" width="200" height="200" id="campaignCanvas"></canvas>
-
+        <div class="campaign-content-container">
+            <div class="campaign-box">
+                <canvas class="campaign-canvas background-canvas" width="1920" height="1080" id="campaignBackground"></canvas>
+                <canvas class="campaign-canvas" id="campaignCanvas"  width="1920" height="1080"></canvas>
+            </div>
+        </div>
         <script async>
             setup();
 

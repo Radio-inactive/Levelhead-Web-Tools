@@ -1,0 +1,20 @@
+{
+  "name": "communitycampaign",
+  "version": "1.0.0",
+  "description": "Levelhead Community Campaign Map",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "dev": "parcel index.html",
+    "build": "parcel build dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Radio-inactive/Levelhead-Web-Tools/tree/main/Radio's%20Levelhead%20Web%20Tools/CommunityCampaign"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.3"
+  }
+}
