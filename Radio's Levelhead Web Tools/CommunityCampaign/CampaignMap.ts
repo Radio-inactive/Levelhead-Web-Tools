@@ -9,12 +9,14 @@ export default class CampaignMap extends Phaser.Scene {
     SHIP_VELOCITY = 5;
 
     keys: any = null;
-    ship: any = null;
+    ship: Phaser.GameObjects.Sprite | null = null;
     shipLevelindex = 0;
 
     campaignLevelData: CampaignApi.Level[] = []
 
-    layers = [];
+    bgLayer: Phaser.GameObjects.Layer | null = null;
+    fgLayer: Phaser.GameObjects.Layer | null = null;
+
 
     campaignLevelCodes = [
         "lk2mpp4", 
@@ -61,6 +63,9 @@ export default class CampaignMap extends Phaser.Scene {
 
     sendShipToPlanet = (index: number) => {
         var pos = this.getLocForPlanet(index);
+
+        this.ship?.setFlipX(pos.x > this.ship.x)
+
         this.tweens.add({
             targets: this.ship,
             x: pos.x-25,
@@ -74,19 +79,33 @@ export default class CampaignMap extends Phaser.Scene {
     }
 
 
-    getLocForPlanet = (index: number) => {
-        var row = index % 5;
-        var col = Math.floor(index / 5);
-        var xOffset = 300;
-        var yOffset = 200;
+    getLocForPlanet = (index: number): Phaser.Math.Vector2 => {
+        const rowCount = 1;
+        var col = index;
+        var row = 1;
+        var xMargin = 300;
+        var yMargin = 250;
 
         var xPadding = 350;
-        var yPadding = 300;
+        var yPadding = 250;
 
-        return {
-            x: (xOffset * row) + xPadding,
-            y: (col * yOffset) + yPadding,
+        return new Phaser.Math.Vector2((xMargin * col) + xPadding, (row * yMargin) + yPadding);
+    }
+
+    drawLinesBetweenOrbs(orbA: Phaser.Math.Vector2, orbB: Phaser.Math.Vector2) {
+        var currPos = new Phaser.Math.Vector2(orbA.x, orbA.y)
+        var dashDist = 50;
+        var direction = new Phaser.Math.Vector2(orbB.x, orbB.y).subtract(orbA).normalize().scale(dashDist);
+        
+        currPos.add(direction)
+        var cnt = 0;
+        //don't let this go forever
+        while(currPos.distance(orbB) >= dashDist && cnt < 100) {
+            cnt++;
+            this.add.sprite(currPos.x, currPos.y, `path1`);
+            currPos.add(direction)
         }
+
     }
 
     preload () {
@@ -94,20 +113,23 @@ export default class CampaignMap extends Phaser.Scene {
         this.load.image('logo', 'logos/CC_logo.png');
         this.load.image('ship', 'ship.png')
         this.load.image('level', 'levelorbs/levelorb_unbeaten.png')
-
-        
+        this.load.image('path1', 'starpath1.png');
+        this.load.image('path2', 'starpath2.png');
     }
 
     create () {
-        const bg = this.add.image(0, 0, 'background').setOrigin(0,0);
-        const logo = this.add.image(100, 140, 'logo');
+        const bg = this.add.image(0, 0, 'background').setOrigin(0,0).setScrollFactor(0);
+        const logo = this.add.image(100, 140, 'logo').setScrollFactor(0);
         this.ship = this.add.sprite(200, 500,'ship').setScale(0.25, 0.25).setFlipX(true).setDepth(1);
         logo.setScale(0.1, 0.1)
             .setPosition((this.GAME_WIDTH / 2), (logo.height * logo.scaleY) / 2);
-       
-        
 
-        //this.keys = this.input.keyboard.addKeys('W,A,S,D');
+        this.fgLayer = this.add.layer();
+        this.fgLayer.add([ this.ship ])
+        this.fgLayer.setDepth(1);
+
+        this.bgLayer = this.add.layer();
+        this.bgLayer.add([ bg, logo])
 
         this.tweens.add({
             targets: logo,
@@ -127,18 +149,26 @@ export default class CampaignMap extends Phaser.Scene {
 
             var orbPos = this.getLocForPlanet(index);
 
-            this.add.sprite(orbPos.x, orbPos.y, 'level').setScale(0.5, 0.5);
+            var orb = this.add.sprite(orbPos.x, orbPos.y, 'level').setScale(0.5, 0.5);
 
             var text = this.add.text(orbPos.x- 50, orbPos.y+50, level.title as string).setScale(1, 1);
+
+            //this.fgLayer.add([ orb, text])
+
             text.setPosition(orbPos.x - (text.width/2), orbPos.y+50, 0);
+            if(index >= 1) {
+                this.drawLinesBetweenOrbs(this.getLocForPlanet(index-1), this.getLocForPlanet(index))
+            }
+
         });
         
         this.sendShipToPlanet(0);
+        this.cameras.main.startFollow(this.ship);
     })
     }
 
     update() {
-
+        
 
     }
 }

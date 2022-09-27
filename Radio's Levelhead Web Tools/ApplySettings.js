@@ -47,7 +47,7 @@ function getCurrentToolName(){
  * Generates a footer linking to other tools
  * @note The site has to be in a folder inside the main folder, otherwise this won't work
  */
-export function generateToolFooter(){
+function generateToolFooter(){
     getCurrentToolName();
 
     var htmlout = "";
