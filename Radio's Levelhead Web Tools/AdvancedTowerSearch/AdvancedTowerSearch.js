@@ -97,8 +97,21 @@ var parameter = {
             return this.templates.rangeFunction([parseInt(min), parseInt(max)], ["minDiamonds=", "maxDiamonds="])
         },
         created : function(min, max){
-            return this.templates.rangeFunction([parseInt(min), parseInt(max)], ["minCreatedAt=", "maxCreatedAt="])
-            //ToDo: handle date input
+            //handle empty fields
+            if(min == "" && max == "")
+                return ""
+            if(min == "" && max != "")
+                return "maxCreatedAt=" + max
+            if(min != "" && max == "")
+                return "minCreatedAt=" + min
+            
+            //check difference to see if max date is more recent than min date (error)
+            diff = (new Date(min).getTime()) - (new Date(max).getTime())
+            
+            if(diff > 0)
+                return "minCreatedAt=" + max + "&maxCreatedAt=" + min
+            
+            return "minCreatedAt=" + min + "&maxCreatedAt=" + max
         }
     }
 }
@@ -151,6 +164,10 @@ function assembleURL(){
     buf = document.getElementById("tagsAPI").value
     if(buf != "0")
         urlout += "&tags=" + buf
+    
+    buf = parameter.ranges.created(document.getElementById("dateMin").value, document.getElementById("dateMax").value)
+    if(buf != "")
+        urlout += "&" + buf
     
     console.log(urlout)
     return urlout

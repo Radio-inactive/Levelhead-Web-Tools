@@ -19,7 +19,7 @@
         <br>
         Look for Tag: <select id="tagsAPI"></select>
         <br>
-        Must have been in the Tower Trial:<input type="checkbox" id="towerTrial" style="margin: 0">
+        Must have been in the Tower Trial:<input type="checkbox" id="towerTrial">
         <br>
         Playtime(sec): min: <input id="playtimeMin" type="number" min="0"> max: <input id="playtimeMax" type="number" min="0">
         <br>
@@ -28,6 +28,8 @@
         Feature Score: min: <input id="featuredMin" type="number" min="0"> max: <input id="featuredMax" type="number" min="0">
         <br>
         Difficulty: min: <select id="diamondsMin"></select> max: <select id="diamondsMax"></select>
+        <br>
+        Shipped between <input type="datetime-local" id="dateMin"> and <input type="datetime-local" id="dateMax">
         <br>
         <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
         <p id="filters" style="display:none;">
