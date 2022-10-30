@@ -59,6 +59,10 @@ function generateToolFooter(){
     document.body.innerHTML += `<footer id="navigationFooter"><p><b>Other Tools:</b></p><p><b><a href="../index.html">Main Page</a></b></p>${htmlout}</footer>`;
 }
 
+function checkIfServersOnline(){
+    //ToDo: Implement
+}
+
 //#endregion
 
 //#region general purpose functions
