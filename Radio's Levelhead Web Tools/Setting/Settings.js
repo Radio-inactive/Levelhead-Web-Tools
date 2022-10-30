@@ -123,6 +123,7 @@ function saveFormatingOptions(options){
     options.forEach(option => {
         chooseFormatOption(option)
     })
+    document.getElementById("formatSaveConfirm").innerHTML = "Format changes saved!"
 }
 
 function chooseFormatOption(optionName = ""){
