@@ -202,7 +202,8 @@ function getExtendedRequestBody(method = 'GET'){
 
 var delegationKeyChecked = false
 /**
- * Checks if the Delegation Key is valid. sets delegationKeyValid to true if valid, false if invalid
+ * Checks if the Delegation Key is valid. sets delegationKeyValid to true if valid, false if invalid. 
+ * Suboptimal, checkDelegationKeyAsync is recommended for future tools.
  */
 function checkDelegationKey(){
     try{
@@ -217,6 +218,28 @@ function checkDelegationKey(){
         delegationKeyValid = false
         delegationKeyChecked = true
     }
+}
+
+/**
+ * Checks if the Delegation Key is valid.
+ * @returns {Promise<bool>} Promise for validity of the Delegation key. True if valid.
+ */
+async function checkDelegationKeyAsync(){
+    /**
+     * @param {bool} result Validity of the delegation key
+     */
+    var result = false;
+    try{
+        if(window.localStorage.getItem('DelegationKey'))
+            result = await fetch('https://www.bscotch.net/api/levelhead/aliases?userIds=@me', getExtendedRequestBody('GET'))
+                    .then(function(r){ 
+                        return (r.status == '200');
+                    }) //see if status is OK
+            }
+        catch(exception){//fetch failed means no internet connection or key is invalid
+            result = false;
+        }
+        return result;
 }
 
 /**
