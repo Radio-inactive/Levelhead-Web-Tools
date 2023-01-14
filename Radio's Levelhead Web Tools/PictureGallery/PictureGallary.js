@@ -41,7 +41,7 @@ var gallaryCardTemplate=`
 <img src="https://img.bscotch.net/fit-in/100x100/avatars/{{avatar}}.webp" id="galleryPicture">
 <p id="gallaryText"><b onclick="navigator.clipboard.writeText('{{avatar}}')">{{avatar}}</b><br>
 Size: <input type="number" min="16" max="2000" value="100" id="{{avatar}}Input"><br>
-File type: <button onclick="toggleFileType('{{avatar}}')" id="{{avatar}}Filetype">png</button><br>
+File type: <button disabled onclick="toggleFileType('{{avatar}}')" id="{{avatar}}Filetype">webp</button><br>
 <button onclick="loadLevelLink('{{avatar}}')">Load Avatar</button>
 </p></div></div>
 `;
