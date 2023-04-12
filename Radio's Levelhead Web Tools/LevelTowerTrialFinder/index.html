@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Level Tower Trial Finder</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../ApplySettings.js"></script>
+        <script src="../LevelCards.js"></script>
+        <script src="LvlTTFind.js"></script>
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <style>
+            table{
+                border: 1px solid black;
+                background-color: lightgoldenrodyellow;
+            }
+            td{
+                background-color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Level Tower Trial Finder</h1>
+        <p>This tool takes the level code of a level that has been featured in a Tower Trial and attempts to find the tower trial it's been in!</p>
+        <br>
+        <b>Level Code: </b><input id="TTLevelCode" type="text" placeholder="TT Level Code"><button onclick="findLevelTT()">Find TT</button>
+        <br>
+        <div class="row" id="LevelPreviewCard"></div>
+        <br>
+        <strong id="TTStatus" style="color: red;"></strong>
+        <br>
+        <table id="MatchingTT"></table>
+        <script src="" async defer></script>
+    </body>
+    <script>
+        generateToolFooter();
+    </script>
+</html>
