@@ -20,6 +20,7 @@ var toolNames = [
   ["HiddenProfileStatisticsViewer", "Hidden Profile Statistics Viewer"],
   ["RecordViewer", "Record Viewer"],
   ["CombobulatorSimulator", "Combobulator Simulator"],
+  ["CombobulatorWordFinder", "Combobulator Word Finder"],
   ["PictureGallery", "Avatar Gallery"],
   ["AdvancedTowerSearch", "Advanced Tower Search"],
   ["TowerTrialViewer", "Tower Trial Viewer"],

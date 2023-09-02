@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Combobulator Word Finder</title>
+        <link rel="icon" type="icon" sizes="32x32" href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CommonStyle.css">
+        <script src="../ApplySettings.js"></script>
+    </head>
+    <body>
+        <h1>Combobulator Word Finder</h1>
+        <p>Find out if a word is in the combobulator.<br>Displays the language and category where it can be found!</p>
+        <br>
+        Enter Word Here: <input id="word"><button onclick="find_word(document.getElementById('word').value)">Search</button>
+        <p id="not_found" style="color: red; display: none;">WORD NOT FOUND :(</p>
+        <p id="result"></p>
+        <br>
+        <script src="WordFinder.js" async defer></script>
+        <script>
+                generateToolFooter();
+        </script>
+    </body>
+</html>
