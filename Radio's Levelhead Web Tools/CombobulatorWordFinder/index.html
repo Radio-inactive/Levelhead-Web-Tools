@@ -9,17 +9,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../CommonStyle.css">
         <script src="../ApplySettings.js"></script>
+        <script src="WordFinder.js"></script>
+
     </head>
     <body>
         <h1>Combobulator Word Finder</h1>
         <p>Find out if a word is in the combobulator.<br>Displays the language and category where it can be found!</p>
         <br>
-        Enter Word Here: <input id="word"><button onclick="find_word(document.getElementById('word').value)">Search</button>
+        Enter Word Here: <input id="word"><button onclick="find_word()">Search</button>
         <p id="not_found" style="color: red; display: none;">WORD NOT FOUND :(</p>
         <p id="result"></p>
         <br>
-        <script src="WordFinder.js" async defer></script>
         <script>
+                get_word_from_url();
                 generateToolFooter();
         </script>
     </body>

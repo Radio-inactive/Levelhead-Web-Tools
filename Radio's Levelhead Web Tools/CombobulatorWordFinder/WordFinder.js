@@ -1,5 +1,17 @@
+function get_word_from_url() {
+  var url_string = window.location;
+  var url = new URL(url_string);
+  var word = url.searchParams.get("word");
+  if (!word) {
+    console.log("no param given");
+    return;
+  }
+  console.log(`word from url: ${word}`);
+  document.getElementById("word").value = word;
+  find_word();
+}
+
 function make_result_html(final_res) {
-  console.log(final_res);
   var html_out = "";
   for (const res of final_res) {
     html_out += "<h2>" + res.lang + "</h2>";
@@ -11,7 +23,9 @@ function make_result_html(final_res) {
   document.getElementById("result").innerHTML = html_out;
 }
 
-function find_word(word) {
+function find_word() {
+  var word = document.getElementById("word").value;
+  console.log(word);
   var final_res = [];
   document.getElementById("result").innerHTML = "";
   document.getElementById("not_found").style.display = "none";
@@ -38,6 +52,8 @@ function find_word(word) {
   }
   if (!final_res.length) {
     document.getElementById("not_found").style.display = "block";
+    document.getElementById("result").innerHTML = "";
+    return;
   } else {
     document.getElementById("not_found").style.display = "none";
   }
@@ -47,7 +63,7 @@ function find_word(word) {
 const category_map = {
   aj: "Adjective",
   av: "Adverb",
-  ex: "Expression",
+  ex: "Exclamation",
   m: "Miscalleneous",
   n: "Noun",
   v: "Verb",
