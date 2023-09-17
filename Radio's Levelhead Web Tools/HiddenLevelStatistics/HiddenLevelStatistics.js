@@ -178,7 +178,7 @@ function loadHiddenStatistics() {
     });
 }
 
-function get_word_from_url() {
+function loadLevelCodeFromURL() {
   var url_string = window.location;
   var url = new URL(url_string);
   var code = url.searchParams.get("levelCode");
