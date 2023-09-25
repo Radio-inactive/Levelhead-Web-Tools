@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Playlist Viewer</title>
+    <link
+      rel="icon"
+      type="icon"
+      sizes="32x32"
+      href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp"
+    />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="../LevelCards.js"></script>
+    <script src="../ApplySettings.js"></script>
+    <script src="PlaylistViewer.js"></script>
+    <link rel="stylesheet" href="../CommonStyle.css" />
+  </head>
+  <body>
+    <h1>Playlist Viewer</h1>
+    <p>This tool can view playlists.</p>
+    <br />
+    <form onsubmit="load_playlist();return false">
+      <input id="playlist_code" type="text" placeholder="Playlist Code" /><input
+        type="reset"
+        value="X"
+      /><input type="Submit" value="Load" />
+    </form>
+
+    <select
+      id="sortSelect"
+      onchange="reloadLevels()"
+      style="display: none"
+    ></select>
+    <div id="levelCount" style="display: none">
+      <p>Total Levels: <a id="levelCountTotal">-</a></p>
+      <p style="display: none">Total Matches: <a id="levelCountMatch">-</a></p>
+    </div>
+    <h3 id="playlist_name"></h3>
+    <div class="row" id="levelCards">Nothing to see here yet!</div>
+    <script>
+      generateToolFooter();
+      loadOptions();
+      loadSortingSelect();
+    </script>
+  </body>
+</html>

@@ -14,6 +14,7 @@ var delegationKeyValid = false;
 var toolNames = [
   ["Setting", "Site Settings"],
   ["ProfileLevelViewer", "Profile Level Viewer"],
+  ["PlaylistViewer", "Playlist Viewer"],
   ["AdvancedMDSearch", "Advanced Marketing Department Search"],
   ["DailyBuildViewer", "Daily Build Viewer"],
   ["HiddenLevelStatistics", "Hidden Level Statistics viewer"],

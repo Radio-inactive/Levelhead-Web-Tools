@@ -111,7 +111,7 @@ function getRecords(players, levels) {
   //remove duplicates
   players = [...new Set(players)];
   levels = [...new Set(levels)];
-  console.log(levels, players);
+  console.log("codes: ", levels, players);
   var playersSplit = splitArray(players);
   var levelsSplit = splitArray(levels);
   var recordsPromises = [];
@@ -131,11 +131,10 @@ function getRecords(players, levels) {
   });
   recordsPromises.push(Promise.all(timePromises));
   recordsPromises.push(Promise.all(scorePromises));
-  console.log(recordsPromises);
 
   Promise.all(recordsPromises).then(function (timeAndScore) {
     //r contains all data fields from the fetch calls
-    console.log(timeAndScore);
+    console.log("time & score", timeAndScore);
 
     if (timeAndScore.length == 0 || timeAndScore[0].length == 0) {
       document.getElementById("recordTable").innerHTML = "NO LEVELS FOUND";
@@ -161,7 +160,7 @@ function getRecords(players, levels) {
         recordsAll.push(recordFull);
       });
     });
-    console.log(recordsAll);
+    console.log("All records", recordsAll);
 
     var levelDetails = [];
     //get all returned levels
@@ -218,6 +217,11 @@ function checkTimes() {
 
   //for levels or level lists
   if (levelCodesOption == "lvl") {
+    if (getPlaylistCode(levelIds)) {
+      document.getElementById("recordTable").innerHTML =
+        "PLAYLIST CODE DETECTED, PLEASE USE PLAYLIST OPTION";
+      return;
+    }
     levelIds = transformStringListToArray(levelIds);
     for (var x = 0; x < levelIds.length; x++) {
       levelIds[x] = getLevelCode(levelIds[x]);
@@ -226,10 +230,11 @@ function checkTimes() {
   } else {
     var playlistName = "";
     var codes = [];
+    var cleaned_code = getPlaylistCode(levelIds);
     levelIds =
-      `https://www.bscotch.net/api/levelhead/playlists/` +
-      getPlaylistCode(levelIds);
-    if (getPlaylistCode(levelIds) == null) {
+      `https://www.bscotch.net/api/levelhead/playlists/` + cleaned_code;
+
+    if (cleaned_code == null) {
       document.getElementById("recordTable").innerHTML =
         "INVALID PLAYLIST CODE";
       return;
