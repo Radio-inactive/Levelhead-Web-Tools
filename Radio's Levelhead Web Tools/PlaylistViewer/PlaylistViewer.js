@@ -19,21 +19,19 @@ async function load_playlist() {
       ).then((r) => r.json());
 
       var playlist_name = playlist_response.data.name;
-      var playlist_level_codes = splitArray(playlist_response.data.levelIds);
       var level_responses = [];
     } catch (e) {
       document.getElementById("levelCards").innerHTML = "PLAYLIST NOT FOUND";
       return;
     }
-    for (const level_codes of playlist_level_codes) {
-      var level_response = await fetch(
-        "https://www.bscotch.net/api/levelhead/levels?includeStats=true&includeAliases=true&levelIds=" +
-          level_codes
-      )
-        .then((r) => r.json())
-        .then((r) => r.data);
-      level_responses.push(level_response);
-    }
+
+    var level_response = await fetch(
+      "https://www.bscotch.net/api/levelhead/levels?limit=128&includeStats=true&includeAliases=true&levelIds=" +
+        playlist_response.data.levelIds
+    )
+      .then((r) => r.json())
+      .then((r) => r.data);
+    level_responses.push(level_response);
 
     levelList = await Promise.all(level_responses);
 
