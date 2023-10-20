@@ -214,19 +214,31 @@ function checkTimes() {
   for (var x = 0; x < playerIds.length; x++) {
     playerIds[x] = getProfileCode(playerIds[x]);
   }
+  if (
+    document.getElementById("playerCodes").value.trim() != "" &&
+    !playerIds.find((x) => x != null)
+  ) {
+    document.getElementById("recordTable").innerHTML =
+      "<b>INVALID PLAYER CODE(S)</b>";
+    return;
+  }
 
-  //for levels or level lists
   if (levelCodesOption == "lvl") {
-    if (getPlaylistCode(levelIds)) {
-      document.getElementById("recordTable").innerHTML =
-        "PLAYLIST CODE DETECTED, PLEASE USE PLAYLIST OPTION";
-      return;
-    }
+    //for levels or level lists
+    let id_out = [];
     levelIds = transformStringListToArray(levelIds);
     for (var x = 0; x < levelIds.length; x++) {
-      levelIds[x] = getLevelCode(levelIds[x]);
+      let level_code = getLevelCode(levelIds[x]);
+      if (level_code) {
+        id_out.push(level_code);
+      }
     }
-    getRecords(playerIds, levelIds);
+    if (id_out.length || document.getElementById("levelCodes").value == "") {
+      getRecords(playerIds, id_out);
+    } else {
+      document.getElementById("recordTable").innerHTML =
+        "<b>INVALID LEVEL CODE(S)</b>";
+    }
   } else {
     var playlistName = "";
     var codes = [];
@@ -245,6 +257,10 @@ function checkTimes() {
         codes = r.data.levelIds;
         playlistName = r.data.name;
         getRecords(playerIds, codes);
+      })
+      .catch(function (error) {
+        document.getElementById("recordTable").innerHTML =
+          "<b>PLAYLIST NOT FOUND</b>";
       });
   }
 }
