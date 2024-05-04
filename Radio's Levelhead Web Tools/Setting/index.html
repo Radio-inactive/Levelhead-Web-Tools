@@ -23,7 +23,7 @@
         <img src="../PicturesCommon/Delegation_Key_Example.png" style="max-width: 300px;"><br>
         <input type="password" id="delegationInput"><button onclick="delegationKeySave()" id="delegationButton">Save</button>
         <p id="delegationConfirm"></p>
-        <button onclick="navigator.clipboard.writeText(window.localStorage.getItem('DelegationKey'))">Copy delegation key to clipboard</button><br>
+        <button onclick="navigator.clipboard.writeText(JSON.parse(window.localStorage.getItem('DelegationKey')).Key)">Copy delegation key to clipboard</button><br>
         
         <h2>Formatting</h2>
         <h3>Date</h3>
