@@ -1,3 +1,6 @@
+// Check if the user's system prefers dark mode
+const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
 
 function createSelects(){
     var htmlout = '';
@@ -73,7 +76,7 @@ function updateSentence(){
     //shown black when within the 28-letter limit, otherwise red
     if(htmlout.length <= 28)
         document.getElementById('letterCount').style
-                .color = 'black';
+                .color = prefersDarkMode ? 'white' : 'black';
     else
         document.getElementById('letterCount').style
                 .color = 'red';

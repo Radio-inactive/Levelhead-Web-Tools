@@ -1,5 +1,13 @@
+table {
+  border: 1px solid black;
+  font-size: 20px;
+}
 
-  table{
-    border: 1px solid black;
-    font-size: 20px;
+@media (prefers-color-scheme: dark) {
+  table,
+  th,
+  tr,
+  td {
+    border: 1px solid white !important;
   }
+}

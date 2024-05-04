@@ -603,7 +603,7 @@ var template = {
         var diffRating = level.stats.Diamonds;
         if(likes === undefined) likes = 0;
         if(favorites === undefined) favorites = 0;
-        return `<a style="color:#7E3517">♥️</a>: ${likes}, <a style="color:#7F5217">★</a>: ${favorites}, ${icon.difficulty[diffRating]}`;
+        return `<a style="color:red">♥️</a>: ${likes}, <a style="color:goldenrod">★</a>: ${favorites}, ${icon.difficulty[diffRating]}`;
     },
 
     creationDate : function (level){ //ToDo: replace with level object

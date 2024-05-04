@@ -1,26 +1,30 @@
-
-  #gallaryPicture{
-    grid-column: 1;
-  }
-  #gallaryText{
-    grid-column: 2;
-    margin-left: 5px;
-    margin-bottom: 0px;
-    white-space: nowrap;
-  }
+#gallaryPicture {
+  grid-column: 1;
+}
+#gallaryText {
+  grid-column: 2;
+  margin-left: 5px;
+  margin-bottom: 0px;
+  white-space: nowrap;
+}
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    border-radius: 15px; /* 5px rounded corners */
-    /*my stuff*/
-    display: grid;
-    justify-content: start;
-    overflow: hidden;
-    background-color: beige;
-  }
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 15px; /* 5px rounded corners */
+  /*my stuff*/
+  display: grid;
+  justify-content: start;
+  overflow: hidden;
+  background-color: beige;
+}
 
-  #galleryColumn {
-    width: 269px;
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: darkslategray;
   }
-  
+}
+
+#galleryColumn {
+  width: 269px;
+}
