@@ -27,6 +27,7 @@ var toolNames = [
   ["TowerTrialViewer", "Tower Trial Viewer"],
   ["LevelTowerTrialFinder", "Level Tower Trial Finder"],
   ["SubmitFeedback", "Feedback Submission"],
+  ["BookmarkViewer", "Bookmark Viewer"],
 ];
 /**
  * Folder of the current tool. loaded by currentToolName()

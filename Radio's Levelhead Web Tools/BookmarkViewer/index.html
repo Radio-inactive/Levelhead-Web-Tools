@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Bookmark Viewer</title>
+    <link
+      rel="icon"
+      type="icon"
+      sizes="32x32"
+      href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../CommonStyle.css" />
+    <script src="BookmarkViewer.js"></script>
+    <script src="../ApplySettings.js"></script>
+    <script src="../LevelCards.js"></script>
+  </head>
+  <body>
+    <h1>Bookmark Viewer</h1>
+    <p>View all of your bookmarks... at once!</p>
+
+    <button id="filtersToggle" onclick="showFilters()">Filters ▲</button>
+    <p id="filters" style="display: none">
+      Multiplayer:
+      <select id="mulitiplayerFilter" onchange="reloadLevels()">
+        <option value="0">show all</option>
+        <option value="1">1 Player</option>
+        <option value="2">2 Player</option>
+        <option value="3">3 Player</option>
+        <option value="4">4 Player</option>
+      </select>
+      <br />
+      <b>Filter Tags</b><br />
+      Required Tags:<br />
+      <select id="requiredTags1" onchange="reloadLevels()"></select>
+      <select id="requiredTags2" onchange="reloadLevels()"></select>
+      <select id="requiredTags3" onchange="reloadLevels()"></select>
+      <br />
+      Excluded Tags:<br />
+      <select id="excludedTags1" onchange="reloadLevels()"></select>
+      <select id="excludedTags2" onchange="reloadLevels()"></select>
+      <select id="excludedTags3" onchange="reloadLevels()"></select>
+      <br />
+      <b>Interactions (can only be used with a delegation key):</b>
+      <br />
+      Played:
+      <select id="playedFilter" onchange="reloadLevels()">
+        <option value="0">show all</option>
+        <option value="1">Not Played</option>
+        <option value="2">Played</option>
+        <option value="3">Beaten</option>
+        <option value="4">Played or Beaten</option>
+      </select>
+      <br />
+      Liked:
+      <select id="likedFilter" onchange="reloadLevels()">
+        <option value="0">show all</option>
+        <option value="1">show only Liked</option>
+        <option value="2">exclude Liked</option>
+      </select>
+      <br />
+      Favorited:
+      <select id="favoritedFilter" onchange="reloadLevels()">
+        <option value="0">show all</option>
+        <option value="1">show only Favorited</option>
+        <option value="2">exclude Favorited</option>
+      </select>
+      <input
+        type="number"
+        id="bookmarkedFilter"
+        value="0"
+        disabled
+        style="display: none"
+      />
+      <br />
+      <br />
+    </p>
+    <br />
+    Sort by
+    <select id="sortSelect" onchange="reloadLevels()"></select>
+    <br />
+
+    <button id="bookmarkReload" onclick="reloadBookmarks()">
+      Load Bookmarks
+    </button>
+    <br />
+    <div id="levelCount" style="display: none">
+      <p>Total Levels: <a id="levelCountTotal">-</a></p>
+      <p>Total Matches: <a id="levelCountMatch">-</a></p>
+    </div>
+    <br />
+    <div class="row" id="levelCards">Nothing to see here yet!</div>
+
+    <script>
+      loadOptions();
+      loadSortingSelect();
+      generateToolFooter();
+      loadTagSelect();
+    </script>
+  </body>
+</html>
