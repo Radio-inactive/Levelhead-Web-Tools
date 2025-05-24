@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Follower Viewer</title>
+    <link
+      rel="icon"
+      type="icon"
+      sizes="32x32"
+      href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../CommonStyle.css" />
+    <script src="FollowerViewer.js"></script>
+    <script src="../ApplySettings.js"></script>
+  </head>
+  <body>
+    <h1>Follower Viewer</h1>
+    <p>
+      This tool lets you look at all of your followers... and people who follow
+      YOU!<br />
+      <b>Note: </b> The API only fetches 32 players at once, so if you're trying
+      to load a ton of players at once, loading might take a while.
+    </p>
+    <p>
+      <b>Load: </b>
+      <select id="loadTypeSelect">
+        <option value="0" selected>Player's followers</option>
+        <option value="1">Players the player is following</option>
+      </select>
+    </p>
+    <form onsubmit="loadFollowers();return false;">
+      <label>Player Code: </label> <input type="text" id="playerCodeInput" />
+    </form>
+    <br />
+    <button id="loadBtn" onclick="loadFollowers()">Load Followers</button>
+    <br />
+
+    <h2 id="headline"></h2>
+    <table>
+      <tbody id="usersTable"></tbody>
+    </table>
+    <button
+      id="loadmore"
+      onclick="buildTable(playerCode)"
+      style="width: 500px; height: 400px; display: none"
+    >
+      Load more levels
+    </button>
+    <script>
+      generateToolFooter();
+      loadOptions();
+      if (window.localStorage.getItem("DelegationKey")) {
+        document.getElementById("userCode").value = JSON.parse(
+          window.localStorage.getItem("DelegationKey")
+        ).UserCode;
+      }
+    </script>
+  </body>
+</html>

@@ -26,8 +26,9 @@ var toolNames = [
   ["AdvancedTowerSearch", "Advanced Tower Search"],
   ["TowerTrialViewer", "Tower Trial Viewer"],
   ["LevelTowerTrialFinder", "Level Tower Trial Finder"],
-  ["SubmitFeedback", "Feedback Submission"],
   ["BookmarkViewer", "Bookmark Viewer"],
+  ["FollowerViewer", "Follower Viewer"],
+  ["SubmitFeedback", "Feedback Submission"],
 ];
 /**
  * Folder of the current tool. loaded by currentToolName()
@@ -179,7 +180,9 @@ function getPlaylistCode(input = "") {
  * @returns URL to load an avatar with
  */
 function getAvatarURL(avatarId, size = 100) {
-  return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${avatarId}.webp`;
+  return `https://img.bscotch.net/fit-in/${size}x${size}/avatars/${
+    avatarId || "bureau-employee"
+  }.webp`;
 }
 
 /**
