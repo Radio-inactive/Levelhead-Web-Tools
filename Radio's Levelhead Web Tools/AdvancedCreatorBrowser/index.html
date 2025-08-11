@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Advanced Creator Browser</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="icon"
+      sizes="32x32"
+      href="https://img.bscotch.net/fit-in/32x32/avatars/tbot-closeup.webp"
+    />
+    <script src="creator_browser.js"></script>
+    <script src="../LevelCards.js"></script>
+    <script src="../ApplySettings.js"></script>
+    <link rel="stylesheet" href="../CommonStyle.css" />
+    <style>
+      input[type="number"] {
+        width: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Advanced Creator Browser</h1>
+    <p>This tool searches for creators.</p>
+    <br />
+    <label for="sort_select">Sort by </label>
+    <select id="sort_select"></select>
+    <br />
+    <label for="sort_asc">Ascending</label>
+    <input type="checkbox" id="sort_asc" />
+    <br /><br />
+    <div id="filter"></div>
+    <br />
+    <button onclick="fetch_creators()">Load Creators</button>
+    <br />
+    <p id="error_msg" style="color: red"></p>
+    <div id="result" class="row"></div>
+    <script>
+      generateToolFooter();
+      loadOptions();
+      load_content();
+    </script>
+  </body>
+</html>
