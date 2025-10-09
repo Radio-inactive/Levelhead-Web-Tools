@@ -33,15 +33,15 @@ const banned_columns = [
 ];
 
 let current_sort_value_key = "Subscribers";
-let current_sort_desc = false;
+let current_sort_asc = false;
 let tie_breaker_item_id = "";
 
 function get_url() {
-  const desc = document.getElementById("sort_asc").checked;
-  if (desc != current_sort_desc) {
+  const asc = document.getElementById("sort_asc").checked;
+  if (asc != current_sort_asc) {
     tie_breaker_item_id = "";
   }
-  current_sort_desc = desc;
+  current_sort_asc = asc;
 
   const new_sort_value_key = document.getElementById("sort_select").value;
   if (new_sort_value_key != current_sort_value_key) {
@@ -51,7 +51,7 @@ function get_url() {
 
   const baseUrl =
     "https://www.bscotch.net/api/levelhead/players?limit=128&includeAliases=true&sort=" +
-    (desc ? "-" : "") +
+    (asc ? "-" : "") +
     current_sort_value_key +
     addInteractionDetails();
 
@@ -108,7 +108,7 @@ async function fetch_creators() {
 
       document.getElementById(
         "filter" +
-          (current_sort_desc ? "_min_" : "_max_") +
+          (current_sort_asc ? "_min_" : "_max_") +
           current_sort_value_key
       ).value = response[response.length - 1]["stats"][current_sort_value_key];
     }
