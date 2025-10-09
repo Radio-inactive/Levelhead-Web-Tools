@@ -20,6 +20,7 @@ const sort_values = {
 };
 
 /**
+ * Columns that the filtering does not work for.
  * @type {(keyof sort_values)[]}
  */
 const banned_columns = [
@@ -31,13 +32,27 @@ const banned_columns = [
   "TipsGotten",
 ];
 
+let current_sort_value_key = "Subscribers";
+let current_sort_asc = false;
+let tie_breaker_item_id = "";
+
 function get_url() {
   const asc = document.getElementById("sort_asc").checked;
+  if (asc != current_sort_asc) {
+    tie_breaker_item_id = "";
+  }
+  current_sort_asc = asc;
+
+  const new_sort_value_key = document.getElementById("sort_select").value;
+  if (new_sort_value_key != current_sort_value_key) {
+    tie_breaker_item_id = "";
+  }
+  current_sort_value_key = new_sort_value_key;
 
   const baseUrl =
     "https://www.bscotch.net/api/levelhead/players?limit=128&includeAliases=true&sort=" +
     (asc ? "-" : "") +
-    document.getElementById("sort_select").value +
+    current_sort_value_key +
     addInteractionDetails();
 
   /**
@@ -59,6 +74,10 @@ function get_url() {
     if (max) {
       filters.push(["max" + key, max]);
     }
+  }
+
+  if (tie_breaker_item_id) {
+    filters.push(["tiebreakerItemId", tie_breaker_item_id]);
   }
 
   return (
@@ -83,6 +102,16 @@ async function fetch_creators() {
     document.getElementById("result").innerHTML = response
       .map(build_row)
       .join("");
+
+    if (document.getElementById("paginate").checked && response.length == 128) {
+      tie_breaker_item_id = response[response.length - 1]._id;
+
+      document.getElementById(
+        "filter" +
+          (current_sort_asc ? "_min_" : "_max_") +
+          current_sort_value_key
+      ).value = response[response.length - 1]["stats"][current_sort_value_key];
+    }
   } catch (e) {
     console.error("Error fetching creators:", e);
     document.getElementById("error_msg").innerText = "Error: " + e.message;

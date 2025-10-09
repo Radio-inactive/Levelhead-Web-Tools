@@ -16,6 +16,7 @@ var toolNames = [
   ["ProfileLevelViewer", "Profile Level Viewer"],
   ["PlaylistViewer", "Playlist Viewer"],
   ["AdvancedMDSearch", "Advanced Marketing Department Search"],
+  ["AdvancedCreatorBrowser", "Advanced Creator Browser"],
   ["DailyBuildViewer", "Daily Build Viewer"],
   ["HiddenLevelStatistics", "Hidden Level Statistics viewer"],
   ["HiddenProfileStatisticsViewer", "Hidden Profile Statistics Viewer"],
