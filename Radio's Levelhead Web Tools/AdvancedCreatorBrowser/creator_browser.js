@@ -44,7 +44,10 @@ function get_url() {
   current_sort_asc = asc;
 
   const new_sort_value_key = document.getElementById("sort_select").value;
-  if (new_sort_value_key != current_sort_value_key) {
+  if (
+    new_sort_value_key != current_sort_value_key ||
+    !document.getElementById("paginate").checked
+  ) {
     tie_breaker_item_id = "";
   }
   current_sort_value_key = new_sort_value_key;
@@ -111,6 +114,8 @@ async function fetch_creators() {
           (current_sort_asc ? "_min_" : "_max_") +
           current_sort_value_key
       ).value = response[response.length - 1]["stats"][current_sort_value_key];
+    } else {
+      tie_breaker_item_id = "";
     }
   } catch (e) {
     console.error("Error fetching creators:", e);
